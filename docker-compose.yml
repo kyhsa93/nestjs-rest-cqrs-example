@@ -1,19 +1,22 @@
 version: "3.7"
+
 services:
   nest:
     build: .
+    restart: always
     ports:
       - 5000:5000
-    environment:
-      - DB_HOST=database
+    env_file:
+      - .env
     links:
       - database
+
   database:
     image: mysql:5.7
+    restart: always
     ports:
       - 3306:3306
-    environment:
-      - MYSQL_DATABASE=nest
-      - MYSQL_ROOT_PASSWORD=test
+    env_file:
+      - .env
     volumes:
       - ~/database/nest:/var/lib/mysql

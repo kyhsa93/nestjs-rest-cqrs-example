@@ -4,16 +4,22 @@ import { ProductService } from './product.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Product as ProductEntity } from './product.entity';
 import { Repository } from 'typeorm';
+import { ReadProductDTO } from './dto/product.dto.read';
+import { CreateProductDTO } from './dto/product.dto.create';
+import { DeleteProductDTO } from './dto/product.dto.delete';
 
 describe('ProductService', () => {
   let productRepository: Repository<ProductEntity>;
   let productService: ProductService;
 
-  const product = {
-    id: 1,
-    name: 'test',
-    description: 'test description',
-  };
+  const id = 'testid';
+  const name = 'testname';
+  const description = 'testdescription';
+
+  const product = new ProductEntity();
+  const readProductDto = new ReadProductDTO(id);
+  const createProductDto = new CreateProductDTO(name, description);
+  const deleteProductDto = new DeleteProductDTO(id);
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
@@ -39,11 +45,11 @@ describe('ProductService', () => {
     });
   });
 
-  describe('findByName', () => {
+  describe('findById', () => {
     it('should be return an product', async () => {
-      jest.spyOn(productRepository, 'find').mockResolvedValue([product]);
+      jest.spyOn(productRepository, 'findOneOrFail').mockResolvedValue(product);
 
-      expect(await productService.findByName('test')).toBe(product);
+      expect(await productService.findById(readProductDto)).toBe(product);
     });
   });
 
@@ -51,13 +57,13 @@ describe('ProductService', () => {
     it('should be return an product', async () => {
       jest.spyOn(productRepository, 'save').mockResolvedValue(product);
 
-      expect(await productService.create(product)).toBe(product);
+      expect(await productService.create(createProductDto)).toBe(product);
     });
   });
 
   describe('update', () => {
     it('should be return an product', async () => {
-      jest.spyOn(productRepository, 'findByIds').mockResolvedValue([product]);
+      jest.spyOn(productRepository, 'findOneOrFail').mockResolvedValue(product);
       jest.spyOn(productRepository, 'save').mockResolvedValue(product);
 
       expect(await productService.update(product)).toBe(product);
@@ -65,10 +71,11 @@ describe('ProductService', () => {
   });
 
   describe('remove', () => {
-    it('should be return number of affected', async () => {
-      jest.spyOn(productRepository, 'delete').mockResolvedValue({ affected: 0, raw: {} });
+    it('should be return affected', async () => {
+      jest.spyOn(productRepository, 'findOneOrFail').mockResolvedValue(product);
+      jest.spyOn(productRepository, 'save').mockResolvedValue(product);
 
-      expect(await productService.remove(1)).toBe(0);
+      expect(await productService.remove(deleteProductDto)).toBe(product);
     });
   });
 });

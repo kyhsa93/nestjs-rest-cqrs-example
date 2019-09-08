@@ -9,6 +9,7 @@ import { Product as ProductEntity } from "./product/product.entity";
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: process.env.DB_HOST || 'localhost',
+      port: 3306,
       database: 'nest',
       username: 'root',
       password: 'test',
