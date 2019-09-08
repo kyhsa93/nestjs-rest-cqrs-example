@@ -1,4 +1,4 @@
-# Nest.js sample code
+# Nest sample code
 
 ```bash
   # run database container
@@ -8,4 +8,8 @@
   npm test      # run test
   npm run build # transpile typescript
   npm start     # run sample code
+
+  docker-compose up # use compose
 ```
+
+- swagger UI: http://localhost:5000/api
