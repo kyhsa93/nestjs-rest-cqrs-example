@@ -117,6 +117,12 @@ After use compose, you have to stop and remove containers.
 
 ## Configuration
 
+All configuration is in [src/app.config.ts](https://github.com/kyhsa93/nestJS-sample/blob/master/src/app.config.ts)
+
+Most default configuration can use through you environment values.
+
+And also you can modify configurations.
+
 ## Documantaion
 
 Documentaion about this project is made swagger.
