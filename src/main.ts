@@ -4,6 +4,7 @@ import RateLimit from 'express-rate-limit';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import compression from 'compression';
 import { ApplicationModule } from './app.module';
+import { AppConfiguration } from './app.config';
 
 async function bootstrap() {
   const app = await NestFactory.create(ApplicationModule, { cors: true });
@@ -23,6 +24,6 @@ async function bootstrap() {
   app.use(compression());
   app.use(new RateLimit({ windowMs: 15 * 60 * 1000, max: 100 }));
 
-  await app.listen(5000);
+  await app.listen(AppConfiguration.PORT);
 }
 bootstrap();
