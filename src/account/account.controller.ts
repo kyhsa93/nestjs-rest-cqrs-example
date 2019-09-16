@@ -22,7 +22,7 @@ export class AccountController {
   ) {}
 
   @Post()
-  create(@Body() body: CreateAccountDTO) {
+  create(@Body() body: CreateAccountDTO): Promise<void> {
     return this.commandBus.execute(new CreateAccountCommand(body));
   }
 
@@ -37,12 +37,12 @@ export class AccountController {
   }
 
   @Put(':accountId')
-  updateAccount(@Param() param: UpdateAccountParamDTO, @Body() body: UpdateAccountBodyDTO) {
+  updateAccount(@Param() param: UpdateAccountParamDTO, @Body() body: UpdateAccountBodyDTO): Promise<void> {
     return this.commandBus.execute(new UpdateAccountCommand(new UpdateAccountDTO(param, body)));
   }
 
   @Delete(':accountId')
-  deleteAccount(@Param() param: DeleteAccountParamDTO, @Body() body: DeleteAccountBodyDTO) {
+  deleteAccount(@Param() param: DeleteAccountParamDTO, @Body() body: DeleteAccountBodyDTO): Promise<void> {
     return this.commandBus.execute(new DeleteAccountCommand(new DeleteAccountDTO(param, body)));
   }
 }
