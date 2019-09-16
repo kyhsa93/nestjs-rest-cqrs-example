@@ -1,11 +1,11 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
-@Entity()
+@Entity({ name: 'account' })
 export class AccountEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column({ length: 500, unique: true })
+  @Column({ length: 500, unique: true, name: 'account_id' })
   accountId!: string
 
   @Column({ length: 500 })
@@ -20,12 +20,12 @@ export class AccountEntity {
   @Column({ type: "bool", default: true })
   active!: boolean
 
-  @Column({ type: "datetime" })
-  created_at!: string;
+  @Column({ type: "datetime", name: 'created_at' })
+  createdAt!: string;
 
-  @Column({ type: "timestamp", default: null })
-  updated_at!: string;
+  @Column({ type: "timestamp", default: null, name: 'updated_at' })
+  updatedAt!: string;
 
-  @Column({ type: "datetime", default: null })
-  deleted_at!: string;
+  @Column({ type: "datetime", default: null, name: 'deleted_at' })
+  deletedAt!: string;
 }

@@ -7,7 +7,7 @@ import { CreateAccountCommandHandler } from "./command/account.handler.command.c
 import { ReadAccountListQueryHandler } from './query/account.handler.query.list';
 import { CqrsModule } from "@nestjs/cqrs";
 import { ReadAccountQueryHandler } from "./query/account.handler.query";
-import { EncryptPasswordEventHandler } from "./event/account.handler.event.encrypt-password";
+import { ComparePasswordEventHandler } from "./event/account.handler.event.compare-password";
 import { UpdateAccountCommandHandler } from "./command/account.handler.command.update";
 import { DeleteAccountCommandHandler } from './command/account.handler.command.delete';
 
@@ -23,7 +23,7 @@ const commandHandler = [
 ];
 
 const eventHandler = [
-  EncryptPasswordEventHandler,
+  ComparePasswordEventHandler,
 ];
 
 @Module({

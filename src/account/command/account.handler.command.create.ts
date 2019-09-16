@@ -1,3 +1,4 @@
+import bcrypt from 'bcrypt';
 import { CommandHandler, ICommandHandler, EventPublisher } from "@nestjs/cqrs";
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateAccountCommand } from "./account.command.create";
@@ -18,8 +19,9 @@ export class CreateAccountCommandHandler implements ICommandHandler<CreateAccoun
     await this.repository.findOne({ where: [{ accountId: command.accountId }, { email: command.email }]}).then((item) => {
       if (item) throw new HttpException('Conflict', HttpStatus.CONFLICT);
     });
-    const account = this.publisher.mergeObjectContext(new Account(command.accountId, command.name, command.email, command.password, command.active));
-    account.password = command.password;
+    const account = this.publisher.mergeObjectContext(
+      new Account(command.accountId, command.name, command.email, bcrypt.hashSync(command.password, 10), command.active),
+    );
     account.commit();
     await this.repository.save(new CreateAccountMapper(account));
   }

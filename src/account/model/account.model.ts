@@ -1,6 +1,6 @@
 import { AggregateRoot } from '@nestjs/cqrs';
 import bcrypt from 'bcrypt';
-import { EncryptPasswordEvent } from '../event/account.event.encrypt-password';
+import { ComparePasswordEvent } from '../event/account.event.compare-password';
 
 export class Account extends AggregateRoot {
   constructor(
@@ -14,7 +14,9 @@ export class Account extends AggregateRoot {
   }
 
   comparePassword(password: string): boolean {
-    return bcrypt.compareSync(password, this._password);
+    const result = bcrypt.compareSync(password, this._password);
+    if (result) this.apply(new ComparePasswordEvent(this._accountId));
+    return result;
   }
 
   get accountId(): string {
@@ -33,12 +35,11 @@ export class Account extends AggregateRoot {
     return this._password;
   }
 
-  get active(): boolean {
-    return this._active;
+  set password(password) {
+    this._password = password;
   }
 
-  set password(password) {
-    this._password = bcrypt.hashSync(password, 10);
-    this.apply(new EncryptPasswordEvent(this._accountId));
+  get active(): boolean {
+    return this._active;
   }
 }
