@@ -6,7 +6,7 @@ export class AccountEntity {
   id!: number;
 
   @Column({ length: 500, unique: true })
-  account_id!: string
+  accountId!: string
 
   @Column({ length: 500 })
   name!: string

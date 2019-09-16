@@ -2,9 +2,9 @@ import { ApiModelProperty } from "@nestjs/swagger";
 
 export class DeleteProductDTO {
   @ApiModelProperty()
-  readonly product_id: string;
+  readonly productId: string;
 
-  constructor(product_id: string) {
-    this.product_id = product_id;
+  constructor(productId: string) {
+    this.productId = productId;
   }
 }

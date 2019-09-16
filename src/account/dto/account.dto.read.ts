@@ -2,9 +2,9 @@ import { ApiModelProperty } from '@nestjs/swagger';
 
 export class ReadAccountDTO {
   @ApiModelProperty()
-  public readonly account_id: string;
+  public readonly accountId: string;
 
-  constructor(account_id: string) {
-    this.account_id = account_id;
+  constructor(accountId: string) {
+    this.accountId = accountId;
   }
 }

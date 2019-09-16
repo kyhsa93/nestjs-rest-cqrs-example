@@ -7,8 +7,8 @@ export class UpdateAccountDTO {
   public readonly newPassword: string;
 
   constructor(param: UpdateAccountParamDTO, body: UpdateAccountBodyDTO) {
-    this.accountId = param.account_id;
-    this.oldPassword = body.old_password;
-    this.newPassword = body.new_password;
+    this.accountId = param.accountId;
+    this.oldPassword = body.oldPassword;
+    this.newPassword = body.newPassword;
   }
 }

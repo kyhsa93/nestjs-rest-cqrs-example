@@ -21,7 +21,7 @@ export class ReadAccountListQueryHandler implements IQueryHandler<ReadAccountLis
     const data = await this.repository.findOneOrFail({ email: query.email }).catch(() => {
       throw new HttpException('Not found', HttpStatus.NOT_FOUND);
     });
-    const account = this.publisher.mergeObjectContext(new Account(data.account_id, data.name, data.email, data.password, data.active));
+    const account = this.publisher.mergeObjectContext(new Account(data.accountId, data.name, data.email, data.password, data.active));
     if (!account.comparePassword(query.password)) throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
     account.commit();
     return {

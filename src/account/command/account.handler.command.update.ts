@@ -16,13 +16,13 @@ export class UpdateAccountCommandHandler implements ICommandHandler<UpdateAccoun
   ) {}
 
   async execute(command: UpdateAccountCommand): Promise<void> {
-    const data = await this.repository.findOneOrFail({ where: { account_id: command.accountId, deleted_at: IsNull() } }).catch(() => {
+    const data = await this.repository.findOneOrFail({ where: { accountId: command.accountId, deletedAt: IsNull() } }).catch(() => {
       throw new HttpException('Not found', HttpStatus.NOT_FOUND);
     });
-    const account = this.publisher.mergeObjectContext(new Account(data.account_id, data.name, data.email, data.password, data.active));
+    const account = this.publisher.mergeObjectContext(new Account(data.accountId, data.name, data.email, data.password, data.active));
     if (!account.comparePassword(command.oldPassword)) throw new HttpException('Bad requeest', HttpStatus.BAD_REQUEST);
     account.password = command.newPassword;
     account.commit();
-    await this.repository.update({ account_id: account.accountId }, new UpdateAccountMapper(account));
+    await this.repository.update({ accountId: account.accountId }, new UpdateAccountMapper(account));
   }
 }

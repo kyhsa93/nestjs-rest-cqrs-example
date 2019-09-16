@@ -5,7 +5,7 @@ export class DeleteAccountCommand {
   public readonly password: string;
 
   constructor(dto: DeleteAccountDTO) {
-    this.accountId = dto.account_id;
+    this.accountId = dto.accountId;
     this.password = dto.password;
   }
 }

@@ -4,6 +4,6 @@ export class ReadAccountQuery {
   public readonly accountId: string;
 
   constructor(dto: ReadAccountDTO) {
-    this.accountId = dto.account_id;
+    this.accountId = dto.accountId;
   }
 }

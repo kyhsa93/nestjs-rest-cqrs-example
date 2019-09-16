@@ -15,20 +15,20 @@ export class UpdateProductBodyDTO {
 
 export class UpdateProductParamDTO {
   @ApiModelProperty()
-  readonly product_id: string;
+  readonly productId: string;
 
-  constructor(product_id: string) {
-    this.product_id = product_id;
+  constructor(productId: string) {
+    this.productId = productId;
   }
 }
 
 export class UpdateProductDTO {
-  readonly product_id: string;
+  readonly productId: string;
   readonly name: string;
   readonly description: string;
 
-  constructor(product_id: string, name: string, description: string) {
-    this.product_id = product_id;
+  constructor(productId: string, name: string, description: string) {
+    this.productId = productId;
     this.name = name;
     this.description = description;
   }

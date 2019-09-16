@@ -6,7 +6,7 @@ import compression from 'compression';
 import { ApplicationModule } from './app.module';
 import { AppConfiguration } from './app.config';
 
-async function bootstrap() {
+async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(ApplicationModule, { cors: true });
 
   const options = new DocumentBuilder()

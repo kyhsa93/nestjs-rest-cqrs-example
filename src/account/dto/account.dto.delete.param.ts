@@ -2,9 +2,9 @@ import { ApiModelProperty } from '@nestjs/swagger';
 
 export class DeleteAccountParamDTO {
   @ApiModelProperty()
-  public readonly account_id: string;
+  public readonly accountId: string;
 
   constructor(accountId: string) {
-    this.account_id = accountId;
+    this.accountId = accountId;
   }
 }

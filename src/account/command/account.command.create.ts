@@ -6,7 +6,7 @@ export class CreateAccountCommand {
   public readonly password: string;
   public readonly name: string;
   public readonly active: boolean = true;
-  public readonly account_id: string = (() => {
+  public readonly accountId: string = ((): string => {
     const tokens = uuid().split('-');
     return `${tokens[2]}${tokens[1]}${tokens[0]}${tokens[3]}${tokens[4]}`;
   })();

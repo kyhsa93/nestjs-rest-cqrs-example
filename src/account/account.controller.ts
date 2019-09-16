@@ -35,17 +35,17 @@ export class AccountController {
     return this.queryBus.execute(new ReadAccountListQuery(query));
   }
 
-  @Get(':account_id')
+  @Get(':accountId')
   getAccount(@Param() param: ReadAccountDTO): Promise<Account> {
     return this.queryBus.execute(new ReadAccountQuery(param));
   }
 
-  @Put(':account_id')
+  @Put(':accountId')
   updateAccount(@Param() param: UpdateAccountParamDTO, @Body() body: UpdateAccountBodyDTO) {
     return this.commandBus.execute(new UpdateAccountCommand(new UpdateAccountDTO(param, body)));
   }
 
-  @Delete(':account_id')
+  @Delete(':accountId')
   deleteAccount(@Param() param: DeleteAccountParamDTO, @Body() body: DeleteAccountBodyDTO) {
     return this.commandBus.execute(new DeleteAccountCommand(new DeleteAccountDTO(param, body)));
   }
