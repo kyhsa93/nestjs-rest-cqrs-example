@@ -7,15 +7,11 @@ import { Account } from "./model/account.model";
 import { ReadAccountListQuery } from "./query/account.query.list";
 import { ReadAccountQuery } from './query/account.query';
 import { ReadAccountDTO } from "./dto/account.dto.read";
-import { UpdateAccountParamDTO } from "./dto/account.dto.update.param";
-import { UpdateAccountBodyDTO } from "./dto/account.dto.update.body";
 import { UpdateAccountCommand } from './command/account.command.update';
-import { UpdateAccountDTO } from "./dto/account.dto.update";
+import { UpdateAccountDTO, UpdateAccountBodyDTO, UpdateAccountParamDTO } from "./dto/account.dto.update";
 import { ReadAccountListDTO } from "./dto/account.dto.read.list";
-import { DeleteAccountDTO } from "./dto/account.dto.delete";
+import { DeleteAccountDTO, DeleteAccountParamDTO, DeleteAccountBodyDTO } from "./dto/account.dto.delete";
 import { DeleteAccountCommand } from './command/account.command.delete';
-import { DeleteAccountParamDTO } from "./dto/account.dto.delete.param";
-import { DeleteAccountBodyDTO } from "./dto/account.dto.delete.body";
 
 @ApiUseTags('Accounts')
 @Controller('accounts')

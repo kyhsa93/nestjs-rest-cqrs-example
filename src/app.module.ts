@@ -17,9 +17,7 @@ import { AppConfiguration } from './app.config';
       password: AppConfiguration.DATABASE_PASSWORD,
       synchronize: true,
       logging: true,
-      entities: [
-        AccountEntity,
-      ],
+      entities: [AccountEntity,],
     }),
     AccountModule,
   ],

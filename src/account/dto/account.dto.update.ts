@@ -1,5 +1,27 @@
-import { UpdateAccountParamDTO } from './account.dto.update.param';
-import { UpdateAccountBodyDTO } from './account.dto.update.body';
+import { ApiModelProperty } from '@nestjs/swagger';
+
+export class UpdateAccountParamDTO {
+  @ApiModelProperty()
+  public readonly accountId: string;
+
+  constructor(accountId: string) {
+    this.accountId = accountId;
+  }
+}
+
+
+export class UpdateAccountBodyDTO {
+  @ApiModelProperty()
+  public readonly newPassword: string;
+
+  @ApiModelProperty()
+  public readonly oldPassword: string;
+
+  constructor(newPassword: string, oldPassword: string) {
+    this.newPassword = newPassword;
+    this.oldPassword = oldPassword;
+  }
+}
 
 export class UpdateAccountDTO {
   public readonly accountId: string
