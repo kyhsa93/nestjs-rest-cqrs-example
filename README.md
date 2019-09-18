@@ -1,4 +1,4 @@
-# Nest sample code
+# Nest CQRS Rest api example
 
 This is sample nestjs project.
 - link: https://nestjs.com
