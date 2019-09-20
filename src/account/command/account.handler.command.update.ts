@@ -22,7 +22,7 @@ export class UpdateAccountCommandHandler implements ICommandHandler<UpdateAccoun
     });
     const account = this.publisher.mergeObjectContext(new Account(data.accountId, data.name, data.email, data.password, data.active));
     if (!account.comparePassword(command.oldPassword)) throw new HttpException('Bad requeest', HttpStatus.BAD_REQUEST);
-    account.password = bcrypt.hashSync(command.newPassword, '10');
+    account.password = bcrypt.hashSync(command.newPassword);
     account.commit();
     await this.repository.update({ accountId: account.accountId }, new UpdateAccountMapper(account));
   }

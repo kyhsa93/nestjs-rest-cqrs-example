@@ -20,7 +20,7 @@ export class CreateAccountCommandHandler implements ICommandHandler<CreateAccoun
       if (item) throw new HttpException('Conflict', HttpStatus.CONFLICT);
     });
     const account = this.publisher.mergeObjectContext(
-      new Account(command.accountId, command.name, command.email, bcrypt.hashSync(command.password, '10'), command.active),
+      new Account(command.accountId, command.name, command.email, bcrypt.hashSync(command.password), command.active),
     );
     account.commit();
     await this.repository.save(new CreateAccountMapper(account));
