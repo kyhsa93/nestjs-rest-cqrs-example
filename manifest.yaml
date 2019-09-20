@@ -1,0 +1,78 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nestjs-rest-cqrs-example
+  labels:
+    app: nestjs-rest-cqrs-example
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: 5000
+  selector:
+    app: nestjs-rest-cqrs-example
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nestjs-rest-cqrs-example
+  labels:
+    app: nestjs-rest-cqrs-example
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nestjs-rest-cqrs-example
+  template:
+    metadata:
+      labels:
+        app: nestjs-rest-cqrs-example
+    spec:
+      containers:
+        - name: nestjs-rest-cqrs-example
+          image: kyhsa93/nestjs-rest-cqrs-example
+          ports:
+            - containerPort: 80
+          env:
+            - name: DATABASE_HOST
+              value: "database"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: database
+  labels:
+    app: database
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 3306
+      targetPort: 3306
+  selector:
+    app: database
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: database
+  labels:
+    app: database
+spec:
+  selector:
+    matchLabels:
+      app: database
+  template:
+    metadata:
+      labels:
+        app: database
+    spec:
+      containers:
+        - name: database
+          image: mysql:5.7
+          ports:
+            - containerPort: 3306
+          env:
+            - name: MYSQL_DATABASE
+              value: nest
+            - name: MYSQL_ROOT_PASSWORD
+              value: test

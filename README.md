@@ -115,6 +115,18 @@ After use compose, you have to stop and remove containers.
   docker-compose down # stop and remove container in compose
 ```
 
+## Start with kubernetes
+
+If you want to use kubernetes, you can use manifest.yaml for apply to your kubernetes cluster.
+
+```bash
+  kubectl apply -f manifest.yaml
+```
+
+When all Deployment, Service and Pods is created, you can use api through http://localhost.
+
+Also swagger ui address is http://localhost/api.
+
 ## Configuration
 
 All configuration is in [src/app.config.ts](https://github.com/kyhsa93/nestJS-sample/blob/master/src/app.config.ts)
@@ -156,4 +168,6 @@ Start this api and connect http://localhost:5000/api in your browser.
   npm start     # run sample code
 
   docker-compose up # use compose
+  
+  kubectl apply -f manifest.yaml # use kubernetes
 ```
