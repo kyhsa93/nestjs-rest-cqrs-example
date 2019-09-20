@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcrypt-nodejs';
 import { CommandHandler, ICommandHandler, EventPublisher } from "@nestjs/cqrs";
 import { InjectRepository } from '@nestjs/typeorm';
 import { UpdateAccountCommand } from "./account.command.update";
@@ -22,7 +22,7 @@ export class UpdateAccountCommandHandler implements ICommandHandler<UpdateAccoun
     });
     const account = this.publisher.mergeObjectContext(new Account(data.accountId, data.name, data.email, data.password, data.active));
     if (!account.comparePassword(command.oldPassword)) throw new HttpException('Bad requeest', HttpStatus.BAD_REQUEST);
-    account.password = bcrypt.hashSync(command.newPassword, 10);
+    account.password = bcrypt.hashSync(command.newPassword, '10');
     account.commit();
     await this.repository.update({ accountId: account.accountId }, new UpdateAccountMapper(account));
   }
