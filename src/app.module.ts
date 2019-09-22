@@ -2,7 +2,7 @@ import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { AppController } from "./app.controller";
 import { AccountModule } from "./account/account.module";
-import { AccountEntity } from "./account/entity/account.entity";
+import { AccountEntity } from "./account/infrastructure/entity/account.entity";
 import { Connection } from "typeorm";
 import { AppConfiguration } from './app.config';
 

@@ -1,4 +1,4 @@
-import { ReadAccountListQuery } from "../query/account.query.list";
+import { ReadAccountListQuery } from "../../application/query/account.query.list";
 
 export class ReadAccountListMapper {
   public readonly email: string;

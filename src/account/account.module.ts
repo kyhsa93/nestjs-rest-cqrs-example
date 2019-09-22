@@ -1,15 +1,15 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { AccountEntity } from "./entity/account.entity";
-import { AccountController } from "./account.controller";
-import { AccountRepository } from "./repository/account.repository";
-import { CreateAccountCommandHandler } from "./command/account.handler.command.create";
-import { ReadAccountListQueryHandler } from './query/account.handler.query.list';
+import { AccountEntity } from "./infrastructure/entity/account.entity";
+import { AccountController } from "./interface/account.controller";
+import { AccountRepository } from "./infrastructure/repository/account.repository";
+import { CreateAccountCommandHandler } from "./application/command/account.handler.command.create";
+import { ReadAccountListQueryHandler } from './application/query/account.handler.query.list';
 import { CqrsModule } from "@nestjs/cqrs";
-import { ReadAccountQueryHandler } from "./query/account.handler.query";
-import { ComparePasswordEventHandler } from "./event/account.handler.event.compare-password";
-import { UpdateAccountCommandHandler } from "./command/account.handler.command.update";
-import { DeleteAccountCommandHandler } from './command/account.handler.command.delete';
+import { ReadAccountQueryHandler } from "./application/query/account.handler.query";
+import { ComparePasswordEventHandler } from "./application/event/account.handler.event.compare-password";
+import { UpdateAccountCommandHandler } from "./application/command/account.handler.command.update";
+import { DeleteAccountCommandHandler } from './application/command/account.handler.command.delete';
 
 const queryHandler = [
   ReadAccountListQueryHandler,

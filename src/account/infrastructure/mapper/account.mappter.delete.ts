@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { Account } from '../model/account.model';
+import { Account } from '../../domain/model/account.model';
 
 export class DeleteAccountMapper {
   public readonly accountId: string;

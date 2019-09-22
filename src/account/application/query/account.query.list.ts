@@ -1,4 +1,4 @@
-import { ReadAccountListDTO } from "../dto/account.dto.read.list";
+import { ReadAccountListDTO } from "../../interface/dto/account.dto.read.list";
 
 export class ReadAccountListQuery {
   public readonly email: string;

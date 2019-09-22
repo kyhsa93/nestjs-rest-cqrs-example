@@ -1,5 +1,4 @@
-import { v4 as uuid } from 'uuid';
-import { CreateAccountDTO } from "../dto/account.dto.create";
+import { CreateAccountDTO } from "../../interface/dto/account.dto.create";
 
 export class CreateAccountCommand {
   public readonly email: string;
