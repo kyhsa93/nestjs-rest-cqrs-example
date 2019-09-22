@@ -31,7 +31,7 @@ describe('AccountController', () =>{
     accountController = module.get(AccountController);
     commandBus = module.get(CommandBus);
     queryBus = module.get(QueryBus);
-  })
+  });
 
   afterAll(async () => {
     app.close();
