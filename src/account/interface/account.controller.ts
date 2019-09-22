@@ -2,16 +2,16 @@ import { ApiUseTags } from "@nestjs/swagger";
 import { Controller, Post, Body, Get, Param, Put, Query, Delete } from "@nestjs/common";
 import { CreateAccountDTO } from "./dto/account.dto.create";
 import { CommandBus, QueryBus } from "@nestjs/cqrs";
-import { CreateAccountCommand } from "../application/command/account.command.create";
+import { CreateAccountCommand } from "../application/command/implements/account.command.create";
 import { Account } from "../domain/model/account.model";
-import { ReadAccountListQuery } from "../application/query/account.query.list";
-import { ReadAccountQuery } from '../application/query/account.query';
+import { ReadAccountListQuery } from "../application/query/handlers/account.query.list";
+import { ReadAccountQuery } from '../application/query/handlers/account.query';
 import { ReadAccountDTO } from "./dto/account.dto.read";
-import { UpdateAccountCommand } from '../application/command/account.command.update';
+import { UpdateAccountCommand } from '../application/command/implements/account.command.update';
 import { UpdateAccountDTO, UpdateAccountBodyDTO, UpdateAccountParamDTO } from "./dto/account.dto.update";
 import { ReadAccountListDTO } from "./dto/account.dto.read.list";
 import { DeleteAccountDTO, DeleteAccountParamDTO, DeleteAccountBodyDTO } from "./dto/account.dto.delete";
-import { DeleteAccountCommand } from '../application/command/account.command.delete';
+import { DeleteAccountCommand } from '../application/command/implements/account.command.delete';
 
 @ApiUseTags('Accounts')
 @Controller('accounts')

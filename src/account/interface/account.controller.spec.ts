@@ -1,18 +1,18 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CqrsModule, CommandBus, QueryBus } from '@nestjs/cqrs';
 import { AccountController } from './account.controller';
-import { CreateAccountCommand } from '../application/command/account.command.create';
+import { CreateAccountCommand } from '../application/command/implements/account.command.create';
 import { CreateAccountDTO } from './dto/account.dto.create';
 import { INestApplication } from '@nestjs/common';
-import { ReadAccountListQuery } from '../application/query/account.query.list';
+import { ReadAccountListQuery } from '../application/query/handlers/account.query.list';
 import { ReadAccountListDTO } from './dto/account.dto.read.list';
 import { Account } from '../domain/model/account.model';
 import { ReadAccountDTO } from './dto/account.dto.read';
-import { ReadAccountQuery } from '../application/query/account.query';
+import { ReadAccountQuery } from '../application/query/handlers/account.query';
 import { UpdateAccountParamDTO, UpdateAccountBodyDTO, UpdateAccountDTO } from './dto/account.dto.update';
-import { UpdateAccountCommand } from '../application/command/account.command.update';
+import { UpdateAccountCommand } from '../application/command/implements/account.command.update';
 import { DeleteAccountParamDTO, DeleteAccountBodyDTO, DeleteAccountDTO } from './dto/account.dto.delete';
-import { DeleteAccountCommand } from '../application/command/account.command.delete';
+import { DeleteAccountCommand } from '../application/command/implements/account.command.delete';
 
 describe('AccountController', () =>{
   let module: TestingModule;

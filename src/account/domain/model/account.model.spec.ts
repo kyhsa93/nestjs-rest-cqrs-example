@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt-nodejs';
 import { Account } from './account.model';
-import { ComparePasswordEvent } from '../../application/event/account.event.compare-password';
+import { ComparePasswordEvent } from '../../application/event/implements/account.event.compare-password';
 
 describe('AccountModel', () => {
   let accountModel: Account;

@@ -1,5 +1,5 @@
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
-import { ComparePasswordEvent } from './account.event.compare-password';
+import { ComparePasswordEvent } from '../implements/account.event.compare-password';
 
 @EventsHandler(ComparePasswordEvent)
 export class ComparePasswordEventHandler implements IEventHandler<ComparePasswordEvent> {

@@ -1,12 +1,12 @@
 import { IQueryHandler, QueryHandler, EventPublisher } from '@nestjs/cqrs';
-import { ReadAccountListQuery } from './account.query.list';
-import { AccountRepository } from '../../infrastructure/repository/account.repository';
-import { AccountEntity } from '../../infrastructure/entity/account.entity';
+import { ReadAccountListQuery } from '../handlers/account.query.list';
+import { AccountRepository } from '../../../infrastructure/repository/account.repository';
+import { AccountEntity } from '../../../infrastructure/entity/account.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { HttpException, HttpStatus } from '@nestjs/common';
-import { Account } from '../../domain/model/account.model';
+import { Account } from '../../../domain/model/account.model';
 import * as jwt from 'jsonwebtoken';
-import { AppConfiguration } from '../../../app.config';
+import { AppConfiguration } from '../../../../app.config';
 
 const { JWT_SECRET, JWT_EXPIRATION } = AppConfiguration
 

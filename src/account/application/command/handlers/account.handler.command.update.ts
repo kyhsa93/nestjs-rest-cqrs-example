@@ -1,13 +1,13 @@
 import bcrypt from 'bcrypt-nodejs';
 import { CommandHandler, ICommandHandler, EventPublisher } from "@nestjs/cqrs";
 import { InjectRepository } from '@nestjs/typeorm';
-import { UpdateAccountCommand } from "./account.command.update";
-import { AccountEntity } from "../../infrastructure/entity/account.entity";
-import { AccountRepository } from "../../infrastructure/repository/account.repository";
+import { UpdateAccountCommand } from "../implements/account.command.update";
+import { AccountEntity } from "../../../infrastructure/entity/account.entity";
+import { AccountRepository } from "../../../infrastructure/repository/account.repository";
 import { IsNull } from "typeorm";
 import { HttpException, HttpStatus } from "@nestjs/common";
-import { Account } from "../../domain/model/account.model";
-import { UpdateAccountMapper } from '../../infrastructure/mapper/account.mapper.update';
+import { Account } from "../../../domain/model/account.model";
+import { UpdateAccountMapper } from '../../../infrastructure/mapper/account.mapper.update';
 
 @CommandHandler(UpdateAccountCommand)
 export class UpdateAccountCommandHandler implements ICommandHandler<UpdateAccountCommand> {
