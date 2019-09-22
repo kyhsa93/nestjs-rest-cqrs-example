@@ -17,7 +17,7 @@ export class ReadAccountListQueryHandler implements IQueryHandler<ReadAccountLis
     private readonly publisher: EventPublisher,
   ) {}
 
-  async execute(query: ReadAccountListQuery): Promise<{access: string}> {
+  async execute(query: ReadAccountListQuery): Promise<{access: string, accountId: string}> {
     const data = await this.repository.findOneOrFail({ email: query.email }).catch(() => {
       throw new HttpException('Not found', HttpStatus.NOT_FOUND);
     });
@@ -25,6 +25,7 @@ export class ReadAccountListQueryHandler implements IQueryHandler<ReadAccountLis
     if (!account.comparePassword(query.password)) throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
     account.commit();
     return {
+      accountId: account.accountId,
       access: jwt.sign({ accountId: account.accountId, email: account.email, name: account.name }, JWT_SECRET, { expiresIn: JWT_EXPIRATION }),
     };
   }
