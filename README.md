@@ -28,7 +28,7 @@ My recommand node.js version is dubnium and latest docker version.
 First, clone this repository into your local environment. Run followed command in your terminal.
 
 ```bash
-  git clone https://github.com/kyhsa93/nestJS-sample.git
+  git clone https://github.com/kyhsa93/nestjs-rest-cqrs-example.git
 ```
 
 Second step, install package that needed in this project.
@@ -171,7 +171,7 @@ Start this api and connect http://localhost:5000/api in your browser.
 
 ## Scripts
 ```bash
-  git clone https://github.com/kyhsa93/nestJS-sample.git # clone this project
+  git clone https://github.com/kyhsa93/nestjs-rest-cqrs-example.git # clone this project
 
   # run mysql database container
   docker run --name nest -d -p 3306:3306 -e MYSQL_DATABASE=nest -e MYSQL_ROOT_PASSWORD=test -v ~/database/nest:/var/lib/mysql mysql:5.7

@@ -1,7 +1,15 @@
 {
-  "name": "nestjs-sample",
+  "name": "nestjs-rest-cqrs-example",
   "version": "1.0.0",
-  "description": "",
+  "description": "This is sample nestjs project. - link: https://nestjs.com",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kyhsa93/nestjs-rest-cqrs-example.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kyhsa93/nestjs-rest-cqrs-example/issues"
+  },
+  "homepage": "https://github.com/kyhsa93/nestjs-rest-cqrs-example#readme",
   "main": "main.ts",
   "author": "kyhsa93",
   "license": "ISC",
