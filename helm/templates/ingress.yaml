@@ -1,0 +1,17 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: nestjs-rest-cqrs-example
+  labels:
+    app: nestjs-rest-cqrs-example
+spec:
+  tls:
+    - secretName: my-ssl-secret
+  rules:
+  - host: testhost.com
+    http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: service-test
+          servicePort: 80

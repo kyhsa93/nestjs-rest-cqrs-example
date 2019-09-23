@@ -1,43 +1,11 @@
-apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  name: nestjs-rest-cqrs-example
-  labels:
-    app: nestjs-rest-cqrs-example
-spec:
-  tls:
-    - secretName: my-ssl-secret
-  rules:
-  - host: testhost.com
-    http:
-      paths:
-      - path: /*
-        backend:
-          serviceName: service-test
-          servicePort: 80
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: nestjs-rest-cqrs-example
-  labels:
-    app: nestjs-rest-cqrs-example
-spec:
-  type: LoadBalancer
-  ports:
-    - port: 80
-      targetPort: 5000
-  selector:
-    app: nestjs-rest-cqrs-example
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nestjs-rest-cqrs-example
+  name: {{ include "nestjs-rest-cqrs-example.fullname" . }}
   labels:
     app: nestjs-rest-cqrs-example
 spec:
-  replicas: 1
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
       app: nestjs-rest-cqrs-example
@@ -48,26 +16,15 @@ spec:
     spec:
       containers:
         - name: nestjs-rest-cqrs-example
-          image: kyhsa93/nestjs-rest-cqrs-example
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - containerPort: 80
           env:
             - name: DATABASE_HOST
               value: "database"
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: database
-  labels:
-    app: database
-spec:
-  type: ClusterIP
-  ports:
-    - port: 3306
-      targetPort: 3306
-  selector:
-    app: database
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -87,6 +44,7 @@ spec:
       containers:
         - name: database
           image: mysql:5.7
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - containerPort: 3306
           env:

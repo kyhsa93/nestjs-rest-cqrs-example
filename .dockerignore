@@ -5,3 +5,4 @@ Dockerfile
 docker-compose.yml
 dist
 *.yaml
+helm
