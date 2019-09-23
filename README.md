@@ -119,13 +119,41 @@ After use compose, you have to stop and remove containers.
 
 If you want to use kubernetes, you can use manifest.yaml for apply to your kubernetes cluster.
 
+Use minikube for create kubernetes locally or use your own kubernetes. (docker for desktop can be enable local cluster)
+
+Minikube: [https://kubernetes.io/docs/setup/learning-environment/minikube/](https://kubernetes.io/docs/setup/learning-environment/minikube/)
+
 ```bash
-  kubectl apply -f manifest.yaml
+  kubectl apply -f manifest.yaml  # create kubernetes resource in your kubernetes using manifest.yaml file
+  kubectl delete -f manifest.yaml # delete kubernetes resource using manifest.yaml file
 ```
 
 When all Deployment, Service and Pods is created, you can use api through http://localhost.
 
 Also swagger ui address is http://localhost/api.
+
+If you want see all container in deployment, you can use kubectl.
+
+```bash
+  kubectl get all # print all kubernetes default namespace
+  kubectl logs deployment.apps/nestjs-rest-cqrs-example --all-containers=true
+  kubectl logs deployment.apps/nestjs-rest-cqrs-example --all-containers=true -f
+```
+
+About kubernetes: [https://kubernetes.io/](https://kubernetes.io/)
+
+## Start with helm
+
+Helm can help you to manage kubernetes applications.
+
+Helm Charts help you define, install, and upgrade even the most complex Kubernetes application.
+
+```bash
+  helm install --name <releasename> helm # create helm chart
+  helm delete --purge <releasename> # delete helm chart
+```
+
+About helm: [https://helm.sh/](https://helm.sh/)
 
 ## Configuration
 
@@ -169,7 +197,15 @@ Start this api and connect http://localhost:5000/api in your browser.
 
   docker-compose up # use compose
   
-  kubectl apply -f manifest.yaml # use kubernetes
+  kubectl apply -f manifest.yaml  # create kubernetes resource in your kubernetes using manifest.yaml file
+  kubectl delete -f manifest.yaml # delete kubernetes resource using manifest.yaml file
+
+  kubectl get all # print all kubernetes default namespace
+  kubectl logs deployment.apps/nestjs-rest-cqrs-example --all-containers=true
+  kubectl logs deployment.apps/nestjs-rest-cqrs-example --all-containers=true -f
+
+  helm install --name <releasename> helm # create helm chart
+  helm delete --purge <releasename> # delete helm chart
 ```
 
 ## Links
