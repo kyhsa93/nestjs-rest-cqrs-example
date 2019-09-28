@@ -10,8 +10,8 @@ async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(ApplicationModule, { cors: true });
 
   const options = new DocumentBuilder()
-    .setTitle('nest.js sample')
-    .setDescription('Nest.js sample project')
+    .setTitle('nest.js example')
+    .setDescription('Nest.js example project')
     .setVersion('1.0')
     .addTag('Products')
     .build();
