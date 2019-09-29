@@ -5,7 +5,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { AccountEntity } from '../../../infrastructure/entity/account.entity';
 import { Repository } from 'typeorm';
 import { AccountRepository } from '../../../infrastructure/repository/account.repository';
-import { ReadAccountQuery } from '../handlers/account.query';
+import { ReadAccountQuery } from '../implements/account.query';
 import { ReadAccountDTO } from '../../../interface/dto/account.dto.read';
 
 describe('ReadAccountQueryHandler', () => {

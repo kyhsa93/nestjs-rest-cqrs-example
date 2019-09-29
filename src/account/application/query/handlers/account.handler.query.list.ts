@@ -1,5 +1,5 @@
 import { IQueryHandler, QueryHandler, EventPublisher } from '@nestjs/cqrs';
-import { ReadAccountListQuery } from '../handlers/account.query.list';
+import { ReadAccountListQuery } from '../implements/account.query.list';
 import { AccountRepository } from '../../../infrastructure/repository/account.repository';
 import { AccountEntity } from '../../../infrastructure/entity/account.entity';
 import { InjectRepository } from '@nestjs/typeorm';

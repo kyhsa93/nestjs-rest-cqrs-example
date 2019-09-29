@@ -6,7 +6,7 @@ import { AccountEntity } from "../../../infrastructure/entity/account.entity";
 import { Repository } from "typeorm";
 import { AccountRepository } from "../../../infrastructure/repository/account.repository";
 import { Account } from "../../../domain/model/account.model";
-import { ReadAccountListQuery } from "../handlers/account.query.list";
+import { ReadAccountListQuery } from "../implements/account.query.list";
 import { ReadAccountListDTO } from "../../../interface/dto/account.dto.read.list";
 
 describe('ReadAccountListQueryHandler', () => {
