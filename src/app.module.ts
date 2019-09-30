@@ -5,6 +5,7 @@ import { AccountModule } from "./account/account.module";
 import { AccountEntity } from "./account/infrastructure/entity/account.entity";
 import { Connection } from "typeorm";
 import { AppConfiguration } from './app.config';
+import { AuthModule } from "./auth/auth.module";
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { AppConfiguration } from './app.config';
       entities: [AccountEntity,],
     }),
     AccountModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [],

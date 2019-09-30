@@ -13,6 +13,7 @@ import { UpdateAccountParamDTO, UpdateAccountBodyDTO, UpdateAccountDTO } from '.
 import { UpdateAccountCommand } from '../application/command/implements/account.command.update';
 import { DeleteAccountParamDTO, DeleteAccountBodyDTO, DeleteAccountDTO } from './dto/account.dto.delete';
 import { DeleteAccountCommand } from '../application/command/implements/account.command.delete';
+import { AccountUserDTO } from './dto/account.dto.user';
 
 describe('AccountController', () =>{
   let module: TestingModule;
@@ -70,9 +71,10 @@ describe('AccountController', () =>{
     const account = new Account('accountId', 'accountName', 'accountEmail', 'accountPassword', true);
     const readAccountDto: ReadAccountDTO = new ReadAccountDTO('accountId');
     const readAccountQeury: ReadAccountQuery = new ReadAccountQuery(readAccountDto);
+    const user: AccountUserDTO = new AccountUserDTO('accountId', 'accountEmail', 'accountName');
     it('getAccount method call queryBus with query', async () => {
       jest.spyOn(queryBus, 'execute').mockImplementation(() => Promise.resolve(account));
-      await accountController.getAccount(readAccountDto);
+      await accountController.getAccount({ user }, readAccountDto);
       expect(queryBus.execute).toBeCalledWith(readAccountQeury);
     });
   });
@@ -82,9 +84,10 @@ describe('AccountController', () =>{
     const updateAccountBodyDto: UpdateAccountBodyDTO = new UpdateAccountBodyDTO('newPassword', 'oldPassword');
     const updateAccountDto: UpdateAccountDTO = new UpdateAccountDTO(updateAccountParamDto, updateAccountBodyDto);
     const updateAccountCommand: UpdateAccountCommand = new UpdateAccountCommand(updateAccountDto);
+    const user: AccountUserDTO = new AccountUserDTO('accountId', 'accountEmail', 'accountName');
     it('updateAccount method call commndBus with command', async () => {
       jest.spyOn(commandBus, 'execute').mockImplementation(() => Promise.resolve());
-      await accountController.updateAccount(updateAccountParamDto, updateAccountBodyDto);
+      await accountController.updateAccount({ user }, updateAccountParamDto, updateAccountBodyDto);
       expect(commandBus.execute).toBeCalledWith(updateAccountCommand);
     });
   });
@@ -94,9 +97,10 @@ describe('AccountController', () =>{
     const deleteAccountBodyDto: DeleteAccountBodyDTO = new DeleteAccountBodyDTO('password');
     const deleteAccountDto: DeleteAccountDTO = new DeleteAccountDTO(deleteAccountParamDto, deleteAccountBodyDto);
     const deleteAccountCommand: DeleteAccountCommand = new DeleteAccountCommand(deleteAccountDto);
+    const user: AccountUserDTO = new AccountUserDTO('accountId', 'accountEmail', 'accountName');
     it('deleteAccount method call commandBus tiwh command', async () => {
       jest.spyOn(commandBus, 'execute').mockImplementation();
-      await accountController.deleteAccount(deleteAccountParamDto, deleteAccountBodyDto);
+      await accountController.deleteAccount({ user }, deleteAccountParamDto, deleteAccountBodyDto);
       expect(commandBus.execute).toBeCalledWith(deleteAccountCommand);
     });
   });

@@ -1,5 +1,5 @@
-import { ApiUseTags } from "@nestjs/swagger";
-import { Controller, Post, Body, Get, Param, Put, Query, Delete } from "@nestjs/common";
+import { ApiUseTags, ApiBearerAuth } from "@nestjs/swagger";
+import { Controller, Post, Body, Get, Param, Put, Query, Delete, UseGuards, Request, HttpException, HttpStatus } from "@nestjs/common";
 import { CreateAccountDTO } from "./dto/account.dto.create";
 import { CommandBus, QueryBus } from "@nestjs/cqrs";
 import { CreateAccountCommand } from "../application/command/implements/account.command.create";
@@ -12,6 +12,8 @@ import { UpdateAccountDTO, UpdateAccountBodyDTO, UpdateAccountParamDTO } from ".
 import { ReadAccountListDTO } from "./dto/account.dto.read.list";
 import { DeleteAccountDTO, DeleteAccountParamDTO, DeleteAccountBodyDTO } from "./dto/account.dto.delete";
 import { DeleteAccountCommand } from '../application/command/implements/account.command.delete';
+import { AuthGuard } from "@nestjs/passport";
+import { AccountUserDTO } from "./dto/account.dto.user";
 
 @ApiUseTags('Accounts')
 @Controller('accounts')
@@ -31,18 +33,27 @@ export class AccountController {
     return this.queryBus.execute(new ReadAccountListQuery(query));
   }
 
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
   @Get(':accountId')
-  getAccount(@Param() param: ReadAccountDTO): Promise<Account> {
+  getAccount(@Request() req: { user: AccountUserDTO }, @Param() param: ReadAccountDTO): Promise<Account> {
+    if (param.accountId !== req.user.accountId) throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
     return this.queryBus.execute(new ReadAccountQuery(param));
   }
 
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
   @Put(':accountId')
-  updateAccount(@Param() param: UpdateAccountParamDTO, @Body() body: UpdateAccountBodyDTO): Promise<void> {
+  updateAccount(@Request() req: { user: AccountUserDTO }, @Param() param: UpdateAccountParamDTO, @Body() body: UpdateAccountBodyDTO): Promise<void> {
+    if (param.accountId !== req.user.accountId) throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
     return this.commandBus.execute(new UpdateAccountCommand(new UpdateAccountDTO(param, body)));
   }
 
+  @UseGuards(AuthGuard('jwt'))
+  @ApiBearerAuth()
   @Delete(':accountId')
-  deleteAccount(@Param() param: DeleteAccountParamDTO, @Body() body: DeleteAccountBodyDTO): Promise<void> {
+  deleteAccount(@Request() req: { user: AccountUserDTO }, @Param() param: DeleteAccountParamDTO, @Body() body: DeleteAccountBodyDTO): Promise<void> {
+    if (param.accountId !== req.user.accountId) throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
     return this.commandBus.execute(new DeleteAccountCommand(new DeleteAccountDTO(param, body)));
   }
 }

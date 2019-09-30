@@ -14,6 +14,7 @@ async function bootstrap(): Promise<void> {
     .setDescription('Nest.js example project')
     .setVersion('1.0')
     .addTag('Products')
+    .addBearerAuth('Authorization', 'header')
     .build();
 
   const document = SwaggerModule.createDocument(app, options);
