@@ -1,14 +1,14 @@
-import { Module } from "@nestjs/common";
-import { TypeOrmModule } from "@nestjs/typeorm";
-import { AccountEntity } from "./infrastructure/entity/account.entity";
-import { AccountController } from "./interface/account.controller";
-import { AccountRepository } from "./infrastructure/repository/account.repository";
-import { CreateAccountCommandHandler } from "./application/command/handlers/account.handler.command.create";
+import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { CqrsModule } from '@nestjs/cqrs';
+import AccountEntity from './infrastructure/entity/account.entity';
+import AccountController from './interface/account.controller';
+import AccountRepository from './infrastructure/repository/account.repository';
+import { CreateAccountCommandHandler } from './application/command/handlers/account.handler.command.create';
 import { ReadAccountListQueryHandler } from './application/query/handlers/account.handler.query.list';
-import { CqrsModule } from "@nestjs/cqrs";
-import { ReadAccountQueryHandler } from "./application/query/handlers/account.handler.query";
-import { ComparePasswordEventHandler } from "./application/event/handlers/account.handler.event.compare-password";
-import { UpdateAccountCommandHandler } from "./application/command/handlers/account.handler.command.update";
+import { ReadAccountQueryHandler } from './application/query/handlers/account.handler.query';
+import { ComparePasswordEventHandler } from './application/event/handlers/account.handler.event.compare-password';
+import { UpdateAccountCommandHandler } from './application/command/handlers/account.handler.command.update';
 import { DeleteAccountCommandHandler } from './application/command/handlers/account.handler.command.delete';
 
 const queryHandler = [
@@ -36,4 +36,4 @@ const eventHandler = [
     ...eventHandler,
   ],
 })
-export class AccountModule {}
+export default class AccountModule {}

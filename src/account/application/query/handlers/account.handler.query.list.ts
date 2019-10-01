@@ -1,12 +1,13 @@
 import { IQueryHandler, QueryHandler, EventPublisher } from '@nestjs/cqrs';
 import { ReadAccountListQuery } from '../implements/account.query.list';
-import { AccountRepository } from '../../../infrastructure/repository/account.repository';
-import { AccountEntity } from '../../../infrastructure/entity/account.entity';
+import AccountRepository from '../../../infrastructure/repository/account.repository';
+import AccountEntity from '../../../infrastructure/entity/account.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { HttpException, HttpStatus } from '@nestjs/common';
-import { Account } from '../../../domain/model/account.model';
+import Account from '../../../domain/model/account.model';
 import * as jwt from 'jsonwebtoken';
-import { AppConfiguration } from '../../../../app.config';
+import AppConfiguration from '../../../../app.config';
+import { IsNull } from 'typeorm';
 
 const { JWT_SECRET, JWT_EXPIRATION } = AppConfiguration
 
@@ -18,7 +19,7 @@ export class ReadAccountListQueryHandler implements IQueryHandler<ReadAccountLis
   ) {}
 
   async execute(query: ReadAccountListQuery): Promise<{access: string, accountId: string}> {
-    const data = await this.repository.findOneOrFail({ email: query.email }).catch(() => {
+    const data = await this.repository.findOneOrFail({ email: query.email, deletedAt: IsNull() }).catch(() => {
       throw new HttpException('Not found', HttpStatus.NOT_FOUND);
     });
     const account = this.publisher.mergeObjectContext(new Account(data.accountId, data.name, data.email, data.password, data.active));

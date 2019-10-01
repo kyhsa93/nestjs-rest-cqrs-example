@@ -2,11 +2,11 @@ import { TestingModule, Test } from '@nestjs/testing'
 import { CqrsModule, EventPublisher } from '@nestjs/cqrs';
 import { ReadAccountQueryHandler } from './account.handler.query';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { AccountEntity } from '../../../infrastructure/entity/account.entity';
+import AccountEntity from '../../../infrastructure/entity/account.entity';
 import { Repository } from 'typeorm';
-import { AccountRepository } from '../../../infrastructure/repository/account.repository';
+import AccountRepository from '../../../infrastructure/repository/account.repository';
 import { ReadAccountQuery } from '../implements/account.query';
-import { ReadAccountDTO } from '../../../interface/dto/account.dto.read';
+import ReadAccountDTO from '../../../interface/dto/account.dto.read';
 
 describe('ReadAccountQueryHandler', () => {
   let module: TestingModule;

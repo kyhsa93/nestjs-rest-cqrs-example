@@ -1,45 +1,27 @@
 import { AggregateRoot } from '@nestjs/cqrs';
 import bcrypt from 'bcrypt-nodejs';
+import { HttpException, HttpStatus } from '@nestjs/common';
 import { ComparePasswordEvent } from '../../application/event/implements/account.event.compare-password';
 
-export class Account extends AggregateRoot {
+export default class Account extends AggregateRoot {
   constructor(
-    private readonly _accountId: string,
-    private readonly _name: string,
-    private readonly _email: string,
-    private _password: string,
-    private readonly _active: boolean,
+    public readonly accountId: string,
+    public readonly name: string,
+    public readonly email: string,
+    public password: string,
+    public readonly active: boolean,
   ) {
     super();
   }
 
   comparePassword(password: string): boolean {
-    const result = bcrypt.compareSync(password, this._password);
-    if (result) this.apply(new ComparePasswordEvent(this._accountId));
+    const result = bcrypt.compareSync(password, this.password);
+    if (result) this.apply(new ComparePasswordEvent(this.accountId));
     return result;
   }
 
-  get accountId(): string {
-    return this._accountId;
-  }
-
-  get name(): string {
-    return this._name;
-  }
-
-  get email(): string {
-    return this._email;
-  }
-  
-  get password(): string {
-    return this._password;
-  }
-
-  set password(password) {
-    this._password = password;
-  }
-
-  get active(): boolean {
-    return this._active;
+  updatePassoword(oldPassoword: string, newPassword: string): void {
+    if (!this.comparePassword(oldPassoword)) throw new HttpException('Bad requeest', HttpStatus.BAD_REQUEST);
+    this.password = bcrypt.hashSync(newPassword);
   }
 }

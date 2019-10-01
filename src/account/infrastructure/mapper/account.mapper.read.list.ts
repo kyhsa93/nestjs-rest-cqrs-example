@@ -1,7 +1,8 @@
-import { ReadAccountListQuery } from "../../application/query/implements/account.query.list";
+import { ReadAccountListQuery } from '../../application/query/implements/account.query.list';
 
-export class ReadAccountListMapper {
+export default class ReadAccountListMapper {
   public readonly email: string;
+
   public readonly password: string;
 
   constructor(query: ReadAccountListQuery) {

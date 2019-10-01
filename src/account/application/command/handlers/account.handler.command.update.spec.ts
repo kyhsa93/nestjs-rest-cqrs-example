@@ -3,12 +3,14 @@ import bcrypt from 'bcrypt-nodejs';
 import { CqrsModule, EventPublisher } from "@nestjs/cqrs";
 import { UpdateAccountCommandHandler } from './account.handler.command.update';
 import { getRepositoryToken } from "@nestjs/typeorm";
-import { AccountEntity } from "../../../infrastructure/entity/account.entity";
+import AccountEntity from "../../../infrastructure/entity/account.entity";
 import { Repository, UpdateResult } from "typeorm";
-import { AccountRepository } from "../../../infrastructure/repository/account.repository";
-import { Account } from "../../../domain/model/account.model";
+import AccountRepository from "../../../infrastructure/repository/account.repository";
+import Account from "../../../domain/model/account.model";
 import { UpdateAccountCommand } from "../implements/account.command.update";
-import { UpdateAccountDTO, UpdateAccountParamDTO, UpdateAccountBodyDTO } from "../../../interface/dto/account.dto.update";
+import UpdateAccountDTO from "../../../interface/dto/account.dto.update";
+import UpdateAccountParamDTO from "../../../interface/dto/account.dto.update.param";
+import UpdateAccountBodyDTO from "../../../interface/dto/account.dto.update.body";
 
 describe('UpdateAccountCommandHandler', () => {
   let module: TestingModule;

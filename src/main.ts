@@ -3,8 +3,8 @@ import helmet from 'helmet';
 import RateLimit from 'express-rate-limit';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import compression from 'compression';
-import { ApplicationModule } from './app.module';
-import { AppConfiguration } from './app.config';
+import ApplicationModule from './app.module';
+import AppConfiguration from './app.config';
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(ApplicationModule, { cors: true });
@@ -18,7 +18,7 @@ async function bootstrap(): Promise<void> {
     .build();
 
   const document = SwaggerModule.createDocument(app, options);
-  
+
   SwaggerModule.setup('api', app, document);
 
   app.use(helmet());

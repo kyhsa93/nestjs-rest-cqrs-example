@@ -1,4 +1,4 @@
-import { CreateAccountDTO } from "../../../interface/dto/account.dto.create";
+import CreateAccountDTO from "../../../interface/dto/account.dto.create";
 
 export class CreateAccountCommand {
   public readonly email: string;

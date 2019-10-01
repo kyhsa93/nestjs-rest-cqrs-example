@@ -55,6 +55,8 @@
     "@typescript-eslint/eslint-plugin": "^2.3.1",
     "@typescript-eslint/parser": "^2.3.1",
     "eslint": "^6.4.0",
+    "eslint-config-airbnb-typescript": "^5.0.0",
+    "eslint-plugin-import": "^2.18.2",
     "jest": "^24.9.0",
     "nodemon": "^1.19.2",
     "rimraf": "^2.7.1",

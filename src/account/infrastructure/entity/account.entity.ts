@@ -1,31 +1,31 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity({ name: 'account' })
-export class AccountEntity {
+export default class AccountEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
   @Column({ length: 500, unique: true, name: 'account_id' })
-  accountId!: string
+  accountId!: string;
 
   @Column({ length: 500 })
-  name!: string
+  name!: string;
 
   @Column({ length: 500, unique: true })
-  email!: string
+  email!: string;
 
   @Column({ length: 500 })
-  password!: string
+  password!: string;
 
-  @Column({ type: "bool", default: true })
-  active!: boolean
+  @Column({ type: 'bool', default: true })
+  active!: boolean;
 
-  @Column({ type: "datetime", name: 'created_at' })
+  @Column({ type: 'datetime', name: 'created_at' })
   createdAt!: string;
 
-  @Column({ type: "timestamp", default: null, name: 'updated_at' })
+  @Column({ type: 'timestamp', default: null, name: 'updated_at' })
   updatedAt!: string;
 
-  @Column({ type: "datetime", default: null, name: 'deleted_at' })
+  @Column({ type: 'datetime', default: null, name: 'deleted_at' })
   deletedAt!: string;
 }

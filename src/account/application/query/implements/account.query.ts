@@ -1,4 +1,4 @@
-import { ReadAccountDTO } from "../../../interface/dto/account.dto.read";
+import ReadAccountDTO from "../../../interface/dto/account.dto.read";
 
 export class ReadAccountQuery {
   public readonly accountId: string;

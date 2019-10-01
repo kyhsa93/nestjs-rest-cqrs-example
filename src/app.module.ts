@@ -1,11 +1,11 @@
-import { Module } from "@nestjs/common";
-import { TypeOrmModule } from "@nestjs/typeorm";
-import { AppController } from "./app.controller";
-import { AccountModule } from "./account/account.module";
-import { AccountEntity } from "./account/infrastructure/entity/account.entity";
-import { Connection } from "typeorm";
-import { AppConfiguration } from './app.config';
-import { AuthModule } from "./auth/auth.module";
+import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Connection } from 'typeorm';
+import AppController from './app.controller';
+import AccountModule from './account/account.module';
+import AccountEntity from './account/infrastructure/entity/account.entity';
+import AppConfiguration from './app.config';
+import AuthModule from './auth/auth.module';
 
 @Module({
   imports: [
@@ -18,7 +18,7 @@ import { AuthModule } from "./auth/auth.module";
       password: AppConfiguration.DATABASE_PASSWORD,
       synchronize: true,
       logging: true,
-      entities: [AccountEntity,],
+      entities: [AccountEntity],
     }),
     AccountModule,
     AuthModule,
@@ -26,6 +26,6 @@ import { AuthModule } from "./auth/auth.module";
   controllers: [AppController],
   providers: [],
 })
-export class ApplicationModule {
+export default class ApplicationModule {
   constructor(private readonly connection: Connection) {}
 }

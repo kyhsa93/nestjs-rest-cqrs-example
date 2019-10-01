@@ -1,6 +1,6 @@
 import { ApiModelPropertyOptional } from '@nestjs/swagger';
 
-export class ReadAccountListDTO {
+export default class ReadAccountListDTO {
   @ApiModelPropertyOptional()
   public readonly email: string;
 
@@ -8,7 +8,7 @@ export class ReadAccountListDTO {
   public readonly password: string;
 
   constructor(email: string, password: string) {
-    this.email = email;    
+    this.email = email;
     this.password = password;
   }
 }

@@ -1,4 +1,4 @@
-import { DeleteAccountDTO } from "../../../interface/dto/account.dto.delete";
+import DeleteAccountDTO from "../../../interface/dto/account.dto.delete";
 
 export class DeleteAccountCommand {
   public readonly accountId: string;

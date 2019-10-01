@@ -1,4 +1,4 @@
-import { UpdateAccountDTO } from "../../../interface/dto/account.dto.update";
+import UpdateAccountDTO from "../../../interface/dto/account.dto.update";
 
 export class UpdateAccountCommand {
   public readonly accountId: string;

@@ -2,11 +2,11 @@ import { Test, TestingModule } from '@nestjs/testing';
 import uuid from 'uuid';
 import { CreateAccountCommandHandler } from './account.handler.command.create';
 import { CreateAccountCommand } from '../implements/account.command.create';
-import { AccountRepository } from '../../../infrastructure/repository/account.repository';
+import AccountRepository from '../../../infrastructure/repository/account.repository';
 import { EventPublisher, CqrsModule } from '@nestjs/cqrs';
-import { Account } from '../../../domain/model/account.model';
-import { AccountEntity } from '../../../infrastructure/entity/account.entity';
-import { CreateAccountDTO } from '../../../interface/dto/account.dto.create';
+import Account from '../../../domain/model/account.model';
+import AccountEntity from '../../../infrastructure/entity/account.entity';
+import CreateAccountDTO from '../../../interface/dto/account.dto.create';
 import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
 
