@@ -13,14 +13,11 @@ async function bootstrap(): Promise<void> {
     .setTitle('nest.js example')
     .setDescription('Nest.js example project')
     .setVersion('1.0')
-    .addTag('Products')
     .addBearerAuth('Authorization', 'header')
     .build();
 
   const document = SwaggerModule.createDocument(app, options);
-
   SwaggerModule.setup('api', app, document);
-
   app.use(helmet());
   app.use(compression());
   app.use(new RateLimit({ windowMs: 15 * 60 * 1000, max: 100 }));
