@@ -14,5 +14,6 @@ RUN npm install && \
 
 WORKDIR /app
 
-CMD ["node", "main.js"]
+EXPOSE 5000
 
+CMD ["node", "main.js"]
