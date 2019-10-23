@@ -9,6 +9,8 @@ import Account from "../../../domain/model/account.model";
 import { ReadAccountListQuery } from "../implements/account.query.list";
 import ReadAccountListDTO from "../../../interface/dto/account.dto.read.list";
 
+jest.mock('../../../infrastructure/redis/account.redis');
+
 describe('ReadAccountListQueryHandler', () => {
   let module: TestingModule;
   let readAccountListQueryHandler: ReadAccountListQueryHandler;

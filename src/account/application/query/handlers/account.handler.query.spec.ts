@@ -1,5 +1,5 @@
 import { TestingModule, Test } from '@nestjs/testing'
-import { CqrsModule, EventPublisher } from '@nestjs/cqrs';
+import { CqrsModule } from '@nestjs/cqrs';
 import { ReadAccountQueryHandler } from './account.handler.query';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import AccountEntity from '../../../infrastructure/entity/account.entity';
@@ -8,11 +8,12 @@ import AccountRepository from '../../../infrastructure/repository/account.reposi
 import { ReadAccountQuery } from '../implements/account.query';
 import ReadAccountDTO from '../../../interface/dto/account.dto.read';
 
+jest.mock('../../../infrastructure/redis/account.redis');
+
 describe('ReadAccountQueryHandler', () => {
   let module: TestingModule;
   let readAccountQueryHandler: ReadAccountQueryHandler;
   let accountRepository: AccountRepository;
-  let eventPublisher: EventPublisher;
   let accountEntity: AccountEntity;
   let readAccountQuery: ReadAccountQuery;
   let readAccountDto: ReadAccountDTO;
@@ -27,7 +28,6 @@ describe('ReadAccountQueryHandler', () => {
     }).compile();
     readAccountQueryHandler = module.get(ReadAccountQueryHandler);
     accountRepository = module.get<Repository<AccountEntity>>(getRepositoryToken(AccountEntity));
-    eventPublisher = module.get(EventPublisher);
   });
 
   afterAll(async () => close());

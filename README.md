@@ -5,9 +5,9 @@ This is sample nestjs project.
 
 ## Getting started
 
-This is REST api made by node.js, nest, mysql with typescript.
+This is REST api made by node.js, nest, redis, mysql with typescript.
 
-So you have to get node.js environment, mysql for database, know typescript syntax.
+So you have to get node.js environment, redis for cache, mysql for database, know typescript syntax.
 
 ### Prerequisites
 
@@ -41,11 +41,11 @@ Run followed command in your terminal.
   npm install
 ```
 
-Next up, generate mysql database.
+Next up, generate mysql and redis.
 
-If you already have mysql in your development environment, you can use that.
+If you already have mysql, redis in your development environment, you can use that.
 
-But if you don't have mysql database, try this process.
+But if you don't have one or both, try this process.
 
 Install docker for your OS from link in top of this documentation.
 
@@ -55,6 +55,7 @@ If your docker is successfully installed, you can use docker cli.
 
 ```bash
   docker run --name nest -d -p 3306:3306 -e MYSQL_DATABASE=nest -e MYSQL_ROOT_PASSWORD=test -v ~/database/nest:/var/lib/mysql mysql:5.7
+  docker run --name redis -d -p 6379:6379 redis:alpine
 ```
 
 And then, you can connect mysql in http://localhost:3306, user name 'root' and password is 'test'.
@@ -89,7 +90,7 @@ and now you can connect api through http://localhost:5000.
 
 ## Start with docker compose
 
-Docker compose in this project is include api and mysql 5.7 for database.
+Docker compose in this project is include api redis alpine and mysql 5.7 for database.
 
 Run followed command in project directory.
 

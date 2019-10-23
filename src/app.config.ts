@@ -11,6 +11,8 @@ type AppConfigurationType = {
   DATABASE_LOGGING: string;
   JWT_SECRET: string;
   JWT_EXPIRATION: number;
+  REDIS_HOST: string;
+  REDIS_PORT: number;
 };
 
 const AppConfiguration: AppConfigurationType = {
@@ -26,6 +28,8 @@ const AppConfiguration: AppConfigurationType = {
   DATABASE_LOGGING: process.env.DATABASE_LOGGING || 'true',
   JWT_SECRET: 'sAmPlEsEcReT',
   JWT_EXPIRATION: 3600,
+  REDIS_HOST: process.env.REDIS_HOST || 'localhost',
+  REDIS_PORT: Number(process.env.REDIS_PORT) || 6379,
 };
 
 export default AppConfiguration;
