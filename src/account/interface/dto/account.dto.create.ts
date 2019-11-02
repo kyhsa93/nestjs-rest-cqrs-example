@@ -1,13 +1,13 @@
 import { ApiModelProperty } from '@nestjs/swagger';
 
 export default class CreateAccountDTO {
-  @ApiModelProperty()
+  @ApiModelProperty({ example: 'test@test.com' })
   public readonly email: string;
 
-  @ApiModelProperty()
+  @ApiModelProperty({ example: 'testpassword' })
   public readonly password: string;
 
-  @ApiModelProperty()
+  @ApiModelProperty({ example: 'tester' })
   public readonly name: string;
 
   constructor(email: string, password: string, name: string) {
