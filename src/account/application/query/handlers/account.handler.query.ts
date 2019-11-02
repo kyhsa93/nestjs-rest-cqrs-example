@@ -6,7 +6,7 @@ import AccountRepository from "../../../infrastructure/repository/account.reposi
 import ReadAccountMapper from "../../../infrastructure/mapper/account.mapper.read";
 import AccountRedis from '../../../infrastructure/redis/account.redis';
 import { IsNull } from "typeorm";
-import Account from "src/account/domain/model/account.model";
+import Account from "../../../domain/model/account.model";
 
 @QueryHandler(ReadAccountQuery)
 export class ReadAccountQueryHandler implements IQueryHandler<ReadAccountQuery> {
