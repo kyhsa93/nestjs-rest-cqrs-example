@@ -1,0 +1,18 @@
+version: "3.7"
+
+services:
+  redis:
+    image: redis:alpine
+    restart: always
+    ports:
+      - 6379:6379
+
+  database:
+    image: mysql:5.7
+    restart: always
+    ports:
+      - 3306:3306
+    env_file:
+      - .env
+    volumes:
+      - ~/database/nest:/var/lib/mysql
