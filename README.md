@@ -56,6 +56,11 @@ If your docker is successfully installed, you can use docker cli.
 ```bash
   docker run --name nest -d -p 3306:3306 -e MYSQL_DATABASE=nest -e MYSQL_ROOT_PASSWORD=test -v ~/database/nest:/var/lib/mysql mysql:5.7
   docker run --name redis -d -p 6379:6379 redis:alpine
+
+  OR
+
+  docker-compose -f docker-compose.development.yml up -d # create mysql, redis container for development environment
+  docker-compose -f docker-compose.development.yml down  # remove created containers
 ```
 
 And then, you can connect mysql in http://localhost:3306, user name 'root' and password is 'test'.
@@ -90,7 +95,7 @@ and now you can connect api through http://localhost:5000.
 
 ## Start with docker compose
 
-Docker compose in this project is include api redis alpine and mysql 5.7 for database.
+Docker compose in this project is include api redis and mysql 5.7 for database.
 
 Run followed command in project directory.
 
