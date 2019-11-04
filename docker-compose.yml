@@ -19,9 +19,13 @@ services:
       - .env
     links:
       - database
-  
-  redis:
-    image: redis:alpine
+
+  redis-master:
+    image: k8s.gcr.io/redis
+    restart: always
+
+  redis-slave:
+    image: gcr.io/google_samples/gb-redisslave:v3
     restart: always
 
   database:

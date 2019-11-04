@@ -2,17 +2,19 @@ import Redis from 'ioredis';
 import AppConfiguration from '../../../app.config';
 
 export default class AccountRedis {
-  private readonly redis: Redis.Redis;
+  private readonly master: Redis.Redis;
+  private readonly slave: Redis.Redis;
 
   constructor() {
-    this.redis = new Redis(AppConfiguration.REDIS_PORT, AppConfiguration.REDIS_HOST);
+    this.master = new Redis(AppConfiguration.REDIS_MASTER_PORT, AppConfiguration.REDIS_MASTER_HOST);
+    this.slave = new Redis(AppConfiguration.REDIS_SLAVE_PORT, AppConfiguration.REDIS_SLAVE_HOST);
   }
 
   async set(key: string, value: string): Promise<string> {
-    return this.redis.set(key, value, 'EX', 1);
+    return this.master.set(key, value, 'EX', 1);
   }
 
   async get(key: string): Promise<string | null> {
-    return this.redis.get(key).then(result => result).catch(() => null);
+    return this.slave.get(key).then(result => result).catch(() => null);
   }
 }
