@@ -21,11 +21,11 @@ services:
       - database
 
   redis-master:
-    image: k8s.gcr.io/redis
+    image: kyhsa93/redis-master
     restart: always
 
   redis-slave:
-    image: gcr.io/google_samples/gb-redisslave:v3
+    image: kyhsa93/redis-slave
     restart: always
 
   database:

@@ -86,7 +86,7 @@ spec:
     spec:
       containers:
       - name: master
-        image: k8s.gcr.io/redis
+        image: kyhsa93/redis-master
         resources:
           requests:
             cpu: 100m
@@ -132,7 +132,7 @@ spec:
     spec:
       containers:
       - name: slave
-        image: gcr.io/google_samples/gb-redisslave:v3
+        image: kyhsa93/redis-slave
         resources:
           requests:
             cpu: 100m
