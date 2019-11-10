@@ -1,6 +1,6 @@
 type AppConfigurationType = {
   NODE_ENV: string;
-  PORT: string;
+  PORT: number;
   DATABASE_TYPE: 'mysql' | 'mariadb';
   DATABASE_HOST: string;
   DATABASE_PORT: number;
@@ -19,7 +19,7 @@ type AppConfigurationType = {
 
 const AppConfiguration: AppConfigurationType = {
   NODE_ENV: process.env.NODE_ENV || 'development',
-  PORT: process.env.PORT || '5000',
+  PORT: Number(process.env.PORT) || 5000,
   DATABASE_TYPE: 'mysql',
   DATABASE_HOST: process.env.DATABASE_HOST || 'localhost',
   DATABASE_PORT: Number(process.env.DATABASE_PORT) || 3306,
