@@ -3,6 +3,7 @@ import AppConfiguration from '../../../app.config';
 
 export default class AccountRedis {
   private readonly master: Redis.Redis;
+
   private readonly slave: Redis.Redis;
 
   constructor() {
