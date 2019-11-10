@@ -1,7 +1,7 @@
 import { ApiModelProperty } from '@nestjs/swagger';
 
 export default class UpdateAccountBodyDTO {
-  @ApiModelProperty({ example: 'test@test.com' })
+  @ApiModelProperty({ example: 'testpassword' })
   public readonly newPassword: string;
 
   @ApiModelProperty({ example: 'testpassword' })
