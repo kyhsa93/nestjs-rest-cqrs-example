@@ -42,9 +42,9 @@ describe('UpdateAccountCommandHandler', () => {
 
   describe('execute', () => {
     accountEntity = new AccountEntity();
-    account = new Account(accountEntity.accountId, accountEntity.name, accountEntity.email, accountEntity.password, accountEntity.active);
+    account = new Account(accountEntity.id, accountEntity.name, accountEntity.email, accountEntity.password, accountEntity.active);
     accountUpdateResult = new UpdateResult();
-    updateAccountParamDto = new UpdateAccountParamDTO(accountEntity.accountId);
+    updateAccountParamDto = new UpdateAccountParamDTO(accountEntity.id);
     updateAccountBodyDto = new UpdateAccountBodyDTO('newPassword', 'oldPassword');
     updateAccountDto = new UpdateAccountDTO(updateAccountParamDto, updateAccountBodyDto);
     updateAccountCommand = new UpdateAccountCommand(updateAccountDto);

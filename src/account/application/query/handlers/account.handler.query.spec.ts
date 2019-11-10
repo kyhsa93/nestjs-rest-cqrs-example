@@ -35,7 +35,7 @@ describe('ReadAccountQueryHandler', () => {
   describe('execute', () => {
     accountRepository = new AccountRepository();
     accountEntity = new AccountEntity();
-    readAccountDto = new ReadAccountDTO('accountId');
+    readAccountDto = new ReadAccountDTO('id');
     readAccountQuery = new ReadAccountQuery(readAccountDto);
 
     it('execute query handler', async () => {

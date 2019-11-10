@@ -2,7 +2,7 @@ import moment from 'moment';
 import Account from '../../domain/model/account.model';
 
 export default class UpdateAccountMapper {
-  public readonly accountId: string;
+  public readonly id: string;
 
   public readonly name: string;
 
@@ -15,7 +15,7 @@ export default class UpdateAccountMapper {
   public readonly updatedAt: string;
 
   constructor(account: Account) {
-    this.accountId = account.accountId;
+    this.id = account.id;
     this.name = account.name;
     this.email = account.email;
     this.password = account.password;

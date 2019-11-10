@@ -42,36 +42,36 @@ export default class AccountController {
 
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth()
-  @Get(':accountId')
+  @Get(':id')
   getAccount(
     @Request() req: { user: AccountUserDTO },
     @Param() param: ReadAccountDTO,
   ): Promise<Account> {
-    if (param.accountId !== req.user.accountId) throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
+    if (param.id !== req.user.id) throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
     return this.queryBus.execute(new ReadAccountQuery(param));
   }
 
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth()
-  @Put(':accountId')
+  @Put(':id')
   updateAccount(
     @Request() req: { user: AccountUserDTO },
     @Param() param: UpdateAccountParamDTO,
     @Body() body: UpdateAccountBodyDTO,
   ): Promise<void> {
-    if (param.accountId !== req.user.accountId) throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
+    if (param.id !== req.user.id) throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
     return this.commandBus.execute(new UpdateAccountCommand(new UpdateAccountDTO(param, body)));
   }
 
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth()
-  @Delete(':accountId')
+  @Delete(':id')
   deleteAccount(
     @Request() req: { user: AccountUserDTO },
     @Param() param: DeleteAccountParamDTO,
     @Body() body: DeleteAccountBodyDTO,
   ): Promise<void> {
-    if (param.accountId !== req.user.accountId) throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
+    if (param.id !== req.user.id) throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
     return this.commandBus.execute(new DeleteAccountCommand(new DeleteAccountDTO(param, body)));
   }
 }

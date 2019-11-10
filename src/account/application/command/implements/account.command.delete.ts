@@ -1,11 +1,11 @@
 import DeleteAccountDTO from "../../../interface/dto/account.dto.delete";
 
 export class DeleteAccountCommand {
-  public readonly accountId: string;
+  public readonly id: string;
   public readonly password: string;
 
   constructor(dto: DeleteAccountDTO) {
-    this.accountId = dto.accountId;
+    this.id = dto.id;
     this.password = dto.password;
   }
 }

@@ -5,7 +5,7 @@ import { ComparePasswordEvent } from '../../application/event/implements/account
 
 export default class Account extends AggregateRoot {
   constructor(
-    public readonly accountId: string,
+    public readonly id: string,
     public readonly name: string,
     public readonly email: string,
     public password: string,
@@ -16,7 +16,7 @@ export default class Account extends AggregateRoot {
 
   comparePassword(password: string): boolean {
     const result = bcrypt.compareSync(password, this.password);
-    if (result) this.apply(new ComparePasswordEvent(this.accountId));
+    if (result) this.apply(new ComparePasswordEvent(this.id));
     return result;
   }
 

@@ -7,7 +7,7 @@ import { ReadAccountQuery } from '../account/application/query/implements/accoun
 import ReadAccountDTO from '../account/interface/dto/account.dto.read';
 import Account from '../account/domain/model/account.model';
 
-type payloadType = { accountId: string; email: string; name: string };
+type PayloadType = { id: string; email: string; name: string };
 
 @Injectable()
 export default class JwtStrategy extends PassportStrategy(Strategy) {
@@ -21,8 +21,8 @@ export default class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  private async validate(payload: payloadType): Promise<payloadType | false> {
-    const dto: ReadAccountDTO = new ReadAccountDTO(payload.accountId);
+  private async validate(payload: PayloadType): Promise<PayloadType | false> {
+    const dto = new ReadAccountDTO(payload.id);
     const account: Account = await this.queryBus.execute(new ReadAccountQuery(dto));
     return (account) && (account.email === payload.email) && (account.name === payload.name)
       ? payload : false;

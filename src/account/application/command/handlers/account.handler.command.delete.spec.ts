@@ -41,9 +41,9 @@ describe('DeleteAccountCommandHandler', () => {
 
   describe('execute', () => {
     accountEntity = new AccountEntity()
-    account = new Account(accountEntity.accountId, accountEntity.name, accountEntity.email, accountEntity.password, accountEntity.active);
+    account = new Account(accountEntity.id, accountEntity.name, accountEntity.email, accountEntity.password, accountEntity.active);
     accountUpdateResult = new UpdateResult();
-    deleteAccountParamDto = new DeleteAccountParamDTO('accountId');
+    deleteAccountParamDto = new DeleteAccountParamDTO('id');
     deleteAccountBodyDto = new DeleteAccountBodyDTO('password')
     deleteAccountDto = new DeleteAccountDTO(deleteAccountParamDto, deleteAccountBodyDto);
     deleteAccountCommand = new DeleteAccountCommand(deleteAccountDto);

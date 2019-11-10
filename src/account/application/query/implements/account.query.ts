@@ -1,9 +1,9 @@
 import ReadAccountDTO from "../../../interface/dto/account.dto.read";
 
 export class ReadAccountQuery {
-  public readonly accountId: string;
+  public readonly id: string;
 
   constructor(dto: ReadAccountDTO) {
-    this.accountId = dto.accountId;
+    this.id = dto.id;
   }
 }

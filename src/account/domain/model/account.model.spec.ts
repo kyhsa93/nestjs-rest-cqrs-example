@@ -7,8 +7,8 @@ describe('AccountModel', () => {
   let comparePasswordEvent: ComparePasswordEvent;
 
   describe('comparePassword', () => {
-    accountModel = new Account('accountId', 'accountName', 'accountEmail', 'accountPassword', true);
-    comparePasswordEvent = new ComparePasswordEvent(accountModel.accountId);
+    accountModel = new Account('id', 'accountName', 'accountEmail', 'accountPassword', true);
+    comparePasswordEvent = new ComparePasswordEvent(accountModel.id);
 
     it('execute comparePassword method', () => {
       jest.spyOn(bcrypt, 'compareSync').mockImplementation(() => true);

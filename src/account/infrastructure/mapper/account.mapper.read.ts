@@ -1,12 +1,12 @@
 import { IsNull, FindOperator } from 'typeorm';
 
 export default class ReadAccountMapper {
-  public readonly accountId: string;
+  public readonly id: string;
 
   public readonly deletedAt: FindOperator<string>;
 
-  constructor(accountId: string) {
-    this.accountId = accountId;
+  constructor(id: string) {
+    this.id = id;
     this.deletedAt = IsNull();
   }
 }

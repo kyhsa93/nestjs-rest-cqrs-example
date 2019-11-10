@@ -19,7 +19,7 @@ describe('ComparePasswordEventHandler', () => {
   afterAll(async () => close());
 
   describe('handle', () => {
-    comparePasswordEvent = new ComparePasswordEvent('accountId');
+    comparePasswordEvent = new ComparePasswordEvent('id');
     it('run event handler', () => {
       const result = comparePasswordEventHandler.handle(comparePasswordEvent);
       expect(result).toBe(undefined);

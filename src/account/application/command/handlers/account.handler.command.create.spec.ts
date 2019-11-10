@@ -38,7 +38,7 @@ describe('CreateAccountCommandHandler', () => {
 
   describe('execute', () => {
     accountEntity = new AccountEntity();
-    account = new Account(accountEntity.accountId, accountEntity.name, accountEntity.email, accountEntity.password, accountEntity.active);
+    account = new Account(accountEntity.id, accountEntity.name, accountEntity.email, accountEntity.password, accountEntity.active);
     createAccountDto = new CreateAccountDTO(accountEntity.email, accountEntity.password, accountEntity.name);
     createAccountCommand = new CreateAccountCommand(createAccountDto);
 

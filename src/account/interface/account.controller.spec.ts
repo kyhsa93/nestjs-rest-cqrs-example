@@ -59,7 +59,7 @@ describe('AccountController', () => {
   describe('getAccountByEmailAndPassword', () => {
     const email = 'test@test.com';
     const password = 'password';
-    const account = new Account('accountId', 'accountName', 'accountEmail', 'accountPassword', true);
+    const account = new Account('id', 'accountName', 'accountEmail', 'accountPassword', true);
     const readAccountListDto = new ReadAccountListDTO(email, password);
     const readAccountListQuery = new ReadAccountListQuery(readAccountListDto);
 
@@ -71,10 +71,10 @@ describe('AccountController', () => {
   });
 
   describe('getAccount', () => {
-    const account = new Account('accountId', 'accountName', 'accountEmail', 'accountPassword', true);
-    const readAccountDto = new ReadAccountDTO('accountId');
+    const account = new Account('id', 'accountName', 'accountEmail', 'accountPassword', true);
+    const readAccountDto = new ReadAccountDTO('id');
     const readAccountQeury = new ReadAccountQuery(readAccountDto);
-    const user = new AccountUserDTO('accountId', 'accountEmail', 'accountName');
+    const user = new AccountUserDTO('id', 'accountEmail', 'accountName');
     it('getAccount method call queryBus with query', async () => {
       const spy = jest.spyOn(queryBus, 'execute').mockImplementation(() => Promise.resolve(account));
       await accountController.getAccount({ user }, readAccountDto);
@@ -83,11 +83,11 @@ describe('AccountController', () => {
   });
 
   describe('updateAccount', () => {
-    const updateAccountParamDto = new UpdateAccountParamDTO('accountId');
+    const updateAccountParamDto = new UpdateAccountParamDTO('id');
     const updateAccountBodyDto = new UpdateAccountBodyDTO('newPassword', 'oldPassword');
     const updateAccountDto = new UpdateAccountDTO(updateAccountParamDto, updateAccountBodyDto);
     const updateAccountCommand = new UpdateAccountCommand(updateAccountDto);
-    const user = new AccountUserDTO('accountId', 'accountEmail', 'accountName');
+    const user = new AccountUserDTO('id', 'accountEmail', 'accountName');
     it('updateAccount method call commndBus with command', async () => {
       const spy = jest.spyOn(commandBus, 'execute').mockImplementation(() => Promise.resolve());
       await accountController.updateAccount({ user }, updateAccountParamDto, updateAccountBodyDto);
@@ -96,11 +96,11 @@ describe('AccountController', () => {
   });
 
   describe('deleteAccount', () => {
-    const deleteAccountParamDto = new DeleteAccountParamDTO('accountId');
+    const deleteAccountParamDto = new DeleteAccountParamDTO('id');
     const deleteAccountBodyDto = new DeleteAccountBodyDTO('password');
     const deleteAccountDto = new DeleteAccountDTO(deleteAccountParamDto, deleteAccountBodyDto);
     const deleteAccountCommand = new DeleteAccountCommand(deleteAccountDto);
-    const user: AccountUserDTO = new AccountUserDTO('accountId', 'accountEmail', 'accountName');
+    const user: AccountUserDTO = new AccountUserDTO('id', 'accountEmail', 'accountName');
     it('deleteAccount method call commandBus tiwh command', async () => {
       const spy = jest.spyOn(commandBus, 'execute').mockImplementation();
       await accountController.deleteAccount({ user }, deleteAccountParamDto, deleteAccountBodyDto);

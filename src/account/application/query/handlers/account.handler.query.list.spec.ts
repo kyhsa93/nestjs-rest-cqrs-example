@@ -38,7 +38,7 @@ describe('ReadAccountListQueryHandler', () => {
 
   describe('execute', () => {
     accountEntity = new AccountEntity();
-    account = new Account(accountEntity.accountId, accountEntity.name, accountEntity.email, accountEntity.password, accountEntity.active);
+    account = new Account(accountEntity.id, accountEntity.name, accountEntity.email, accountEntity.password, accountEntity.active);
     readAccountListDto = new ReadAccountListDTO('test@test.com', 'password');
     readAccountListQuery = new ReadAccountListQuery(readAccountListDto);
   
@@ -47,7 +47,7 @@ describe('ReadAccountListQueryHandler', () => {
       jest.spyOn(eventPublisher, 'mergeObjectContext').mockImplementation(() => account);
       jest.spyOn(account, 'comparePassword').mockImplementation(() => true);
       const result = await readAccountListQueryHandler.execute(readAccountListQuery);
-      expect(result).toHaveProperty('accountId');
+      expect(result).toHaveProperty('id');
       expect(result).toHaveProperty('access');
     });
   });

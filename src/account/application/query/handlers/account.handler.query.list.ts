@@ -19,17 +19,17 @@ export class ReadAccountListQueryHandler implements IQueryHandler<ReadAccountLis
     private readonly publisher: EventPublisher,
   ) {}
 
-  private validation(data: Account, password: string): { access: string, accountId: string } {
-    const account = this.publisher.mergeObjectContext(new Account(data.accountId, data.name, data.email, data.password, data.active));
+  private validation(data: Account, password: string): { access: string, id: string } {
+    const account = this.publisher.mergeObjectContext(new Account(data.id, data.name, data.email, data.password, data.active));
     if (!account.comparePassword(password)) throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
     account.commit();
     return {
-      accountId: account.accountId,
-      access: jwt.sign({ accountId: account.accountId, email: account.email, name: account.name }, JWT_SECRET, { expiresIn: JWT_EXPIRATION }),
+      id: account.id,
+      access: jwt.sign({ id: account.id, email: account.email, name: account.name }, JWT_SECRET, { expiresIn: JWT_EXPIRATION }),
     };
   }
 
-  async execute(query: ReadAccountListQuery): Promise<{ access: string, accountId: string }> {
+  async execute(query: ReadAccountListQuery): Promise<{ access: string, id: string }> {
     const redis = new AccountRedis();
     const cached = await redis.get(`account:${query.email}`);
     if (cached) return this.validation(JSON.parse(cached), query.password);
@@ -37,7 +37,7 @@ export class ReadAccountListQueryHandler implements IQueryHandler<ReadAccountLis
     const data = await this.repository.findOneOrFail({ email: query.email, deletedAt: IsNull() }).catch(() => {
       throw new HttpException('Not found', HttpStatus.NOT_FOUND);
     });
-    const account = this.publisher.mergeObjectContext(new Account(data.accountId, data.name, data.email, data.password, data.active));
+    const account = this.publisher.mergeObjectContext(new Account(data.id, data.name, data.email, data.password, data.active));
     redis.set(`account:${query.email}`, JSON.stringify(account));
     return this.validation(account, query.password);
   }

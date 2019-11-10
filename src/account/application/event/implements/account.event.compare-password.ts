@@ -1,3 +1,3 @@
 export class ComparePasswordEvent {
-  constructor(public readonly accountId: string) {}
+  constructor(public readonly id: string) {}
 }
