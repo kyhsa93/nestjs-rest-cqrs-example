@@ -14,5 +14,3 @@ services:
       - 3306:3306
     env_file:
       - .env
-    volumes:
-      - ~/database/nest:/var/lib/mysql
