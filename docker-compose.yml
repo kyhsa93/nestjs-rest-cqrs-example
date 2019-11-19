@@ -13,7 +13,7 @@ services:
     command: [nginx-debug, '-g', 'daemon off;']
 
   nest:
-    build: .
+    image: kyhsa93/nestjs-rest-cqrs-example
     restart: always
     env_file:
       - .env
