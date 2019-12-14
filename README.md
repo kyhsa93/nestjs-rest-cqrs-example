@@ -112,7 +112,7 @@ Default database user is root and password is test.
 If you want apply your modified code into the running container, you can add build option.
 
 ```bash
-  docker-compose up -d --build # if source code is changed, rebuidl image, recreate and start container
+  docker-compose up -d --build # if source code is changed, rebuild image, recreate and start container
 ```
 
 After use compose, you have to stop and remove containers.
@@ -169,7 +169,7 @@ Most default configuration can use through you environment values.
 
 And also you can modify configurations.
 
-## Documantaion
+## Documentation
 
 Documentaion about this project is made swagger.
 
