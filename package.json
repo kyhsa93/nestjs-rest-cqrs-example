@@ -66,6 +66,9 @@
   },
   "jest": {
     "verbose": false,
+    "moduleNameMapper": {
+      "src/(.*)": "<rootDir>/$1"
+    },
     "moduleFileExtensions": [
       "js",
       "json",
@@ -78,7 +81,7 @@
   },
   "scripts": {
     "lint": "eslint --fix src/**.ts src/**/**.ts src/**/**/**.ts src/**/**/**/**.ts",
-    "test": "jest",
+    "test": "jest --clearCache && jest",
     "build": "rimraf dist && tsc -p tsconfig.build.json",
     "start": "nodemon"
   }

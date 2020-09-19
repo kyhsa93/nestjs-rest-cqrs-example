@@ -1,31 +1,32 @@
-import bcrypt from 'bcrypt-nodejs';
-import { CommandHandler, ICommandHandler, EventPublisher } from "@nestjs/cqrs";
-import { InjectRepository } from '@nestjs/typeorm';
-import { CreateAccountCommand } from "../implements/account.command.create";
+import { CommandHandler, EventPublisher, ICommandHandler } from "@nestjs/cqrs";
+import { BadRequestException, Inject } from "@nestjs/common";
+
 import AccountRepository from "../../../infrastructure/repository/account.repository";
-import AccountEntity from "../../../infrastructure/entity/account.entity";
-import Account from "../../../domain/model/account.model";
-import CreateAccountMapper from '../../../infrastructure/mapper/account.mapper.create';
-import { HttpException, HttpStatus } from "@nestjs/common";
+
+import CreateAccountCommand from "src/account/application/command/implements/account.command.create";
+
+import AccountFactory from 'src/account/domain/model/account.factory';
 
 @CommandHandler(CreateAccountCommand)
 export class CreateAccountCommandHandler implements ICommandHandler<CreateAccountCommand> {
   constructor(
-    @InjectRepository(AccountEntity) private readonly repository: AccountRepository,
-    private readonly publisher: EventPublisher,
+    @Inject(AccountFactory) private readonly accountFactory: AccountFactory,
+    @Inject(AccountRepository) private readonly accountRepository: AccountRepository,
+    private readonly eventPublisher: EventPublisher,
   ) {}
 
-  async execute(command: CreateAccountCommand): Promise<void> {
-    await this.repository.findOne({ where: [{ email: command.email }]}).then((item) => {
-      if (item) throw new HttpException('Conflict', HttpStatus.CONFLICT);
-    });
+  public async execute(command: CreateAccountCommand): Promise<void> {
+    const { email, password } = command;
 
-    const { name, email, password } = command;
-    const result = await this.repository.save(new CreateAccountMapper(name, email, bcrypt.hashSync(password)));
+    const accounts = await this.accountRepository.findByEmail(email);
+    if (accounts.length) throw new BadRequestException('duplicated email');
 
-    const account: Account = this.publisher.mergeObjectContext(
-      new Account(result.id, name, email, result.password, result.active),
-    );
+    const id = await this.accountRepository.newId();
+
+    const account = this.eventPublisher.mergeObjectContext(this.accountFactory.create(id, email, password));
+
     account.commit();
+
+    await this.accountRepository.save(account);
   }
 }

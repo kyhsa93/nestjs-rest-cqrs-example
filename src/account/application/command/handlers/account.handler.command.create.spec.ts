@@ -1,54 +1,50 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import uuid from 'uuid';
-import { CreateAccountCommandHandler } from './account.handler.command.create';
-import { CreateAccountCommand } from '../implements/account.command.create';
-import AccountRepository from '../../../infrastructure/repository/account.repository';
-import { EventPublisher, CqrsModule } from '@nestjs/cqrs';
-import Account from '../../../domain/model/account.model';
-import AccountEntity from '../../../infrastructure/entity/account.entity';
-import CreateAccountDTO from '../../../interface/dto/account.dto.create';
-import { Repository } from 'typeorm';
-import { getRepositoryToken } from '@nestjs/typeorm';
+import { BadRequestException, Provider } from "@nestjs/common";
+import { ModuleMetadata } from "@nestjs/common/interfaces";
+import { Test } from "@nestjs/testing";
 
-describe('CreateAccountCommandHandler', () => {
-  let module: TestingModule;
+import AccountRepository from "src/account/infrastructure/repository/account.repository";
+
+import { CreateAccountCommandHandler } from "src/account/application/command/handlers/account.handler.command.create";
+import CreateAccountCommand from "src/account/application/command/implements/account.command.create";
+
+import AccountFactory from "src/account/domain/model/account.factory";
+import Account from "src/account/domain/model/account.model";
+import { EventPublisher } from "@nestjs/cqrs";
+
+describe('CreateAccountHandler', () => {
   let accountRepository: AccountRepository;
-  let accountEntity: AccountEntity;
+  let accountFactory: AccountFactory;
   let eventPublisher: EventPublisher;
-  let account: Account;
-  let createAccountDto: CreateAccountDTO;
-  let createAccountCommand: CreateAccountCommand;
   let createAccountCommandHandler: CreateAccountCommandHandler;
 
-  beforeAll(async () => {
-    module = await Test.createTestingModule({
-      imports: [CqrsModule],
-      providers: [
-        CreateAccountCommandHandler,
-        { provide: getRepositoryToken(AccountEntity), useClass: Repository },
-      ],
-    }).compile();
+  beforeEach(async () => {
+    const providers: Provider[] = [AccountFactory, AccountRepository, EventPublisher, CreateAccountCommandHandler];
+    const moduleMetadata: ModuleMetadata = { providers };
+    const testModule = await Test.createTestingModule(moduleMetadata).compile();
 
-    createAccountCommandHandler = module.get(CreateAccountCommandHandler);
-    accountRepository = module.get<Repository<AccountEntity>>(getRepositoryToken(AccountEntity));
-    eventPublisher = module.get(EventPublisher);
+    accountRepository = testModule.get(AccountRepository);
+    accountFactory = testModule.get(AccountFactory);
+    eventPublisher = testModule.get(EventPublisher);
+    createAccountCommandHandler = testModule.get(CreateAccountCommandHandler);
   });
 
-  afterAll(async () => close());
-
   describe('execute', () => {
-    accountEntity = new AccountEntity();
-    account = new Account(accountEntity.id, accountEntity.name, accountEntity.email, accountEntity.password, accountEntity.active);
-    createAccountDto = new CreateAccountDTO(accountEntity.email, accountEntity.password, accountEntity.name);
-    createAccountCommand = new CreateAccountCommand(createAccountDto);
+    it('should throw BadRequestException when same email account is exists', () => {
+      const command = new CreateAccountCommand('email', 'password');
+      
+      jest.spyOn(accountRepository, 'findByEmail').mockResolvedValue([{} as Account]);
 
-    it('execute command handler', async () => {
-      jest.spyOn(uuid, 'v4').mockImplementation(() => 'uuidv4');
-      jest.spyOn(accountRepository, 'findOne').mockResolvedValue(undefined);
-      jest.spyOn(eventPublisher, 'mergeObjectContext').mockImplementation(() => account);
-      jest.spyOn(accountRepository, 'save').mockResolvedValue(accountEntity);
-      const result = await createAccountCommandHandler.execute(createAccountCommand);
-      expect(result).toBe(undefined);
+      expect(createAccountCommandHandler.execute(command)).toThrow(BadRequestException);
     });
+
+    it('should return Promise<void>', () => {
+      const command = new CreateAccountCommand('email', 'password');
+
+      jest.spyOn(accountRepository, 'findByEmail').mockResolvedValue([]);
+      jest.spyOn(accountRepository, 'newId').mockResolvedValue('id');
+      jest.spyOn(accountRepository, 'save').mockResolvedValue(undefined);
+
+      expect(createAccountCommandHandler.execute(command)).resolves.toEqual(undefined);
+    })
   });
 });
