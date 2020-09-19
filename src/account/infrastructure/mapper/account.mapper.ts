@@ -19,7 +19,7 @@ export default class AccountMapper {
   }
 
   public entityToModel(entity: AccountEntity): Account {
-    const { id, email, password, active, createdAt, updatedAt, deletedAt } = entity;
+    const { id, email, password, createdAt, updatedAt, deletedAt } = entity;
     const passwordData = { encrypted: password.encrypted, salt: password.salt, createdAt: password.createdAt, comparedAt: password.comparedAt };
     return this.accountFactory.reconstitute(id, email, passwordData, createdAt, updatedAt, deletedAt);
   }

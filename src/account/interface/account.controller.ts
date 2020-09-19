@@ -5,22 +5,21 @@ import {
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { AuthGuard } from '@nestjs/passport';
+
 import CreateAccountDTO from './dto/account.dto.create';
-import { CreateAccountCommand } from '../application/command/implements/account.command.create';
-import Account from '../domain/model/account.model';
-import { ReadAccountListQuery } from '../application/query/implements/account.query.by.email.and.password';
-import { ReadAccountQuery } from '../application/query/implements/account.query.by.id';
 import ReadAccountDTO from './dto/account.dto.read';
-import { UpdateAccountCommand } from '../application/command/implements/account.command.update';
-import ReadAccountListDTO from './dto/account.dto.read.list';
-import { DeleteAccountCommand } from '../application/command/implements/account.command.delete';
 import AccountUserDTO from './dto/account.dto.user';
 import UpdateAccountParamDTO from './dto/account.dto.update.param';
 import UpdateAccountBodyDTO from './dto/account.dto.update.body';
-import UpdateAccountDTO from './dto/account.dto.update';
 import DeleteAccountParamDTO from './dto/account.dto.delete.param';
 import DeleteAccountBodyDTO from './dto/account.dto.delete.body';
-import DeleteAccountDTO from './dto/account.dto.delete';
+
+import CreateAccountCommand from '../application/command/implements/account.command.create';
+import ReadAccountQuery from '../application/query/implements/account.query.by.id';
+import UpdateAccountCommand from '../application/command/implements/account.command.update';
+import DeleteAccountCommand from '../application/command/implements/account.command.delete';
+
+import Account from '../domain/model/account.model';
 
 @ApiTags('Accounts')
 @Controller('accounts')
@@ -31,13 +30,9 @@ export default class AccountController {
   ) {}
 
   @Post()
-  create(@Body() body: CreateAccountDTO): Promise<void> {
-    return this.commandBus.execute(new CreateAccountCommand(body));
-  }
-
-  @Get()
-  getAccountByEmailAndPassword(@Query() query: ReadAccountListDTO): Promise<Account> {
-    return this.queryBus.execute(new ReadAccountListQuery(query));
+  public async create(@Body() body: CreateAccountDTO): Promise<void> {
+    const { email, password } = body;
+    await this.commandBus.execute(new CreateAccountCommand(email, password));
   }
 
   @UseGuards(AuthGuard('jwt'))
@@ -48,30 +43,32 @@ export default class AccountController {
     @Param() param: ReadAccountDTO,
   ): Promise<Account> {
     if (param.id !== req.user.id) throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
-    return this.queryBus.execute(new ReadAccountQuery(param));
+    return this.queryBus.execute(new ReadAccountQuery(param.id));
   }
 
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth()
   @Put(':id')
-  updateAccount(
+  public async updateAccount(
     @Request() req: { user: AccountUserDTO },
     @Param() param: UpdateAccountParamDTO,
     @Body() body: UpdateAccountBodyDTO,
   ): Promise<void> {
     if (param.id !== req.user.id) throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
-    return this.commandBus.execute(new UpdateAccountCommand(new UpdateAccountDTO(param, body)));
+    const { oldPassword, newPassword } = body;
+    await this.commandBus.execute(new UpdateAccountCommand(param.id, oldPassword, newPassword));
   }
 
   @UseGuards(AuthGuard('jwt'))
   @ApiBearerAuth()
   @Delete(':id')
-  deleteAccount(
+  public async deleteAccount(
     @Request() req: { user: AccountUserDTO },
     @Param() param: DeleteAccountParamDTO,
     @Body() body: DeleteAccountBodyDTO,
   ): Promise<void> {
     if (param.id !== req.user.id) throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
-    return this.commandBus.execute(new DeleteAccountCommand(new DeleteAccountDTO(param, body)));
+    const { password } = body;
+    await this.commandBus.execute(new DeleteAccountCommand(param.id, password));
   }
 }
