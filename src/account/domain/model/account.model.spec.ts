@@ -1,20 +1,47 @@
-import bcrypt from 'bcrypt-nodejs';
+import bcrypt from 'bcrypt';
+import { UnauthorizedException } from '@nestjs/common';
+
 import Account from './account.model';
-import { ComparePasswordEvent } from '../../application/event/implements/account.event.compare-password';
+import Password from 'src/account/domain/model/password.model';
 
 describe('AccountModel', () => {
-  let accountModel: Account;
-  let comparePasswordEvent: ComparePasswordEvent;
+  describe('updatePassword', () => {
+    it('should throw UnauthorizedException when password is not matched', () => {
+      const password = new Password('encrypted', 'salt', new Date(), new Date())
+      const account = new Account('id', 'email', password, new Date(), new Date());
 
-  describe('comparePassword', () => {
-    accountModel = new Account('id', 'accountName', 'accountEmail', 'accountPassword', true);
-    comparePasswordEvent = new ComparePasswordEvent(accountModel.id);
+      jest.spyOn(bcrypt, 'compareSync').mockReturnValue(false);
 
-    it('execute comparePassword method', () => {
-      jest.spyOn(bcrypt, 'compareSync').mockImplementation(() => true);
-      const spy = jest.spyOn(accountModel, 'apply').mockImplementation(() => true);
-      accountModel.comparePassword('password');
-      expect(spy).toBeCalledWith(comparePasswordEvent);
+      expect(account.updatePassword('password', 'new password')).toThrow(UnauthorizedException);
+    });
+
+    it('should return void', () => {
+      const password = new Password('encrypted', 'salt', new Date(), new Date())
+      const account = new Account('id', 'email', password, new Date(), new Date());
+
+      jest.spyOn(bcrypt, 'compareSync').mockReturnValue(true);
+
+      expect(account.updatePassword('password', 'new password')).toEqual(undefined);
     });
   });
+
+  describe('comparedPassword', () => {
+    it('should return true when password is matched', () => {
+      const password = new Password('encrypted', 'salt', new Date(), new Date())
+      const account = new Account('id', 'email', password, new Date(), new Date());
+
+      jest.spyOn(bcrypt, 'compareSync').mockReturnValue(true);
+
+      expect(account.comparePassword('password')).toEqual(true);
+    });
+
+    it('should return false whdn password is not matched', () => {
+      const password = new Password('encrypted', 'salt', new Date(), new Date())
+      const account = new Account('id', 'email', password, new Date(), new Date());
+
+      jest.spyOn(bcrypt, 'compareSync').mockReturnValue(false);
+
+      expect(account.comparePassword('password')).toEqual(false);
+    })
+  })
 });

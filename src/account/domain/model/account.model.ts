@@ -1,27 +1,52 @@
+import { UnauthorizedException } from '@nestjs/common';
 import { AggregateRoot } from '@nestjs/cqrs';
-import bcrypt from 'bcrypt-nodejs';
-import { HttpException, HttpStatus } from '@nestjs/common';
-import { ComparePasswordEvent } from '../../application/event/implements/account.event.compare-password';
+import bcrypt from 'bcrypt';
+import { AccountUpdated } from 'src/account/domain/event/account.updated';
+
+import Password from 'src/account/domain/model/password.model';
 
 export default class Account extends AggregateRoot {
   constructor(
-    public readonly id: string,
-    public readonly name: string,
-    public readonly email: string,
-    public password: string,
-    public readonly active: boolean,
+    private readonly _id: string,
+    private readonly _email: string,
+    private _password: Password,
+    private readonly _createdAt: Date,
+    private readonly _updatedAt: Date,
   ) {
     super();
   }
-
-  comparePassword(password: string): boolean {
-    const result = bcrypt.compareSync(password, this.password);
-    if (result) this.apply(new ComparePasswordEvent(this.id));
-    return result;
+  
+  get id(): string {
+    return this._id
   }
 
-  updatePassoword(oldPassoword: string, newPassword: string): void {
-    if (!this.comparePassword(oldPassoword)) throw new HttpException('Bad requeest', HttpStatus.BAD_REQUEST);
-    this.password = bcrypt.hashSync(newPassword);
+  get email(): string {
+    return this._email
+  }
+
+  get password(): Password {
+    return this._password
+  }
+
+  get createdAt(): Date {
+    return this._createdAt
+  }
+
+  get updatedAt(): Date {
+    return this._updatedAt;
+  }
+
+  public updatePassword(password: string, data: string): void {
+    if (!bcrypt.compareSync(password, this._password.encrypted)) {
+      throw new UnauthorizedException();
+    }
+
+    const salt = bcrypt.genSaltSync();
+    this._password = new Password(bcrypt.hashSync(data, salt), salt, new Date(), new Date());
+    this.apply(new AccountUpdated(this._id, this._email));
+  }
+
+  public comparePassword(password: string): boolean {
+    return bcrypt.compareSync(password, this._password.encrypted);
   }
 }
