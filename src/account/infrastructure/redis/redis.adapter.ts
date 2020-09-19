@@ -1,7 +1,7 @@
 import Redis from 'ioredis';
 import AppConfiguration from '../../../app.config';
 
-export default class AccountRedis {
+export default class RedisAdapter {
   private readonly master: Redis.Redis;
 
   private readonly slave: Redis.Redis;

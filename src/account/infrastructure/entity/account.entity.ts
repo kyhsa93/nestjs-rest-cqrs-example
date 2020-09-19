@@ -12,9 +12,6 @@ export default class AccountEntity {
   @OneToOne(() => PasswordEntity)
   public password!: PasswordEntity;
 
-  @Column({ default: true })
-  public active!: boolean;
-
   @Column({ type: 'datetime' })
   public createdAt!: Date;
 
