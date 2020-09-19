@@ -1,8 +1,9 @@
 import { UnauthorizedException } from '@nestjs/common';
 import { AggregateRoot } from '@nestjs/cqrs';
 import bcrypt from 'bcrypt';
-import { AccountUpdated } from 'src/account/domain/event/account.updated';
 
+import AccountDeleted from 'src/account/domain/event/account.deleted';
+import AccountUpdated from 'src/account/domain/event/account.updated';
 import Password from 'src/account/domain/model/password.model';
 
 export default class Account extends AggregateRoot {
@@ -11,7 +12,8 @@ export default class Account extends AggregateRoot {
     private readonly _email: string,
     private _password: Password,
     private readonly _createdAt: Date,
-    private readonly _updatedAt: Date,
+    private _updatedAt: Date,
+    private _deletedAt: Date | undefined,
   ) {
     super();
   }
@@ -36,17 +38,27 @@ export default class Account extends AggregateRoot {
     return this._updatedAt;
   }
 
+  get deletedAt(): Date | undefined {
+    return this._deletedAt;
+  }
+
   public updatePassword(password: string, data: string): void {
-    if (!bcrypt.compareSync(password, this._password.encrypted)) {
+    if (!bcrypt.compareSync(password, this.password.encrypted)) {
       throw new UnauthorizedException();
     }
 
+    this._updatedAt = new Date();
     const salt = bcrypt.genSaltSync();
     this._password = new Password(bcrypt.hashSync(data, salt), salt, new Date(), new Date());
-    this.apply(new AccountUpdated(this._id, this._email));
+    this.apply(new AccountUpdated(this.id, this.email));
   }
 
   public comparePassword(password: string): boolean {
-    return bcrypt.compareSync(password, this._password.encrypted);
+    return bcrypt.compareSync(password, this.password.encrypted);
+  }
+
+  public delete(): void {
+    this._deletedAt = new Date();
+    this.apply(new AccountDeleted(this.id, this.email));
   }
 }

@@ -8,7 +8,7 @@ describe('AccountModel', () => {
   describe('updatePassword', () => {
     it('should throw UnauthorizedException when password is not matched', () => {
       const password = new Password('encrypted', 'salt', new Date(), new Date())
-      const account = new Account('id', 'email', password, new Date(), new Date());
+      const account = new Account('id', 'email', password, new Date(), new Date(), undefined);
 
       jest.spyOn(bcrypt, 'compareSync').mockReturnValue(false);
 
@@ -17,7 +17,7 @@ describe('AccountModel', () => {
 
     it('should return void', () => {
       const password = new Password('encrypted', 'salt', new Date(), new Date())
-      const account = new Account('id', 'email', password, new Date(), new Date());
+      const account = new Account('id', 'email', password, new Date(), new Date(), undefined);
 
       jest.spyOn(bcrypt, 'compareSync').mockReturnValue(true);
 
@@ -28,20 +28,31 @@ describe('AccountModel', () => {
   describe('comparedPassword', () => {
     it('should return true when password is matched', () => {
       const password = new Password('encrypted', 'salt', new Date(), new Date())
-      const account = new Account('id', 'email', password, new Date(), new Date());
+      const account = new Account('id', 'email', password, new Date(), new Date(), undefined);
 
       jest.spyOn(bcrypt, 'compareSync').mockReturnValue(true);
 
       expect(account.comparePassword('password')).toEqual(true);
     });
 
-    it('should return false whdn password is not matched', () => {
+    it('should return false when password is not matched', () => {
       const password = new Password('encrypted', 'salt', new Date(), new Date())
-      const account = new Account('id', 'email', password, new Date(), new Date());
+      const account = new Account('id', 'email', password, new Date(), new Date(), undefined);
 
       jest.spyOn(bcrypt, 'compareSync').mockReturnValue(false);
 
       expect(account.comparePassword('password')).toEqual(false);
+    })
+  })
+
+  describe('delete', () => {
+    it('should update account.deletedAt', () => {
+      const password = new Password('encrypted', 'salt', new Date(), new Date())
+      const account = new Account('id', 'email', password, new Date(), new Date(), undefined);
+
+      account.delete();
+
+      expect(account.deletedAt).not.toEqual(undefined);
     })
   })
 });

@@ -1,60 +1,58 @@
-import { TestingModule, Test } from "@nestjs/testing";
-import { CqrsModule, EventPublisher } from "@nestjs/cqrs";
-import { getRepositoryToken } from "@nestjs/typeorm";
-import AccountEntity from "../../../infrastructure/entity/account.entity";
-import { Repository, UpdateResult } from "typeorm";
-import { DeleteAccountCommandHandler } from './account.handler.command.delete';
-import AccountRepository from "../../../infrastructure/repository/account.repository";
-import Account from "../../../domain/model/account.model";
-import { DeleteAccountCommand } from "../implements/account.command.delete";
-import DeleteAccountDTO from "../../../interface/dto/account.dto.delete";
-import DeleteAccountParamDTO from "../../../interface/dto/account.dto.delete.param";
-import DeleteAccountBodyDTO from "../../../interface/dto/account.dto.delete.body";
+import { NotFoundException, Provider, UnauthorizedException } from "@nestjs/common";
+import { ModuleMetadata } from "@nestjs/common/interfaces";
+import { EventPublisher } from "@nestjs/cqrs";
+import { Test } from "@nestjs/testing";
+
+import AccountRepository from "src/account/infrastructure/repository/account.repository";
+
+import { DeleteAccountCommandHandler } from "src/account/application/command/handlers/account.handler.command.delete";
+import { UpdateAccountCommandHandler } from "src/account/application/command/handlers/account.handler.command.update";
+import DeleteAccountCommand from "src/account/application/command/implements/account.command.delete";
+
+import Account from "src/account/domain/model/account.model";
 
 describe('DeleteAccountCommandHandler', () => {
-  let module: TestingModule;
-  let deleteAccountCommandHandler: DeleteAccountCommandHandler;
   let accountRepository: AccountRepository;
   let eventPublisher: EventPublisher;
-  let accountEntity: AccountEntity;
-  let account: Account;
-  let accountUpdateResult: UpdateResult;
-  let deleteAccountCommand: DeleteAccountCommand;
-  let deleteAccountDto: DeleteAccountDTO;
-  let deleteAccountParamDto: DeleteAccountParamDTO;
-  let deleteAccountBodyDto: DeleteAccountBodyDTO;
+  let deleteAccountCommandHandler: DeleteAccountCommandHandler;
 
-  beforeAll(async () => {
-    module = await Test.createTestingModule({
-      imports: [CqrsModule],
-      providers: [
-        DeleteAccountCommandHandler,
-        { provide: getRepositoryToken(AccountEntity), useClass: Repository },
-      ],
-    }).compile();
-    deleteAccountCommandHandler = module.get(DeleteAccountCommandHandler);
-    accountRepository = module.get<Repository<AccountEntity>>(getRepositoryToken(AccountEntity));
-    eventPublisher = module.get(EventPublisher);
+  beforeEach(async () => {
+    const providers: Provider[] = [AccountRepository, EventPublisher, UpdateAccountCommandHandler];
+    const moduleMetadata: ModuleMetadata ={ providers };
+    const testModule = await Test.createTestingModule(moduleMetadata).compile();
+
+    accountRepository = testModule.get(AccountRepository)    ;
+    eventPublisher = testModule.get(EventPublisher);
+    deleteAccountCommandHandler = testModule.get(DeleteAccountCommandHandler);
   });
-
-  afterAll(async () => close());
 
   describe('execute', () => {
-    accountEntity = new AccountEntity()
-    account = new Account(accountEntity.id, accountEntity.name, accountEntity.email, accountEntity.password, accountEntity.active);
-    accountUpdateResult = new UpdateResult();
-    deleteAccountParamDto = new DeleteAccountParamDTO('id');
-    deleteAccountBodyDto = new DeleteAccountBodyDTO('password')
-    deleteAccountDto = new DeleteAccountDTO(deleteAccountParamDto, deleteAccountBodyDto);
-    deleteAccountCommand = new DeleteAccountCommand(deleteAccountDto);
+    it('should throw NotFoundException when account is not found', () => {
+      const command = new DeleteAccountCommand('id', 'password');
 
-    it('execute command handler', async () => {
-      jest.spyOn(accountRepository, 'findOneOrFail').mockResolvedValue(accountEntity);
-      jest.spyOn(eventPublisher, 'mergeObjectContext').mockImplementation(() => account);
-      jest.spyOn(account, 'comparePassword').mockImplementation(() => true);
-      jest.spyOn(accountRepository, 'update').mockResolvedValue(accountUpdateResult);
-      const result = await deleteAccountCommandHandler.execute(deleteAccountCommand);
-      expect(result).toBe(undefined);
+      jest.spyOn(accountRepository, 'findById').mockResolvedValue(undefined);
+
+      expect(deleteAccountCommandHandler.execute(command)).rejects.toThrow(NotFoundException);
     });
-  });
+
+    it('should throw UnauthorizedException when password is not matched', () => {
+      const command = new DeleteAccountCommand('id', 'password');
+
+      const account = {} as Account;
+      jest.spyOn(accountRepository, 'findById').mockResolvedValue(account);
+      jest.spyOn(account, 'comparePassword').mockReturnValue(false);
+
+      expect(deleteAccountCommandHandler.execute(command)).rejects.toThrow(UnauthorizedException);
+    });
+
+    it('should return Promise<void>', () => {
+      const command = new DeleteAccountCommand('id', 'password');
+
+      const account = {} as Account;
+      jest.spyOn(accountRepository, 'findById').mockResolvedValue(account);
+      jest.spyOn(account, 'comparePassword').mockReturnValue(true);
+
+      expect(deleteAccountCommandHandler.execute(command)).resolves.toEqual(undefined);
+    })
+  })
 });

@@ -1,27 +1,33 @@
 import { CommandHandler, ICommandHandler, EventPublisher } from '@nestjs/cqrs';
-import { DeleteAccountCommand } from '../implements/account.command.delete';
-import { InjectRepository } from '@nestjs/typeorm';
-import AccountEntity from '../../../infrastructure/entity/account.entity';
+import { Inject, NotFoundException, UnauthorizedException } from '@nestjs/common';
+
 import AccountRepository from '../../../infrastructure/repository/account.repository';
-import { IsNull } from 'typeorm';
-import { HttpException, HttpStatus } from '@nestjs/common';
-import Account from '../../../domain/model/account.model';
-import DeleteAccountMapper from '../../../infrastructure/mapper/account.mappter.delete';
+
+import DeleteAccountCommand from '../implements/account.command.delete';
+
 
 @CommandHandler(DeleteAccountCommand)
 export class DeleteAccountCommandHandler implements ICommandHandler<DeleteAccountCommand> {
   constructor(
-    @InjectRepository(AccountEntity) private readonly repository: AccountRepository,
-    private readonly publisher: EventPublisher,
+    @Inject(AccountRepository) private readonly accountRepository: AccountRepository,
+    private readonly eventPublisher: EventPublisher,
   ) {}
 
-  async execute(command: DeleteAccountCommand): Promise<void> {
-    const data = await this.repository.findOneOrFail({ where: { id: command.id, deletedAt: IsNull() } }).catch(() => {
-      throw new HttpException('Not found', HttpStatus.NOT_FOUND);
-    });
-    const account = this.publisher.mergeObjectContext(new Account(data.id, data.name, data.email, data.password, data.active));
-    if (!account.comparePassword(command.password)) throw new HttpException('Bad request', HttpStatus.BAD_REQUEST);
+  public async execute(command: DeleteAccountCommand): Promise<void> {
+    const { id, password } = command;
+    const model = await this.accountRepository.findById(id);
+    if (!model) throw new NotFoundException();
+
+    const account = this.eventPublisher.mergeObjectContext(model);
+
+    if (!account.comparePassword(password)) {
+      throw new UnauthorizedException();
+    }
+
+    account.delete();
+
     account.commit();
-    await this.repository.update({ id: account.id }, new DeleteAccountMapper(account));
+
+    await this.accountRepository.save(account);
   }
 }

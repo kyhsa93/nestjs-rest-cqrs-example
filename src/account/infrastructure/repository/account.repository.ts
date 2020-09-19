@@ -16,9 +16,9 @@ export default class AccountRepository {
   }
 
   public async save (data: Account | Account[]): Promise<void> {
-    const modelList = Array.isArray(data) ? data : [data];
-    const entityList = modelList.map(model => this.accountMapper.modelToEntity(model));
-    await getRepository(AccountEntity).save(entityList);
+    const models = Array.isArray(data) ? data : [data];
+    const entities = models.map(model => this.accountMapper.modelToEntity(model));
+    await getRepository(AccountEntity).save(entities);
   }
 
   public async findById(id: string): Promise<Account | undefined> {

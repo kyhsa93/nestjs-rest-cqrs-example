@@ -14,12 +14,13 @@ export default class AccountMapper {
     entity.email = model.email;
     entity.createdAt = model.createdAt;
     entity.updatedAt = model.updatedAt;
+    entity.deletedAt = model.deletedAt;
     return entity;
   }
 
   public entityToModel(entity: AccountEntity): Account {
-    const { id, email, password, active, createdAt, updatedAt } = entity;
+    const { id, email, password, active, createdAt, updatedAt, deletedAt } = entity;
     const passwordData = { encrypted: password.encrypted, salt: password.salt, createdAt: password.createdAt, comparedAt: password.comparedAt };
-    return this.accountFactory.reconstitue(id, email, passwordData, createdAt, updatedAt);
+    return this.accountFactory.reconstitute(id, email, passwordData, createdAt, updatedAt, deletedAt);
   }
 }
