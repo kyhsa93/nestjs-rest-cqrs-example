@@ -1,7 +1,7 @@
-import { ApiModelProperty } from '@nestjs/swagger';
+import { ApiProperty } from "@nestjs/swagger";
 
 export default class UpdateAccountParamDTO {
-  @ApiModelProperty()
+  @ApiProperty()
   public readonly id: string;
 
   constructor(id: string) {

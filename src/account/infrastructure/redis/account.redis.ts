@@ -11,8 +11,8 @@ export default class AccountRedis {
     this.slave = new Redis(AppConfiguration.REDIS_SLAVE_PORT, AppConfiguration.REDIS_SLAVE_HOST);
   }
 
-  async set(key: string, value: string): Promise<string> {
-    return this.master.set(key, value, 'EX', 1);
+  async set(key: string, value: string): Promise<void> {
+    await this.master.set(key, value, 'EX', 1);
   }
 
   async get(key: string): Promise<string | null> {

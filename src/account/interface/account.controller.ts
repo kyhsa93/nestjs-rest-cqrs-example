@@ -1,4 +1,4 @@
-import { ApiUseTags, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import {
   Controller, Post, Body, Get, Param, Put, Query,
   Delete, UseGuards, Request, HttpException, HttpStatus,
@@ -22,7 +22,7 @@ import DeleteAccountParamDTO from './dto/account.dto.delete.param';
 import DeleteAccountBodyDTO from './dto/account.dto.delete.body';
 import DeleteAccountDTO from './dto/account.dto.delete';
 
-@ApiUseTags('Accounts')
+@ApiTags('Accounts')
 @Controller('accounts')
 export default class AccountController {
   constructor(

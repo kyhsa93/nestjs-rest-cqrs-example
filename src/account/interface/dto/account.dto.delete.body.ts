@@ -1,7 +1,7 @@
-import { ApiModelProperty } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 
 export default class DeleteAccountBodyDTO {
-  @ApiModelProperty({ example: 'testpassword' })
+  @ApiProperty({ example: 'testpassword' })
   public readonly password: string;
 
   constructor(password: string) {
