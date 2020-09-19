@@ -21,6 +21,11 @@ export default class AccountRepository {
     await getRepository(AccountEntity).save(entityList);
   }
 
+  public async findById(id: string): Promise<Account | undefined> {
+    const entity = await getRepository(AccountEntity).findOne({id});
+    return entity ? this.accountMapper.entityToModel(entity) : undefined;
+  }
+
   public async findByEmail(email: string): Promise<Account[]> {
     const entities = await getRepository(AccountEntity).find({email});
     return entities.map(entity => this.accountMapper.entityToModel(entity));
