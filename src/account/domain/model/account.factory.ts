@@ -12,4 +12,8 @@ export default class AccountFactory {
     account.apply(new AccountCreated(id, email));
     return account
   }
+
+  public reconstitue(id: string, email: string, password: { encrypted: string, salt: string, createdAt: Date, comparedAt: Date }, createdAt: Date, updatedAt: Date) {
+    return new Account(id, email, this._passwordFactory.reconstitute(password.encrypted, password.salt, password.comparedAt, password.comparedAt), createdAt, updatedAt);
+  }
 }

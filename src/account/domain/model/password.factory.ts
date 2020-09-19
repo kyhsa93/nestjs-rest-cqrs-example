@@ -9,4 +9,8 @@ export default class PasswordFactory {
     const encrypted = bcrypt.hashSync(password, salt);
     return new Password(encrypted, salt, new Date(), new Date());
   }
+
+  public reconstitute(encrypted: string, salt: string, createdAt: Date, comparedAt: Date) {
+    return new Password(encrypted, salt, createdAt, comparedAt)
+  }
 }

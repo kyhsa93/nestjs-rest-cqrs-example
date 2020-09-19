@@ -1,28 +1,26 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import PasswordEntity from 'src/account/infrastructure/entity/password.entity';
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne } from 'typeorm';
 
-@Entity({ name: 'account' })
+@Entity()
 export default class AccountEntity {
   @PrimaryGeneratedColumn('uuid')
-  id!: string;
+  public id!: string;
 
-  @Column({ length: 500 })
-  name!: string;
+  @Column({ unique: true })
+  public email!: string;
+  
+  @OneToOne(() => PasswordEntity)
+  public password!: PasswordEntity;
 
-  @Column({ length: 500, unique: true })
-  email!: string;
+  @Column({ default: true })
+  public active!: boolean;
 
-  @Column({ length: 500 })
-  password!: string;
+  @Column({ type: 'datetime' })
+  public createdAt!: Date;
 
-  @Column({ type: 'bool', default: true })
-  active!: boolean;
+  @Column({ type: 'timestamp' })
+  public updatedAt!: Date;
 
-  @Column({ type: 'datetime', name: 'created_at' })
-  createdAt!: Date;
-
-  @Column({ type: 'timestamp', default: null, name: 'updated_at' })
-  updatedAt!: Date;
-
-  @Column({ type: 'datetime', default: null, name: 'deleted_at' })
-  deletedAt!: Date;
+  @Column({ type: 'datetime', default: null })
+  public deletedAt!: Date;
 }
