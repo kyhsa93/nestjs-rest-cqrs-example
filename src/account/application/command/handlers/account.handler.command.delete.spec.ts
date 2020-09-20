@@ -5,8 +5,7 @@ import { Test } from "@nestjs/testing";
 
 import AccountRepository from "src/account/infrastructure/repository/account.repository";
 
-import { DeleteAccountCommandHandler } from "src/account/application/command/handlers/account.handler.command.delete";
-import { UpdateAccountCommandHandler } from "src/account/application/command/handlers/account.handler.command.update";
+import DeleteAccountCommandHandler from "src/account/application/command/handlers/account.handler.command.delete";
 import DeleteAccountCommand from "src/account/application/command/implements/account.command.delete";
 
 import Account from "src/account/domain/model/account.model";
@@ -17,7 +16,16 @@ describe('DeleteAccountCommandHandler', () => {
   let deleteAccountCommandHandler: DeleteAccountCommandHandler;
 
   beforeEach(async () => {
-    const providers: Provider[] = [AccountRepository, EventPublisher, UpdateAccountCommandHandler];
+    const accountRepositoryProvider: Provider = { provide: AccountRepository, useValue: {} };
+    const eventPublisherProvider: Provider = { provide: EventPublisher, useValue: {} };
+    const deleteAccountCommandHandlerProvider: Provider = { provide: DeleteAccountCommandHandler, useValue: {} };
+
+    const providers: Provider[] = [
+      accountRepositoryProvider,
+      eventPublisherProvider,
+      deleteAccountCommandHandlerProvider,
+    ];
+    
     const moduleMetadata: ModuleMetadata ={ providers };
     const testModule = await Test.createTestingModule(moduleMetadata).compile();
 

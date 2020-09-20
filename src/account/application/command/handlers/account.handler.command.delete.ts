@@ -7,7 +7,7 @@ import DeleteAccountCommand from '../implements/account.command.delete';
 
 
 @CommandHandler(DeleteAccountCommand)
-export class DeleteAccountCommandHandler implements ICommandHandler<DeleteAccountCommand> {
+export default class DeleteAccountCommandHandler implements ICommandHandler<DeleteAccountCommand> {
   constructor(
     @Inject(AccountRepository) private readonly accountRepository: AccountRepository,
     private readonly eventPublisher: EventPublisher,

@@ -16,7 +16,16 @@ describe('UpdateAccountCommandHandler', () => {
   let updateAccountCommandHandler: UpdateAccountCommandHandler;
 
   beforeEach(async () => {
-    const providers: Provider[] = [AccountRepository, EventPublisher, UpdateAccountCommandHandler];
+    const accountRepositoryProvider: Provider = {provide: AccountRepository, useValue: {}};
+    const eventPublisherProvider: Provider = { provide: EventPublisher, useValue: {}};
+    const updateAccountCommandHandlerProvider: Provider = {provide: UpdateAccountCommandHandler, useValue: {}};
+
+    const providers: Provider[] = [
+      accountRepositoryProvider,
+      eventPublisherProvider,
+      updateAccountCommandHandlerProvider,
+    ];
+    
     const moduleMetadata: ModuleMetadata = { providers };
     const testModule = await Test.createTestingModule(moduleMetadata).compile();
 

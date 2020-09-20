@@ -1,6 +1,7 @@
 import { BadRequestException, Provider } from "@nestjs/common";
 import { ModuleMetadata } from "@nestjs/common/interfaces";
 import { Test } from "@nestjs/testing";
+import { EventPublisher } from "@nestjs/cqrs";
 
 import AccountRepository from "src/account/infrastructure/repository/account.repository";
 
@@ -9,7 +10,6 @@ import CreateAccountCommand from "src/account/application/command/implements/acc
 
 import AccountFactory from "src/account/domain/model/account.factory";
 import Account from "src/account/domain/model/account.model";
-import { EventPublisher } from "@nestjs/cqrs";
 
 describe('CreateAccountHandler', () => {
   let accountRepository: AccountRepository;
@@ -18,7 +18,18 @@ describe('CreateAccountHandler', () => {
   let createAccountCommandHandler: CreateAccountCommandHandler;
 
   beforeEach(async () => {
-    const providers: Provider[] = [AccountFactory, AccountRepository, EventPublisher, CreateAccountCommandHandler];
+    const accountFactoryProvider: Provider = { provide: AccountFactory, useValue: {} };
+    const accountRepositoryProvider: Provider = { provide: AccountRepository, useValue: {} };
+    const eventPublisherProvider: Provider = { provide: EventPublisher, useValue: {} };
+    const createAccountCommandHandlerProvider: Provider = { provide: CreateAccountCommandHandler, useValue: {} };
+
+    const providers: Provider[] = [
+      accountFactoryProvider,
+      accountRepositoryProvider,
+      eventPublisherProvider,
+      createAccountCommandHandlerProvider,
+    ];
+  
     const moduleMetadata: ModuleMetadata = { providers };
     const testModule = await Test.createTestingModule(moduleMetadata).compile();
 
