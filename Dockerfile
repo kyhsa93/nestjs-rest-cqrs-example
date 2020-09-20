@@ -5,7 +5,6 @@ COPY . /origin
 WORKDIR /origin
 
 RUN npm install && \
-    npm test && \
     npm run build && \
     npm prune --production && \
     cp -r dist /app && \
