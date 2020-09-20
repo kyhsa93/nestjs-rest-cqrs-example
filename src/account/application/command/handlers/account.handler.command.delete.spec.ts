@@ -18,12 +18,11 @@ describe('DeleteAccountCommandHandler', () => {
   beforeEach(async () => {
     const accountRepositoryProvider: Provider = { provide: AccountRepository, useValue: {} };
     const eventPublisherProvider: Provider = { provide: EventPublisher, useValue: {} };
-    const deleteAccountCommandHandlerProvider: Provider = { provide: DeleteAccountCommandHandler, useValue: {} };
 
     const providers: Provider[] = [
       accountRepositoryProvider,
       eventPublisherProvider,
-      deleteAccountCommandHandlerProvider,
+      DeleteAccountCommandHandler,
     ];
     
     const moduleMetadata: ModuleMetadata ={ providers };
@@ -35,32 +34,36 @@ describe('DeleteAccountCommandHandler', () => {
   });
 
   describe('execute', () => {
-    it('should throw NotFoundException when account is not found', () => {
+    it('should throw NotFoundException when account is not found', async () => {
       const command = new DeleteAccountCommand('id', 'password');
 
-      jest.spyOn(accountRepository, 'findById').mockResolvedValue(undefined);
+      accountRepository.findById = jest.fn().mockResolvedValue(undefined);
 
-      expect(deleteAccountCommandHandler.execute(command)).rejects.toThrow(NotFoundException);
+      await expect(deleteAccountCommandHandler.execute(command)).rejects.toThrow(NotFoundException);
     });
 
-    it('should throw UnauthorizedException when password is not matched', () => {
+    it('should throw UnauthorizedException when password is not matched', async () => {
       const command = new DeleteAccountCommand('id', 'password');
 
       const account = {} as Account;
-      jest.spyOn(accountRepository, 'findById').mockResolvedValue(account);
-      jest.spyOn(account, 'comparePassword').mockReturnValue(false);
+      accountRepository.findById = jest.fn().mockResolvedValue(account);
+      account.comparePassword = jest.fn().mockReturnValue(false);
 
-      expect(deleteAccountCommandHandler.execute(command)).rejects.toThrow(UnauthorizedException);
+      await expect(deleteAccountCommandHandler.execute(command)).rejects.toThrow(UnauthorizedException);
     });
 
-    it('should return Promise<void>', () => {
+    it('should return Promise<void>', async () => {
       const command = new DeleteAccountCommand('id', 'password');
 
       const account = {} as Account;
-      jest.spyOn(accountRepository, 'findById').mockResolvedValue(account);
-      jest.spyOn(account, 'comparePassword').mockReturnValue(true);
+      accountRepository.findById = jest.fn().mockResolvedValue(account);
+      account.comparePassword = jest.fn().mockReturnValue(true);
+      eventPublisher.mergeObjectContext = jest.fn().mockReturnValue(account);
+      account.delete = jest.fn().mockReturnValue(undefined);
+      account.commit = jest.fn().mockReturnValue(undefined);
+      accountRepository.save = jest.fn().mockResolvedValue(undefined);
 
-      expect(deleteAccountCommandHandler.execute(command)).resolves.toEqual(undefined);
+      await expect(deleteAccountCommandHandler.execute(command)).resolves.toEqual(undefined);
     })
   })
 });

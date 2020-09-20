@@ -21,13 +21,12 @@ describe('CreateAccountHandler', () => {
     const accountFactoryProvider: Provider = { provide: AccountFactory, useValue: {} };
     const accountRepositoryProvider: Provider = { provide: AccountRepository, useValue: {} };
     const eventPublisherProvider: Provider = { provide: EventPublisher, useValue: {} };
-    const createAccountCommandHandlerProvider: Provider = { provide: CreateAccountCommandHandler, useValue: {} };
 
     const providers: Provider[] = [
       accountFactoryProvider,
       accountRepositoryProvider,
       eventPublisherProvider,
-      createAccountCommandHandlerProvider,
+      CreateAccountCommandHandler,
     ];
   
     const moduleMetadata: ModuleMetadata = { providers };
@@ -40,22 +39,27 @@ describe('CreateAccountHandler', () => {
   });
 
   describe('execute', () => {
-    it('should throw BadRequestException when same email account is exists', () => {
+    it('should throw BadRequestException when same email account is exists', async () => {
       const command = new CreateAccountCommand('email', 'password');
       
-      jest.spyOn(accountRepository, 'findByEmail').mockResolvedValue([{} as Account]);
+      accountRepository.findByEmail = jest.fn().mockResolvedValue([{} as Account]);
 
-      expect(createAccountCommandHandler.execute(command)).toThrow(BadRequestException);
+      await expect(createAccountCommandHandler.execute(command)).rejects.toThrow(BadRequestException);
     });
 
-    it('should return Promise<void>', () => {
+    it('should return Promise<void>', async () => {
       const command = new CreateAccountCommand('email', 'password');
 
-      jest.spyOn(accountRepository, 'findByEmail').mockResolvedValue([]);
-      jest.spyOn(accountRepository, 'newId').mockResolvedValue('id');
-      jest.spyOn(accountRepository, 'save').mockResolvedValue(undefined);
+      const account = {} as Account;
+      account.commit = jest.fn().mockReturnValue(undefined);
 
-      expect(createAccountCommandHandler.execute(command)).resolves.toEqual(undefined);
+      accountRepository.findByEmail = jest.fn().mockResolvedValue([]);
+      accountRepository.newId = jest.fn().mockResolvedValue('id');
+      accountFactory.create = jest.fn().mockReturnValue(account);
+      eventPublisher.mergeObjectContext = jest.fn().mockReturnValue(account);
+      accountRepository.save = jest.fn().mockResolvedValue(undefined);
+
+      await expect(createAccountCommandHandler.execute(command)).resolves.toEqual(undefined);
     })
   });
 });

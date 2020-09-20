@@ -15,14 +15,12 @@ export default class DeleteAccountCommandHandler implements ICommandHandler<Dele
 
   public async execute(command: DeleteAccountCommand): Promise<void> {
     const { id, password } = command;
+
     const model = await this.accountRepository.findById(id);
     if (!model) throw new NotFoundException();
+    if (!model.comparePassword(password)) throw new UnauthorizedException();
 
     const account = this.eventPublisher.mergeObjectContext(model);
-
-    if (!account.comparePassword(password)) {
-      throw new UnauthorizedException();
-    }
 
     account.delete();
 

@@ -18,12 +18,11 @@ describe('UpdateAccountCommandHandler', () => {
   beforeEach(async () => {
     const accountRepositoryProvider: Provider = {provide: AccountRepository, useValue: {}};
     const eventPublisherProvider: Provider = { provide: EventPublisher, useValue: {}};
-    const updateAccountCommandHandlerProvider: Provider = {provide: UpdateAccountCommandHandler, useValue: {}};
 
     const providers: Provider[] = [
       accountRepositoryProvider,
       eventPublisherProvider,
-      updateAccountCommandHandlerProvider,
+      UpdateAccountCommandHandler,
     ];
     
     const moduleMetadata: ModuleMetadata = { providers };
@@ -35,23 +34,27 @@ describe('UpdateAccountCommandHandler', () => {
   });
 
   describe('execute', () => {
-    it('should throw NotFoundException when account is not found', () => {
+    it('should throw NotFoundException when account is not found', async () => {
       const command = new UpdateAccountCommand('id', 'old', 'new');
 
-      jest.spyOn(accountRepository, 'findById').mockResolvedValue(undefined);
+      accountRepository.findById = jest.fn().mockResolvedValue(undefined);
 
-      expect(updateAccountCommandHandler.execute(command)).toThrow(NotFoundException);
+      await expect(updateAccountCommandHandler.execute(command)).rejects.toThrow(NotFoundException);
     });
 
-    it('should return Promise<void>', () => {
+    it('should return Promise<void>', async () => {
       const command = new UpdateAccountCommand('id', 'old', 'new');
 
       const account = {} as Account;
-      jest.spyOn(accountRepository, 'findById').mockResolvedValue(account);
-      jest.spyOn(account, 'updatePassword').mockReturnValue(undefined);
-      jest.spyOn(accountRepository, 'save').mockResolvedValue(undefined);
+      account.updatePassword = jest.fn().mockReturnValue(undefined);
+      account.commit = jest.fn().mockReturnValue(undefined);
 
-      expect(updateAccountCommandHandler.execute(command)).resolves.toEqual(undefined);
+      accountRepository.findById = jest.fn().mockResolvedValue(account);
+      eventPublisher.mergeObjectContext = jest.fn().mockReturnValue(account);
+      account.updatePassword = jest.fn().mockReturnValue(undefined);
+      accountRepository.save = jest.fn().mockResolvedValue(undefined);
+
+      await expect(updateAccountCommandHandler.execute(command)).resolves.toEqual(undefined);
     });
   });
 });
