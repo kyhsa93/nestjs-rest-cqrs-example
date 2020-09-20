@@ -19,7 +19,7 @@ export class UpdateAccountCommandHandler implements ICommandHandler<UpdateAccoun
 
     const account = this.eventPublisher.mergeObjectContext(model);
 
-    account.updatePassword(oldPassword, newPassword);
+    await account.updatePassword(oldPassword, newPassword);
 
     account.commit();
 

@@ -42,8 +42,8 @@ export default class Account extends AggregateRoot {
     return this._deletedAt;
   }
 
-  public updatePassword(password: string, data: string): void {
-    if (!bcrypt.compareSync(password, this.password.encrypted)) {
+  public async updatePassword(password: string, data: string): Promise<void> {
+    if (!await bcrypt.compare(password, this.password.encrypted)) {
       throw new UnauthorizedException();
     }
 
@@ -53,8 +53,8 @@ export default class Account extends AggregateRoot {
     this.apply(new AccountUpdated(this.id, this.email));
   }
 
-  public comparePassword(password: string): boolean {
-    return bcrypt.compareSync(password, this.password.encrypted);
+  public async comparePassword(password: string): Promise<boolean> {
+    return bcrypt.compare(password, this.password.encrypted);
   }
 
   public delete(): void {

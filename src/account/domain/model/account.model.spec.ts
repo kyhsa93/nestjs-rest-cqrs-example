@@ -6,42 +6,42 @@ import Password from 'src/account/domain/model/password.model';
 
 describe('AccountModel', () => {
   describe('updatePassword', () => {
-    it('should throw UnauthorizedException when password is not matched', () => {
+    it('should throw UnauthorizedException when password is not matched', async () => {
       const password = new Password('encrypted', 'salt', new Date(), new Date())
       const account = new Account('id', 'email', password, new Date(), new Date(), undefined);
 
-      jest.spyOn(bcrypt, 'compareSync').mockReturnValue(false);
+      jest.spyOn(bcrypt, 'compare').mockResolvedValue(false);
 
-      expect(account.updatePassword('password', 'new password')).toThrow(UnauthorizedException);
+      await expect(account.updatePassword('password', 'new password')).rejects.toThrow(UnauthorizedException)
     });
 
-    it('should return void', () => {
+    it('should return Promise<void>', async () => {
       const password = new Password('encrypted', 'salt', new Date(), new Date())
       const account = new Account('id', 'email', password, new Date(), new Date(), undefined);
 
-      jest.spyOn(bcrypt, 'compareSync').mockReturnValue(true);
+      jest.spyOn(bcrypt, 'compare').mockResolvedValue(true);
 
-      expect(account.updatePassword('password', 'new password')).toEqual(undefined);
+      await expect(account.updatePassword('password', 'new password')).resolves.toEqual(undefined);
     });
   });
 
   describe('comparedPassword', () => {
-    it('should return true when password is matched', () => {
+    it('should return true when password is matched', async () => {
       const password = new Password('encrypted', 'salt', new Date(), new Date())
       const account = new Account('id', 'email', password, new Date(), new Date(), undefined);
 
-      jest.spyOn(bcrypt, 'compareSync').mockReturnValue(true);
+      jest.spyOn(bcrypt, 'compare').mockResolvedValue(true);
 
-      expect(account.comparePassword('password')).toEqual(true);
+      await expect(account.comparePassword('password')).resolves.toEqual(true);
     });
 
-    it('should return false when password is not matched', () => {
+    it('should return false when password is not matched', async () => {
       const password = new Password('encrypted', 'salt', new Date(), new Date())
       const account = new Account('id', 'email', password, new Date(), new Date(), undefined);
 
-      jest.spyOn(bcrypt, 'compareSync').mockReturnValue(false);
+      jest.spyOn(bcrypt, 'compare').mockResolvedValue(false);
 
-      expect(account.comparePassword('password')).toEqual(false);
+      await expect(account.comparePassword('password')).resolves.toEqual(false);
     })
   })
 
