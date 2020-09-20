@@ -1,14 +1,13 @@
-import { CommandHandler, EventPublisher, ICommandHandler } from "@nestjs/cqrs";
-import { BadRequestException, Inject } from "@nestjs/common";
+import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
+import { BadRequestException, Inject } from '@nestjs/common';
 
-import AccountRepository from "../../../infrastructure/repository/account.repository";
+import CreateAccountCommand from 'src/account/application/command/implements/account.command.create';
 
-import CreateAccountCommand from "src/account/application/command/implements/account.command.create";
-
-import AccountFactory from 'src/account/domain/model/account.factory';
+import AccountFactory from '@src/account/domain/model/account.factory';
+import AccountRepository from '../../../infrastructure/repository/account.repository';
 
 @CommandHandler(CreateAccountCommand)
-export class CreateAccountCommandHandler implements ICommandHandler<CreateAccountCommand> {
+export default class CreateAccountCommandHandler implements ICommandHandler<CreateAccountCommand> {
   constructor(
     @Inject(AccountFactory) private readonly accountFactory: AccountFactory,
     @Inject(AccountRepository) private readonly accountRepository: AccountRepository,
@@ -23,7 +22,9 @@ export class CreateAccountCommandHandler implements ICommandHandler<CreateAccoun
 
     const id = await this.accountRepository.newId();
 
-    const account = this.eventPublisher.mergeObjectContext(this.accountFactory.create(id, email, password));
+    const account = this.eventPublisher.mergeObjectContext(
+      this.accountFactory.create(id, email, password),
+    );
 
     account.commit();
 

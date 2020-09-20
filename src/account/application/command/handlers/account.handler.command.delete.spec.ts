@@ -1,14 +1,14 @@
-import { NotFoundException, Provider, UnauthorizedException } from "@nestjs/common";
-import { ModuleMetadata } from "@nestjs/common/interfaces";
-import { EventPublisher } from "@nestjs/cqrs";
-import { Test } from "@nestjs/testing";
+import { NotFoundException, Provider, UnauthorizedException } from '@nestjs/common';
+import { ModuleMetadata } from '@nestjs/common/interfaces';
+import { EventPublisher } from '@nestjs/cqrs';
+import { Test } from '@nestjs/testing';
 
-import AccountRepository from "src/account/infrastructure/repository/account.repository";
+import AccountRepository from 'src/account/infrastructure/repository/account.repository';
 
-import DeleteAccountCommandHandler from "src/account/application/command/handlers/account.handler.command.delete";
-import DeleteAccountCommand from "src/account/application/command/implements/account.command.delete";
+import DeleteAccountCommandHandler from 'src/account/application/command/handlers/account.handler.command.delete';
+import DeleteAccountCommand from 'src/account/application/command/implements/account.command.delete';
 
-import Account from "src/account/domain/model/account.model";
+import Account from 'src/account/domain/model/account.model';
 
 describe('DeleteAccountCommandHandler', () => {
   let accountRepository: AccountRepository;
@@ -24,11 +24,11 @@ describe('DeleteAccountCommandHandler', () => {
       eventPublisherProvider,
       DeleteAccountCommandHandler,
     ];
-    
-    const moduleMetadata: ModuleMetadata ={ providers };
+
+    const moduleMetadata: ModuleMetadata = { providers };
     const testModule = await Test.createTestingModule(moduleMetadata).compile();
 
-    accountRepository = testModule.get(AccountRepository)    ;
+    accountRepository = testModule.get(AccountRepository);
     eventPublisher = testModule.get(EventPublisher);
     deleteAccountCommandHandler = testModule.get(DeleteAccountCommandHandler);
   });
@@ -49,7 +49,9 @@ describe('DeleteAccountCommandHandler', () => {
       accountRepository.findById = jest.fn().mockResolvedValue(account);
       account.comparePassword = jest.fn().mockReturnValue(false);
 
-      await expect(deleteAccountCommandHandler.execute(command)).rejects.toThrow(UnauthorizedException);
+      await expect(deleteAccountCommandHandler.execute(command)).rejects.toThrow(
+        UnauthorizedException,
+      );
     });
 
     it('should return Promise<void>', async () => {
@@ -64,6 +66,6 @@ describe('DeleteAccountCommandHandler', () => {
       accountRepository.save = jest.fn().mockResolvedValue(undefined);
 
       await expect(deleteAccountCommandHandler.execute(command)).resolves.toEqual(undefined);
-    })
-  })
+    });
+  });
 });

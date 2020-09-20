@@ -16,6 +16,9 @@ export default class RedisAdapter {
   }
 
   async get(key: string): Promise<string | null> {
-    return this.slave.get(key).then(result => result).catch(() => null);
+    return this.slave
+      .get(key)
+      .then((result) => result)
+      .catch(() => null);
   }
 }

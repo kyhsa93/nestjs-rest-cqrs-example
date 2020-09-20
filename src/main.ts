@@ -3,6 +3,7 @@ import helmet from 'helmet';
 import RateLimit from 'express-rate-limit';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import compression from 'compression';
+
 import ApplicationModule from './app.module';
 import AppConfiguration from './app.config';
 
@@ -13,7 +14,7 @@ async function bootstrap(): Promise<void> {
     .setTitle('nest.js example')
     .setDescription('Nest.js example project')
     .setVersion('1.0')
-    .addBearerAuth('Authorization', 'header')
+    .addBearerAuth({ type: 'apiKey' }, 'header')
     .build();
 
   const document = SwaggerModule.createDocument(app, options);

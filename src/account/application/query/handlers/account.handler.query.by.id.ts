@@ -1,16 +1,28 @@
-import { IQueryHandler, QueryHandler } from "@nestjs/cqrs";
-import { Inject } from "@nestjs/common";
+import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
+import { Inject } from '@nestjs/common';
 
-import AccountEntity from "../../../infrastructure/entity/account.entity";
+import AccountQuery from '@src/account/infrastructure/query/account.query';
+import AccountEntity from '../../../infrastructure/entity/account.entity';
 import RedisAdapter from '../../../infrastructure/redis/redis.adapter';
-import AccountQuery from "src/account/infrastructure/query/account.query";
 
-import FindAccountByIdQuery from "../implements/account.query.by.id";
+import FindAccountByIdQuery from '../implements/account.query.by.id';
 
-type Account = { id: string, email: string, createdAt: Date, updatedAt: Date };
+type Account = { id: string; email: string; createdAt: Date; updatedAt: Date };
+
+function entityToAccount(entity: AccountEntity): Account {
+  const {
+    id, email, createdAt, updatedAt,
+  } = entity;
+  return {
+    id,
+    email,
+    createdAt,
+    updatedAt,
+  };
+}
 
 @QueryHandler(FindAccountByIdQuery)
-export class FindAccountByIdQueryHandler implements IQueryHandler<FindAccountByIdQuery> {
+export default class FindAccountByIdQueryHandler implements IQueryHandler<FindAccountByIdQuery> {
   constructor(
     @Inject(AccountQuery) private readonly accountQuery: AccountQuery,
     @Inject(RedisAdapter) private readonly redisAdapter: RedisAdapter,
@@ -20,23 +32,13 @@ export class FindAccountByIdQueryHandler implements IQueryHandler<FindAccountByI
     const { id } = query;
 
     const cached = await this.redisAdapter.get(id);
-    if (cached) return this.parseCache(cached);
+    if (cached) return entityToAccount(JSON.parse(cached) as AccountEntity);
 
     const entity = await this.accountQuery.findById(id);
     if (!entity) return undefined;
 
     this.redisAdapter.set(id, JSON.stringify(entity));
 
-    return this.entityToAccount(entity);
-  }
-
-  private parseCache(cached: string): Account {
-    const entity = JSON.parse(cached) as AccountEntity;
-    return this.entityToAccount(entity);
-  }
-
-  private entityToAccount(entity: AccountEntity): Account {
-    const { id, email, createdAt, updatedAt } = entity;
-    return { id, email, createdAt, updatedAt }
+    return entityToAccount(entity);
   }
 }

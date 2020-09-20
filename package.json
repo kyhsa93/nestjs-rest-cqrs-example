@@ -55,8 +55,11 @@
     "eslint": "^6.8.0",
     "eslint-config-airbnb-typescript": "^5.1.0",
     "eslint-plugin-import": "^2.22.0",
+    "husky": "^4.3.0",
     "jest": "^26.4.2",
+    "lint-staged": "^10.4.0",
     "nodemon": "^2.0.4",
+    "prettier": "^2.1.2",
     "rimraf": "^2.7.1",
     "supertest": "^4.0.2",
     "ts-jest": "^26.3.0",
@@ -79,7 +82,20 @@
       "^.+\\.(t|j)s$": "ts-jest"
     }
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm test && lint-staged"
+    }
+  },
+  "lint-staged": {
+    "src/**/*.ts": [
+      "npm run prettier",
+      "npm run lint",
+      "git add"
+    ]
+  },
   "scripts": {
+    "prettier": "prettier --write --config .prettierrc \"./src/**/*.ts\"",
     "lint": "eslint --fix src/**.ts src/**/**.ts src/**/**/**.ts src/**/**/**/**.ts",
     "test": "jest --clearCache && jest",
     "build": "rimraf dist && tsc -p tsconfig.build.json",

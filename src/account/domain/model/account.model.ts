@@ -2,63 +2,64 @@ import { UnauthorizedException } from '@nestjs/common';
 import { AggregateRoot } from '@nestjs/cqrs';
 import bcrypt from 'bcrypt';
 
-import AccountDeleted from 'src/account/domain/event/account.deleted';
-import AccountUpdated from 'src/account/domain/event/account.updated';
-import Password from 'src/account/domain/model/password.model';
+import AccountDeleted from '@src/account/domain/event/account.deleted';
+import AccountUpdated from '@src/account/domain/event/account.updated';
+import Password, { AnemicPassword } from '@src/account/domain/model/password.model';
+
+export interface AnemicAccount {
+  readonly id: string;
+  readonly email: string;
+  readonly password: AnemicPassword;
+  readonly createdAt: Date;
+  readonly updatedAt: Date;
+  readonly deletedAt: Date | undefined;
+}
 
 export default class Account extends AggregateRoot {
   constructor(
-    private readonly _id: string,
-    private readonly _email: string,
-    private _password: Password,
-    private readonly _createdAt: Date,
-    private _updatedAt: Date,
-    private _deletedAt: Date | undefined,
+    private readonly id: string,
+    private readonly email: string,
+    private password: Password,
+    private readonly createdAt: Date,
+    private updatedAt: Date,
+    private deletedAt: Date | undefined,
   ) {
     super();
   }
-  
-  get id(): string {
-    return this._id
-  }
 
-  get email(): string {
-    return this._email
-  }
-
-  get password(): Password {
-    return this._password
-  }
-
-  get createdAt(): Date {
-    return this._createdAt
-  }
-
-  get updatedAt(): Date {
-    return this._updatedAt;
-  }
-
-  get deletedAt(): Date | undefined {
-    return this._deletedAt;
+  public toAnemic(): AnemicAccount {
+    const password = this.password.toAnemic();
+    return {
+      id: this.id,
+      email: this.email,
+      password,
+      createdAt: this.createdAt,
+      updatedAt: this.updatedAt,
+      deletedAt: this.deletedAt,
+    };
   }
 
   public async updatePassword(password: string, data: string): Promise<void> {
-    if (!await bcrypt.compare(password, this.password.encrypted)) {
+    if (!(await this.password.compare(password))) {
       throw new UnauthorizedException();
     }
 
-    this._updatedAt = new Date();
+    this.updatedAt = new Date();
     const salt = bcrypt.genSaltSync();
-    this._password = new Password(bcrypt.hashSync(data, salt), salt, new Date(), new Date());
+    this.password = new Password(bcrypt.hashSync(data, salt), salt, new Date(), new Date());
     this.apply(new AccountUpdated(this.id, this.email));
   }
 
   public async comparePassword(password: string): Promise<boolean> {
-    return bcrypt.compare(password, this.password.encrypted);
+    return this.password.compare(password);
   }
 
   public delete(): void {
-    this._deletedAt = new Date();
+    this.deletedAt = new Date();
     this.apply(new AccountDeleted(this.id, this.email));
+  }
+
+  public deleted(): boolean {
+    return !!this.deletedAt;
   }
 }

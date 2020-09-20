@@ -1,12 +1,30 @@
+import bcrypt from 'bcrypt';
+
+export interface AnemicPassword {
+  readonly encrypted: string;
+  readonly salt: string;
+  readonly createdAt: Date;
+  readonly comparedAt: Date;
+}
+
 export default class Password {
   constructor(
-    private _encrypted: string, 
-    private _salt: string,
-    private readonly _createdAt: Date,
-    private _comparedAt: Date,
-  ){};
+    private readonly encrypted: string,
+    private readonly salt: string,
+    private readonly createdAt: Date,
+    private readonly comparedAt: Date,
+  ) {}
 
-  get encrypted(): string {
-    return this._encrypted
+  public toAnemic(): AnemicPassword {
+    return {
+      encrypted: this.encrypted,
+      salt: this.salt,
+      createdAt: this.createdAt,
+      comparedAt: this.comparedAt,
+    };
+  }
+
+  public async compare(password: string): Promise<boolean> {
+    return bcrypt.compare(password, this.encrypted);
   }
 }

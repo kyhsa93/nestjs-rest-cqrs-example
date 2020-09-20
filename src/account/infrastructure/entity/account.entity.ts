@@ -1,5 +1,7 @@
-import PasswordEntity from 'src/account/infrastructure/entity/password.entity';
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne } from 'typeorm';
+import PasswordEntity from '@src/account/infrastructure/entity/password.entity';
+import {
+  Entity, PrimaryGeneratedColumn, Column, OneToOne,
+} from 'typeorm';
 
 @Entity()
 export default class AccountEntity {
@@ -8,7 +10,7 @@ export default class AccountEntity {
 
   @Column({ unique: true })
   public email!: string;
-  
+
   @OneToOne(() => PasswordEntity)
   public password!: PasswordEntity;
 

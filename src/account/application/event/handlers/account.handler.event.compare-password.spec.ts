@@ -1,7 +1,7 @@
-import { TestingModule, Test } from "@nestjs/testing";
-import { CqrsModule } from "@nestjs/cqrs";
-import { ComparePasswordEventHandler } from './account.handler.event.compare-password';
-import { ComparePasswordEvent } from "../implements/account.event.compare-password";
+import { TestingModule, Test } from '@nestjs/testing';
+import { CqrsModule } from '@nestjs/cqrs';
+import ComparePasswordEventHandler from './account.handler.event.compare-password';
+import ComparePasswordEvent from '../implements/account.event.compare-password';
 
 describe('ComparePasswordEventHandler', () => {
   let module: TestingModule;
@@ -15,8 +15,6 @@ describe('ComparePasswordEventHandler', () => {
     }).compile();
     comparePasswordEventHandler = module.get(ComparePasswordEventHandler);
   });
-
-  afterAll(async () => close());
 
   describe('handle', () => {
     comparePasswordEvent = new ComparePasswordEvent('id');

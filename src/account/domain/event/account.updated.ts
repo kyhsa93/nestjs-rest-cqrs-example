@@ -1,6 +1,3 @@
 export default class AccountUpdated {
-  constructor(
-    public readonly id: string,
-    public readonly email: string,
-  ) {}
+  constructor(public readonly id: string, public readonly email: string) {}
 }
