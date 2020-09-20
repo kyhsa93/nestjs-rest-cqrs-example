@@ -5,14 +5,10 @@ import Password from "src/account/domain/model/password.model";
 
 describe('PasswordFactory', () => {
   describe('create', () => {
-    it('should return Passwrod', () => {
+    it('should return Password', () => {
       const factory = new PasswordFactory();
 
-      const salt = bcrypt.genSaltSync();
-      const encrypted = bcrypt.hashSync('password', salt);
-      const password = new Password(encrypted, salt, new Date(), new Date());
-
-      expect(factory.create('password')).toEqual(password);
+      expect(factory.create('password')).toBeInstanceOf(Password);
     })
   })
 });
