@@ -7,12 +7,8 @@ export default class CreateAccountBody {
   @ApiProperty({ example: 'testpassword' })
   public readonly password: string;
 
-  @ApiProperty({ example: 'tester' })
-  public readonly name: string;
-
-  constructor(email: string, password: string, name: string) {
+  constructor(email: string, password: string) {
     this.email = email;
     this.password = password;
-    this.name = name;
   }
 }
