@@ -7,16 +7,18 @@ import AccountQuery from '@src/account/infrastructure/query/account.query';
 import RedisAdapter from '@src/account/infrastructure/redis/redis.adapter';
 
 import FindAccountByIdQueryHandler from '@src/account/application/query/handlers/account.handler.query.by.id';
-import UpdateAccountCommandHandler from '@src/account/application/command/handlers/account.handler.command.update';
-import DeleteAccountCommandHandler from '@src/account/application/command/handlers/account.handler.command.delete';
-import ComparePasswordEventHandler from '@src/account/application/event/handlers/account.handler.event.compare-password';
+import UpdateAccountCommandHandler from '@src/account/application/command/handlers/update.account.command.handler';
+import DeleteAccountCommandHandler from '@src/account/application/command/handlers/delete.account.command.handler';
+import AccountCreatedEventHandler from '@src/account/application/event/handlers/account.created.event.handler';
+import AccountUpdatedEventHandler from '@src/account/application/event/handlers/account.updated.event.handler';
+import AccountDeletedEventHandler from '@src/account/application/event/handlers/account.deleted.event.handler';
 
 import AccountFactory from '@src/account/domain/model/account.factory';
 import PasswordFactory from '@src/account/domain/model/password.factory';
-import CreateAccountCommandHandler from './application/command/handlers/account.handler.command.create';
+import CreateAccountCommandHandler from './application/command/handlers/create.account.command.handler';
 import AccountController from './interface/account.controller';
-import AccountRepository from './infrastructure/repository/account.repository';
 import AccountEntity from './infrastructure/entity/account.entity';
+import AccountRepository from './infrastructure/repository/account.repository';
 
 const adapters = [RedisAdapter];
 
@@ -36,7 +38,11 @@ const commandHandler = [
   DeleteAccountCommandHandler,
 ];
 
-const eventHandler = [ComparePasswordEventHandler];
+const eventHandler = [
+  AccountCreatedEventHandler,
+  AccountUpdatedEventHandler,
+  AccountDeletedEventHandler,
+];
 
 const factories = [AccountFactory, PasswordFactory];
 

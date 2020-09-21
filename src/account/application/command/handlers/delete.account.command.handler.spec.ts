@@ -5,8 +5,8 @@ import { Test } from '@nestjs/testing';
 
 import AccountRepository from 'src/account/infrastructure/repository/account.repository';
 
-import DeleteAccountCommandHandler from 'src/account/application/command/handlers/account.handler.command.delete';
-import DeleteAccountCommand from 'src/account/application/command/implements/account.command.delete';
+import DeleteAccountCommandHandler from '@src/account/application/command/handlers/delete.account.command.handler';
+import DeleteAccountCommand from '@src/account/application/command/implements/delete.account.command';
 
 import Account from 'src/account/domain/model/account.model';
 

@@ -5,8 +5,8 @@ import { EventPublisher } from '@nestjs/cqrs';
 
 import AccountRepository from 'src/account/infrastructure/repository/account.repository';
 
-import CreateAccountCommandHandler from 'src/account/application/command/handlers/account.handler.command.create';
-import CreateAccountCommand from 'src/account/application/command/implements/account.command.create';
+import CreateAccountCommandHandler from '@src/account/application/command/handlers/create.account.command.handler';
+import CreateAccountCommand from '@src/account/application/command/implements/create.account.command';
 
 import AccountFactory from 'src/account/domain/model/account.factory';
 import Account from 'src/account/domain/model/account.model';

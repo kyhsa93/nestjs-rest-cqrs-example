@@ -5,8 +5,8 @@ import { Test } from '@nestjs/testing';
 
 import AccountRepository from 'src/account/infrastructure/repository/account.repository';
 
-import UpdateAccountCommandHandler from 'src/account/application/command/handlers/account.handler.command.update';
-import UpdateAccountCommand from 'src/account/application/command/implements/account.command.update';
+import UpdateAccountCommandHandler from '@src/account/application/command/handlers/update.account.command.handler';
+import UpdateAccountCommand from '@src/account/application/command/implements/update.account.command';
 
 import Account from 'src/account/domain/model/account.model';
 

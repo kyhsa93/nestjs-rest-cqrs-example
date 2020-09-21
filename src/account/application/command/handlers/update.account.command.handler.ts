@@ -3,7 +3,7 @@ import { Inject, NotFoundException } from '@nestjs/common';
 
 import AccountRepository from '../../../infrastructure/repository/account.repository';
 
-import UpdateAccountCommand from '../implements/account.command.update';
+import UpdateAccountCommand from '../implements/update.account.command';
 
 @CommandHandler(UpdateAccountCommand)
 export default class UpdateAccountCommandHandler implements ICommandHandler<UpdateAccountCommand> {

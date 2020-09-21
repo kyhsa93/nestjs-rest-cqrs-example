@@ -3,7 +3,7 @@ import { Inject, NotFoundException, UnauthorizedException } from '@nestjs/common
 
 import AccountRepository from '../../../infrastructure/repository/account.repository';
 
-import DeleteAccountCommand from '../implements/account.command.delete';
+import DeleteAccountCommand from '../implements/delete.account.command';
 
 @CommandHandler(DeleteAccountCommand)
 export default class DeleteAccountCommandHandler implements ICommandHandler<DeleteAccountCommand> {
