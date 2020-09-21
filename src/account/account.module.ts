@@ -17,8 +17,8 @@ import AccountFactory from '@src/account/domain/model/account.factory';
 import PasswordFactory from '@src/account/domain/model/password.factory';
 import CreateAccountCommandHandler from './application/command/handlers/create.account.handler';
 import AccountController from './interface/account.controller';
-import AccountEntity from './infrastructure/entity/account.entity';
 import AccountRepository from './infrastructure/repository/account.repository';
+import AccountEntity from './infrastructure/entity/account.entity';
 
 const adapters = [RedisAdapter];
 

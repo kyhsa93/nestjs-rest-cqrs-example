@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export default class CreateAccountDTO {
+export default class CreateAccountBody {
   @ApiProperty({ example: 'test@test.com' })
   public readonly email: string;
 

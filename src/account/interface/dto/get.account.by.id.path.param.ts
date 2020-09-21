@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export default class ReadAccountDTO {
+export default class GetAccountByIdPathParam {
   @ApiProperty()
   public readonly id: string;
 

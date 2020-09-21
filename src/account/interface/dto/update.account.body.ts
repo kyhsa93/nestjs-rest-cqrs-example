@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export default class UpdateAccountBodyDTO {
+export default class UpdateAccountBody {
   @ApiProperty({ example: 'testpassword' })
   public readonly newPassword: string;
 
