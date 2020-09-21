@@ -45,5 +45,10 @@ jobs:
       uses: actions/checkout@v2
     - name: build container image
       run: docker build -t kyhsa93/nestjs-rest-cqrs-example:${{ github.sha }} .
+    - name: Login to DockerHub
+      uses: docker/login-action@v1 
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
     - name: push container image
       run: docker push kyhsa93/nestjs-rest-cqrs-example:${{ github.sha }}
