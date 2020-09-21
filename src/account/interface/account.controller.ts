@@ -22,10 +22,10 @@ import UpdateAccountBodyDTO from './dto/account.dto.update.body';
 import DeleteAccountParamDTO from './dto/account.dto.delete.param';
 import DeleteAccountBodyDTO from './dto/account.dto.delete.body';
 
-import CreateAccountCommand from '../application/command/implements/create.account.command';
+import CreateAccountCommand from '../application/command/implements/create.account';
 import ReadAccountQuery from '../application/query/implements/account.query.by.id';
-import UpdateAccountCommand from '../application/command/implements/update.account.command';
-import DeleteAccountCommand from '../application/command/implements/delete.account.command';
+import UpdateAccountCommand from '../application/command/implements/update.account';
+import DeleteAccountCommand from '../application/command/implements/delete.account';
 
 @ApiTags('Accounts')
 @Controller('accounts')

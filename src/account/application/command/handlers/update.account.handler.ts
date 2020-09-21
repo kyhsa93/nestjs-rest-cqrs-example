@@ -1,27 +1,25 @@
 import { CommandHandler, ICommandHandler, EventPublisher } from '@nestjs/cqrs';
-import { Inject, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { Inject, NotFoundException } from '@nestjs/common';
 
 import AccountRepository from '../../../infrastructure/repository/account.repository';
 
-import DeleteAccountCommand from '../implements/delete.account.command';
+import UpdateAccountCommand from '../implements/update.account';
 
-@CommandHandler(DeleteAccountCommand)
-export default class DeleteAccountCommandHandler implements ICommandHandler<DeleteAccountCommand> {
+@CommandHandler(UpdateAccountCommand)
+export default class UpdateAccountCommandHandler implements ICommandHandler<UpdateAccountCommand> {
   constructor(
     @Inject(AccountRepository) private readonly accountRepository: AccountRepository,
     private readonly eventPublisher: EventPublisher,
   ) {}
 
-  public async execute(command: DeleteAccountCommand): Promise<void> {
-    const { id, password } = command;
-
+  public async execute(command: UpdateAccountCommand): Promise<void> {
+    const { id, oldPassword, newPassword } = command;
     const model = await this.accountRepository.findById(id);
     if (!model) throw new NotFoundException();
-    if (!(await model.comparePassword(password))) throw new UnauthorizedException();
 
     const account = this.eventPublisher.mergeObjectContext(model);
 
-    account.delete();
+    await account.updatePassword(oldPassword, newPassword);
 
     account.commit();
 

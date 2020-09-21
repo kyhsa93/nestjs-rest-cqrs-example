@@ -1,7 +1,7 @@
 import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
 import { BadRequestException, Inject } from '@nestjs/common';
 
-import CreateAccountCommand from '@src/account/application/command/implements/create.account.command';
+import CreateAccountCommand from '@src/account/application/command/implements/create.account';
 
 import AccountFactory from '@src/account/domain/model/account.factory';
 import AccountRepository from '../../../infrastructure/repository/account.repository';
