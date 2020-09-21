@@ -1,5 +1,6 @@
 import Redis from 'ioredis';
-import AppConfiguration from '../../../app.config';
+
+import AppConfiguration from '@src/app.config';
 
 export default class RedisAdapter {
   private readonly master: Redis.Redis;

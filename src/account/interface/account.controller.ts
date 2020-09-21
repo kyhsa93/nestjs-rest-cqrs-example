@@ -14,18 +14,18 @@ import {
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { AuthGuard } from '@nestjs/passport';
 
-import CreateAccountBody from './dto/create.account.body';
-import GetAccountByIdPathParam from './dto/get.account.by.id.path.param';
-import UserDTO from './dto/user.dto';
-import UpdateAccountPathParam from './dto/update.account.path.param';
-import UpdateAccountBody from './dto/update.account.body';
-import DeleteAccountPathParam from './dto/delete.account.path.param';
-import DeleteAccountBody from './dto/delete.account.body';
+import CreateAccountBody from '@src/account/interface/dto/create.account.body';
+import GetAccountByIdPathParam from '@src/account/interface/dto/get.account.by.id.path.param';
+import UserDTO from '@src/account/interface/dto/user.dto';
+import UpdateAccountPathParam from '@src/account/interface/dto/update.account.path.param';
+import UpdateAccountBody from '@src/account/interface/dto/update.account.body';
+import DeleteAccountPathParam from '@src/account/interface/dto/delete.account.path.param';
+import DeleteAccountBody from '@src/account/interface/dto/delete.account.body';
 
-import CreateAccountCommand from '../application/command/implements/create.account';
-import ReadAccountQuery from '../application/query/implements/account.query.by.id';
-import UpdateAccountCommand from '../application/command/implements/update.account';
-import DeleteAccountCommand from '../application/command/implements/delete.account';
+import CreateAccountCommand from '@src/account/application/command/implements/create.account';
+import ReadAccountQuery from '@src/account/application/query/implements/account.query.by.id';
+import UpdateAccountCommand from '@src/account/application/command/implements/update.account';
+import DeleteAccountCommand from '@src/account/application/command/implements/delete.account';
 
 @ApiTags('Accounts')
 @Controller('accounts')

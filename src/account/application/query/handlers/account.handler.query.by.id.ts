@@ -2,10 +2,10 @@ import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { Inject } from '@nestjs/common';
 
 import AccountQuery from '@src/account/infrastructure/query/account.query';
-import AccountEntity from '../../../infrastructure/entity/account.entity';
-import RedisAdapter from '../../../infrastructure/redis/redis.adapter';
+import AccountEntity from '@src/account/infrastructure/entity/account.entity';
+import RedisAdapter from '@src/account/infrastructure/redis/redis.adapter';
 
-import FindAccountByIdQuery from '../implements/account.query.by.id';
+import FindAccountByIdQuery from '@src/account/application/query/implements/account.query.by.id';
 
 type Account = { id: string; email: string; createdAt: Date; updatedAt: Date };
 

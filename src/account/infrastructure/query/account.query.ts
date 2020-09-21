@@ -1,6 +1,6 @@
 import { getRepository } from 'typeorm';
 
-import AccountEntity from 'src/account/infrastructure/entity/account.entity';
+import AccountEntity from '@src/account/infrastructure/entity/account.entity';
 
 export default class AccountQuery {
   public findById = async (id: string): Promise<AccountEntity | undefined> => {

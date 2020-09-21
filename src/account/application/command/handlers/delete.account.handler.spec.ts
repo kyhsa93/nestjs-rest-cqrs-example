@@ -3,12 +3,12 @@ import { ModuleMetadata } from '@nestjs/common/interfaces';
 import { EventPublisher } from '@nestjs/cqrs';
 import { Test } from '@nestjs/testing';
 
-import AccountRepository from 'src/account/infrastructure/repository/account.repository';
+import AccountRepository from '@src/account/infrastructure/repository/account.repository';
 
 import DeleteAccountCommandHandler from '@src/account/application/command/handlers/delete.account.handler';
 import DeleteAccountCommand from '@src/account/application/command/implements/delete.account';
 
-import Account from 'src/account/domain/model/account.model';
+import Account from '@src/account/domain/model/account.model';
 
 describe('DeleteAccountCommandHandler', () => {
   let accountRepository: AccountRepository;

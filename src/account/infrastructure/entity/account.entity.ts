@@ -1,7 +1,6 @@
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+
 import PasswordEntity from '@src/account/infrastructure/entity/password.entity';
-import {
-  Entity, PrimaryGeneratedColumn, Column, OneToOne,
-} from 'typeorm';
 
 @Entity()
 export default class AccountEntity {

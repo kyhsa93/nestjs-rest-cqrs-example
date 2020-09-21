@@ -4,8 +4,8 @@ import RateLimit from 'express-rate-limit';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import compression from 'compression';
 
-import ApplicationModule from './app.module';
-import AppConfiguration from './app.config';
+import ApplicationModule from '@src/app.module';
+import AppConfiguration from '@src/app.config';
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(ApplicationModule, { cors: true });

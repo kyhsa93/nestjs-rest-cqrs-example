@@ -2,8 +2,9 @@ import { Inject } from '@nestjs/common';
 import { EntityRepository, getRepository } from 'typeorm';
 
 import AccountMapper from '@src/account/infrastructure/mapper/account.mapper';
+import AccountEntity from '@src/account/infrastructure/entity/account.entity';
+
 import Account from '@src/account/domain/model/account.model';
-import AccountEntity from '../entity/account.entity';
 
 @EntityRepository(AccountEntity)
 export default class AccountRepository {

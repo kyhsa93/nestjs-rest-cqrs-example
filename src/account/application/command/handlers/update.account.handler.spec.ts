@@ -3,12 +3,12 @@ import { ModuleMetadata } from '@nestjs/common/interfaces';
 import { EventPublisher } from '@nestjs/cqrs';
 import { Test } from '@nestjs/testing';
 
-import AccountRepository from 'src/account/infrastructure/repository/account.repository';
+import AccountRepository from '@src/account/infrastructure/repository/account.repository';
 
 import UpdateAccountCommandHandler from '@src/account/application/command/handlers/update.account.handler';
 import UpdateAccountCommand from '@src/account/application/command/implements/update.account';
 
-import Account from 'src/account/domain/model/account.model';
+import Account from '@src/account/domain/model/account.model';
 
 describe('UpdateAccountCommandHandler', () => {
   let accountRepository: AccountRepository;

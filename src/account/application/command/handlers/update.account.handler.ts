@@ -1,9 +1,9 @@
 import { CommandHandler, ICommandHandler, EventPublisher } from '@nestjs/cqrs';
 import { Inject, NotFoundException } from '@nestjs/common';
 
-import AccountRepository from '../../../infrastructure/repository/account.repository';
+import AccountRepository from '@src/account/infrastructure/repository/account.repository';
 
-import UpdateAccountCommand from '../implements/update.account';
+import UpdateAccountCommand from '@src/account/application/command/implements/update.account';
 
 @CommandHandler(UpdateAccountCommand)
 export default class UpdateAccountCommandHandler implements ICommandHandler<UpdateAccountCommand> {

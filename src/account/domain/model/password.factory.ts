@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 
-import Password, { AnemicPassword } from 'src/account/domain/model/password.model';
+import Password, { AnemicPassword } from '@src/account/domain/model/password.model';
 
 export default class PasswordFactory {
   public create = (password: string): Password => {
