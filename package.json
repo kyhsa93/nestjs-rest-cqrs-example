@@ -39,6 +39,7 @@
     "uuid": "^3.4.0"
   },
   "devDependencies": {
+    "@nestjs/cli": "^7.5.1",
     "@nestjs/testing": "^6.11.11",
     "@types/bcrypt": "^3.0.0",
     "@types/compression": "^1.7.0",
@@ -97,7 +98,7 @@
     "prettier": "prettier --write --config .prettierrc \"./src/**/*.ts\"",
     "lint": "eslint --fix src/**.ts src/**/**.ts src/**/**/**.ts src/**/**/**/**.ts",
     "test": "jest --clearCache && jest",
-    "build": "rimraf dist && tsc -p tsconfig.build.json",
+    "build": "rimraf dist && nest build",
     "start": "nodemon"
   }
 }

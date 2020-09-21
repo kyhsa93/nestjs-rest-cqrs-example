@@ -11,7 +11,7 @@ export default class AccountEntity {
   @Column({ unique: true })
   public email!: string;
 
-  @OneToOne(() => PasswordEntity)
+  @Column(() => PasswordEntity)
   public password!: PasswordEntity;
 
   @Column({ type: 'datetime' })

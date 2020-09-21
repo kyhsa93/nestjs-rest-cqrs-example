@@ -1,6 +1,5 @@
-import { Column, Entity } from 'typeorm';
+import { Column } from 'typeorm';
 
-@Entity()
 export default class PasswordEntity {
   @Column('varchar')
   public encrypted!: string;

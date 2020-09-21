@@ -1,11 +1,14 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Connection } from 'typeorm';
-import AppController from './app.controller';
-import AccountModule from './account/account.module';
-import AccountEntity from './account/infrastructure/entity/account.entity';
+
 import AppConfiguration from './app.config';
 import AuthModule from './auth/auth.module';
+import AccountModule from './account/account.module';
+
+import AccountEntity from './account/infrastructure/entity/account.entity';
+
+import AppController from './app.controller';
 
 @Module({
   imports: [
