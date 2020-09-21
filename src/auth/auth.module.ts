@@ -10,8 +10,8 @@ import JwtStrategy from './jwt.strategy';
     CqrsModule,
     PassportModule,
     JwtModule.register({
-      secret: AppConfiguration.JWT_SECRET,
-      signOptions: { expiresIn: AppConfiguration.JWT_EXPIRATION },
+      secret: AppConfiguration.jwt.secret,
+      signOptions: { expiresIn: AppConfiguration.jwt.secret },
     }),
   ],
   providers: [JwtStrategy],

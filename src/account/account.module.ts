@@ -48,7 +48,7 @@ const eventHandler = [
 const factories = [AccountFactory, PasswordFactory];
 
 @Module({
-  imports: [CqrsModule, TypeOrmModule.forFeature([AccountEntity])],
+  imports: [CqrsModule],
   controllers,
   providers: [
     ...adapters,
