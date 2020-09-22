@@ -15,4 +15,6 @@ WORKDIR /app
 
 EXPOSE 5000
 
+USER daemon
+
 CMD ["node", "main.js"]
