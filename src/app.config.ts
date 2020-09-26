@@ -25,6 +25,12 @@ type AppConfigurationType = {
       port: number;
     };
   };
+  rabbitMQ: {
+    exchange: string;
+    hostname: string;
+    userName: string;
+    password: string;
+  };
 };
 
 const AppConfiguration: AppConfigurationType = {
@@ -53,6 +59,12 @@ const AppConfiguration: AppConfigurationType = {
       host: process.env.REDIS_SLAVE_HOST || 'localhost',
       port: Number(process.env.REDIS_SLAVE_PORT) || 6379,
     },
+  },
+  rabbitMQ: {
+    exchange: process.env.RABBIT_MQ_EXCHANGE || 'example-exchange',
+    hostname: process.env.RABBIT_MQ_HOSTNAME || 'localhost',
+    userName: process.env.RABBIT_MQ_USER_NAME || 'root',
+    password: process.env.RABBIT_MQ_PASSWORD || 'test',
   },
 };
 

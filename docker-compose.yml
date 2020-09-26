@@ -37,3 +37,13 @@ services:
       - .env
     volumes:
       - ~/database/nest:/var/lib/mysql
+
+  rabbitmq:
+    image: rabbitmq:alpine
+    restart: always
+    ports: 
+      - 5672:5672
+      - 15672:15672
+    environment: 
+      RABBITMQ_DEFAULT_USER: root
+      RABBITMQ_DEFAULT_PASS: test

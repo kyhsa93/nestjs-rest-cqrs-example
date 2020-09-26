@@ -14,3 +14,13 @@ services:
       - 3306:3306
     env_file:
       - .env
+
+  rabbitmq:
+    image: rabbitmq:alpine
+    restart: always
+    ports: 
+      - 5672:5672
+      - 15672:15672
+    environment: 
+      RABBITMQ_DEFAULT_USER: root
+      RABBITMQ_DEFAULT_PASS: test
