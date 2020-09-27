@@ -1,8 +1,21 @@
+import { Inject } from '@nestjs/common';
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
+import AccountDeletedIntegrationEvent from '@src/account/application/event/implements/account.deleted.integration';
+import AccountDeletedDomainEvent from '@src/account/domain/event/account.deleted';
+import IntegrationEventPublisher from '@src/account/infrastructure/message/publisher';
 
-import AccountDeleted from '@src/account/domain/event/account.deleted';
+@EventsHandler(AccountDeletedDomainEvent)
+export default class AccountDeletedDomainEventHandler
+implements IEventHandler<AccountDeletedDomainEvent> {
+  constructor(
+    @Inject(IntegrationEventPublisher)
+    private readonly integrationEventPublisher: IntegrationEventPublisher,
+  ) {}
 
-@EventsHandler(AccountDeleted)
-export default class AccountDeletedEventHandler implements IEventHandler<AccountDeleted> {
-  public handle = (event: AccountDeleted): void => console.log(`account deleted: ${event}`);
+  public async handle(event: AccountDeletedDomainEvent): Promise<void> {
+    const messageKey = 'account.deleted';
+    const data = JSON.stringify(event);
+    const integrationEvent = new AccountDeletedIntegrationEvent(messageKey, data);
+    await this.integrationEventPublisher.publish(integrationEvent);
+  }
 }

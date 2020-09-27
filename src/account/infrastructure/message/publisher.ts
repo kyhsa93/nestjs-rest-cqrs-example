@@ -5,7 +5,7 @@ import AppConfiguration from '@src/app.config';
 import Message from '@src/account/infrastructure/message/message';
 
 @Injectable()
-export default class Publisher {
+export default class IntegrationEventPublisher {
   private readonly exchange: string;
 
   private readonly connectionOptions: Options.Connect;
