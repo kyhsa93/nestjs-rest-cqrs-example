@@ -28,7 +28,7 @@ type AppConfigurationType = {
   rabbitMQ: {
     exchange: string;
     hostname: string;
-    userName: string;
+    username: string;
     password: string;
   };
 };
@@ -63,7 +63,7 @@ const AppConfiguration: AppConfigurationType = {
   rabbitMQ: {
     exchange: process.env.RABBIT_MQ_EXCHANGE || 'example-exchange',
     hostname: process.env.RABBIT_MQ_HOSTNAME || 'localhost',
-    userName: process.env.RABBIT_MQ_USER_NAME || 'root',
+    username: process.env.RABBIT_MQ_USER_NAME || 'root',
     password: process.env.RABBIT_MQ_PASSWORD || 'test',
   },
 };
