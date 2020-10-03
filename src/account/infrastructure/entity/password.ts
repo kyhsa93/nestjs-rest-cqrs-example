@@ -1,15 +1,15 @@
 import { Column } from 'typeorm';
 
 export default class PasswordEntity {
-  @Column('varchar')
+  @Column('varchar', { nullable: true })
   public encrypted!: string;
 
-  @Column('varchar')
+  @Column('varchar', { nullable: true })
   public salt!: string;
 
-  @Column('datetime')
+  @Column('datetime', { nullable: true })
   public createdAt!: Date;
 
-  @Column('datetime')
+  @Column('datetime', { nullable: true })
   public comparedAt!: Date;
 }

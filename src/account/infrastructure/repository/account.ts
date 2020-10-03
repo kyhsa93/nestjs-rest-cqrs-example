@@ -1,5 +1,6 @@
 import { Inject } from '@nestjs/common';
 import { EntityRepository, getRepository } from 'typeorm';
+import uuid from 'uuid';
 
 import AccountMapper from '@src/account/infrastructure/mapper/account';
 import AccountEntity from '@src/account/infrastructure/entity/account';
@@ -11,7 +12,11 @@ export default class AccountRepository {
   constructor(@Inject(AccountMapper) private readonly accountMapper: AccountMapper) {}
 
   public newId = async (): Promise<string> => {
-    const entity = await getRepository(AccountEntity).save(new AccountEntity());
+    const emptyEntity = new AccountEntity();
+    emptyEntity.email = uuid.v1();
+    emptyEntity.createdAt = new Date();
+    emptyEntity.updatedAt = new Date();
+    const entity = await getRepository(AccountEntity).save(emptyEntity);
     return entity.id;
   };
 
