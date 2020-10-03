@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt';
 
 import AccountDeleted from '@src/account/domain/event/account.deleted';
 import AccountUpdated from '@src/account/domain/event/account.updated';
-import Password, { AnemicPassword } from '@src/account/domain/model/password.model';
+import Password, { AnemicPassword } from '@src/account/domain/model/password';
 
 export interface AnemicAccount {
   readonly id: string;

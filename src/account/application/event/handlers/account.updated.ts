@@ -3,7 +3,7 @@ import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 
 import IntegrationEventPublisher from '@src/account/infrastructure/message/publisher';
 
-import AccountUpdatedIntegrationEvent from '@src/account/application/event/implements/account.updated.integration';
+import AccountUpdatedIntegrationEvent from '@src/account/application/event/implements/account.updated';
 
 import AccountUpdatedDomainEvent from '@src/account/domain/event/account.updated';
 

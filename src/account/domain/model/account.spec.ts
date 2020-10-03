@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import { UnauthorizedException } from '@nestjs/common';
 
-import Password from '@src/account/domain/model/password.model';
+import Password from '@src/account/domain/model/password';
 import Account from '@src/account/domain/model/account.model';
 
 describe('AccountModel', () => {

@@ -1,9 +1,9 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { Inject } from '@nestjs/common';
 
-import AccountQuery from '@src/account/infrastructure/query/account.query';
-import AccountEntity from '@src/account/infrastructure/entity/account.entity';
-import RedisAdapter from '@src/account/infrastructure/redis/redis.adapter';
+import AccountQuery from '@src/account/infrastructure/query/account';
+import AccountEntity from '@src/account/infrastructure/entity/account';
+import RedisAdapter from '@src/account/infrastructure/redis/adapter';
 
 import FindAccountByIdQuery from '@src/account/application/query/implements/account.query.by.id';
 

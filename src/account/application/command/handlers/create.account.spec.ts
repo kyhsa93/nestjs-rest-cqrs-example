@@ -3,9 +3,9 @@ import { ModuleMetadata } from '@nestjs/common/interfaces';
 import { Test } from '@nestjs/testing';
 import { EventPublisher } from '@nestjs/cqrs';
 
-import AccountRepository from '@src/account/infrastructure/repository/account.repository';
+import AccountRepository from '@src/account/infrastructure/repository/account';
 
-import CreateAccountCommandHandler from '@src/account/application/command/handlers/create.account.handler';
+import CreateAccountCommandHandler from '@src/account/application/command/handlers/create.account';
 import CreateAccountCommand from '@src/account/application/command/implements/create.account';
 
 import AccountFactory from '@src/account/domain/model/account.factory';

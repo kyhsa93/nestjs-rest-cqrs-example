@@ -11,7 +11,7 @@ import RateLimit from 'express-rate-limit';
 import helmet from 'helmet';
 import { Connection, createConnection } from 'typeorm';
 
-import AccountEntity from '@src/account/infrastructure/entity/account.entity';
+import AccountEntity from '@src/account/infrastructure/entity/account';
 
 export const setUp = async (app: INestApplication): Promise<void> => {
   /**

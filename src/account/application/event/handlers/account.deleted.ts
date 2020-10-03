@@ -1,6 +1,6 @@
 import { Inject } from '@nestjs/common';
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
-import AccountDeletedIntegrationEvent from '@src/account/application/event/implements/account.deleted.integration';
+import AccountDeletedIntegrationEvent from '@src/account/application/event/implements/account.deleted';
 import AccountDeletedDomainEvent from '@src/account/domain/event/account.deleted';
 import IntegrationEventPublisher from '@src/account/infrastructure/message/publisher';
 

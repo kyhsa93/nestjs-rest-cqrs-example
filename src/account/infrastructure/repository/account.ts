@@ -1,8 +1,8 @@
 import { Inject } from '@nestjs/common';
 import { EntityRepository, getRepository } from 'typeorm';
 
-import AccountMapper from '@src/account/infrastructure/mapper/account.mapper';
-import AccountEntity from '@src/account/infrastructure/entity/account.entity';
+import AccountMapper from '@src/account/infrastructure/mapper/account';
+import AccountEntity from '@src/account/infrastructure/entity/account';
 
 import Account from '@src/account/domain/model/account.model';
 
