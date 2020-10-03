@@ -1,9 +1,4 @@
-import {
-  INestApplication,
-  InternalServerErrorException,
-  OnModuleDestroy,
-  OnModuleInit,
-} from '@nestjs/common';
+import { INestApplication, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import AppConfiguration from '@src/app.config';
 import compression from 'compression';
@@ -40,14 +35,14 @@ export const setUp = async (app: INestApplication): Promise<void> => {
 export default class AppService implements OnModuleInit, OnModuleDestroy {
   private connection: Connection | undefined;
 
-  public async onModuleInit() {
+  public async onModuleInit(): Promise<void> {
     const entities = [AccountEntity];
     const databaseOptions = { ...AppConfiguration.database, entities };
     this.connection = await createConnection(databaseOptions);
     if (!this.connection) process.exit(1);
   }
 
-  public async onModuleDestroy() {
+  public async onModuleDestroy(): Promise<void> {
     if (this.connection) await this.connection.close();
   }
 }

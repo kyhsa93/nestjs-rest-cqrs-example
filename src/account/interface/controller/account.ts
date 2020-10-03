@@ -14,13 +14,13 @@ import {
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { AuthGuard } from '@nestjs/passport';
 
-import CreateAccountBody from '@src/account/interface/dto/create.account.body';
-import GetAccountByIdPathParam from '@src/account/interface/dto/get.account.by.id.path.param';
 import UserDTO from '@src/account/interface/dto/user.dto';
-import UpdateAccountPathParam from '@src/account/interface/dto/update.account.path.param';
-import UpdateAccountBody from '@src/account/interface/dto/update.account.body';
-import DeleteAccountPathParam from '@src/account/interface/dto/delete.account.path.param';
-import DeleteAccountBody from '@src/account/interface/dto/delete.account.body';
+import CreateAccountBody from '@src/account/interface/dto/create/body';
+import UpdateAccountPathParam from '@src/account/interface/dto/update/path';
+import UpdateAccountBody from '@src/account/interface/dto/update/body';
+import DeleteAccountPathParam from '@src/account/interface/dto/delete/path';
+import DeleteAccountBody from '@src/account/interface/dto/delete/body';
+import ReadAccountPathParam from '@src/account/interface/dto/read/path';
 
 import CreateAccountCommand from '@src/account/application/command/implements/create.account';
 import ReadAccountQuery from '@src/account/application/query/implements/account.query.by.id';
@@ -69,7 +69,7 @@ export default class AccountController {
   @Get(':id')
   public async handlerGetAccountByIdRequest(
     @Request() req: { user: UserDTO },
-      @Param() param: GetAccountByIdPathParam,
+      @Param() param: ReadAccountPathParam,
   ): Promise<Account> {
     if (param.id !== req.user.id) throw new UnauthorizedException();
     return this.queryBus.execute(new ReadAccountQuery(param.id));
