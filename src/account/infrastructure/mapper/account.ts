@@ -2,8 +2,8 @@ import { Inject } from '@nestjs/common';
 
 import AccountEntity from '@src/account/infrastructure/entity/account';
 
-import Account from '@src/account/domain/model/account.model';
-import AccountFactory from '@src/account/domain/model/account.factory';
+import Account from '@src/account/domain/model/account';
+import AccountFactory from '@src/account/domain/factory/account';
 
 export default class AccountMapper {
   constructor(@Inject(AccountFactory) private readonly accountFactory: AccountFactory) {}

@@ -4,7 +4,7 @@ import { Injectable } from '@nestjs/common';
 import { QueryBus } from '@nestjs/cqrs';
 import AppConfiguration from '../app.config';
 import ReadAccountQuery from '../account/application/query/implements/account.query.by.id';
-import Account from '../account/domain/model/account.model';
+import Account from '../account/domain/model/account';
 
 type PayloadType = { id: string; email: string; name: string };
 

@@ -17,8 +17,8 @@ import AccountCreatedDomainEventHandler from '@src/account/application/event/han
 import AccountUpdatedDomainEventHandler from '@src/account/application/event/handlers/account.updated';
 import AccountDeletedDomainEventHandler from '@src/account/application/event/handlers/account.deleted';
 
-import AccountFactory from '@src/account/domain/model/account.factory';
-import PasswordFactory from '@src/account/domain/model/password.factory';
+import AccountFactory from '@src/account/domain/factory/account';
+import PasswordFactory from '@src/account/domain/factory/password';
 
 const publishers = [IntegrationEventPublisher];
 

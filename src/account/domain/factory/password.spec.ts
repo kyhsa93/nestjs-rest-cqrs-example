@@ -1,4 +1,4 @@
-import PasswordFactory from '@src/account/domain/model/password.factory';
+import PasswordFactory from '@src/account/domain/factory/password';
 import Password from '@src/account/domain/model/password';
 
 describe('PasswordFactory', () => {

@@ -5,7 +5,7 @@ import uuid from 'uuid';
 import AccountMapper from '@src/account/infrastructure/mapper/account';
 import AccountEntity from '@src/account/infrastructure/entity/account';
 
-import Account from '@src/account/domain/model/account.model';
+import Account from '@src/account/domain/model/account';
 
 @EntityRepository(AccountEntity)
 export default class AccountRepository {

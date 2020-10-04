@@ -5,7 +5,7 @@ import AccountRepository from '@src/account/infrastructure/repository/account';
 
 import CreateAccountCommand from '@src/account/application/command/implements/create.account';
 
-import AccountFactory from '@src/account/domain/model/account.factory';
+import AccountFactory from '@src/account/domain/factory/account';
 
 @CommandHandler(CreateAccountCommand)
 export default class CreateAccountCommandHandler implements ICommandHandler<CreateAccountCommand> {

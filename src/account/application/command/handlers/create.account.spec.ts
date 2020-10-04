@@ -8,8 +8,8 @@ import AccountRepository from '@src/account/infrastructure/repository/account';
 import CreateAccountCommandHandler from '@src/account/application/command/handlers/create.account';
 import CreateAccountCommand from '@src/account/application/command/implements/create.account';
 
-import AccountFactory from '@src/account/domain/model/account.factory';
-import Account from '@src/account/domain/model/account.model';
+import AccountFactory from '@src/account/domain/factory/account';
+import Account from '@src/account/domain/model/account';
 
 describe('CreateAccountHandler', () => {
   let accountRepository: AccountRepository;
