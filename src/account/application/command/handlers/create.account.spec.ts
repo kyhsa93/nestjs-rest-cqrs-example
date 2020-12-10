@@ -3,13 +3,12 @@ import { ModuleMetadata } from '@nestjs/common/interfaces';
 import { Test } from '@nestjs/testing';
 import { EventPublisher } from '@nestjs/cqrs';
 
-import AccountRepository from '@src/account/infrastructure/repository/account';
-
 import CreateAccountCommandHandler from '@src/account/application/command/handlers/create.account';
 import CreateAccountCommand from '@src/account/application/command/implements/create.account';
 
 import AccountFactory from '@src/account/domain/factory';
 import Account from '@src/account/domain/model/account';
+import AccountRepository from '@src/account/domain/repository';
 
 describe('CreateAccountHandler', () => {
   let accountRepository: AccountRepository;
@@ -19,7 +18,7 @@ describe('CreateAccountHandler', () => {
 
   beforeEach(async () => {
     const accountFactoryProvider: Provider = { provide: AccountFactory, useValue: {} };
-    const accountRepositoryProvider: Provider = { provide: AccountRepository, useValue: {} };
+    const accountRepositoryProvider: Provider = { provide: 'AccountRepositoryImplement', useValue: {} };
     const eventPublisherProvider: Provider = { provide: EventPublisher, useValue: {} };
 
     const providers: Provider[] = [
@@ -32,7 +31,7 @@ describe('CreateAccountHandler', () => {
     const moduleMetadata: ModuleMetadata = { providers };
     const testModule = await Test.createTestingModule(moduleMetadata).compile();
 
-    accountRepository = testModule.get(AccountRepository);
+    accountRepository = testModule.get('AccountRepositoryImplement');
     accountFactory = testModule.get(AccountFactory);
     eventPublisher = testModule.get(EventPublisher);
     createAccountCommandHandler = testModule.get(CreateAccountCommandHandler);

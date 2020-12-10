@@ -1,18 +1,17 @@
 import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
 import { BadRequestException, Inject } from '@nestjs/common';
 
-import AccountRepository from '@src/account/infrastructure/repository/account';
-
 import CreateAccountCommand from '@src/account/application/command/implements/create.account';
 
 import AccountFactory from '@src/account/domain/factory';
+import AccountRepository from '@src/account/domain/repository';
 
 @CommandHandler(CreateAccountCommand)
 export default class CreateAccountCommandHandler implements ICommandHandler<CreateAccountCommand> {
   constructor(
-    @Inject(AccountFactory) private readonly accountFactory: AccountFactory,
-    @Inject(AccountRepository) private readonly accountRepository: AccountRepository,
+    private readonly accountFactory: AccountFactory,
     private readonly eventPublisher: EventPublisher,
+    @Inject('AccountRepositoryImplement') private readonly accountRepository: AccountRepository,
   ) {}
 
   public async execute(command: CreateAccountCommand): Promise<void> {

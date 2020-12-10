@@ -3,12 +3,11 @@ import { ModuleMetadata } from '@nestjs/common/interfaces';
 import { EventPublisher } from '@nestjs/cqrs';
 import { Test } from '@nestjs/testing';
 
-import AccountRepository from '@src/account/infrastructure/repository/account';
-
 import DeleteAccountCommandHandler from '@src/account/application/command/handlers/delete.account';
 import DeleteAccountCommand from '@src/account/application/command/implements/delete.account';
 
 import Account from '@src/account/domain/model/account';
+import AccountRepository from '@src/account/domain/repository';
 
 describe('DeleteAccountCommandHandler', () => {
   let accountRepository: AccountRepository;
@@ -16,7 +15,7 @@ describe('DeleteAccountCommandHandler', () => {
   let deleteAccountCommandHandler: DeleteAccountCommandHandler;
 
   beforeEach(async () => {
-    const accountRepositoryProvider: Provider = { provide: AccountRepository, useValue: {} };
+    const accountRepositoryProvider: Provider = { provide: 'AccountRepositoryImplement', useValue: {} };
     const eventPublisherProvider: Provider = { provide: EventPublisher, useValue: {} };
 
     const providers: Provider[] = [
@@ -28,7 +27,7 @@ describe('DeleteAccountCommandHandler', () => {
     const moduleMetadata: ModuleMetadata = { providers };
     const testModule = await Test.createTestingModule(moduleMetadata).compile();
 
-    accountRepository = testModule.get(AccountRepository);
+    accountRepository = testModule.get('AccountRepositoryImplement');
     eventPublisher = testModule.get(EventPublisher);
     deleteAccountCommandHandler = testModule.get(DeleteAccountCommandHandler);
   });
