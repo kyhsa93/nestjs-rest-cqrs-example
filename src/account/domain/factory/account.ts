@@ -1,32 +1,34 @@
-import { Inject } from '@nestjs/common';
+import bcrypt from 'bcrypt';
 
 import AccountCreated from '@src/account/domain/event/account.created';
 import Account, { AnemicAccount } from '@src/account/domain/model/account';
-import PasswordFactory from '@src/account/domain/factory/password';
+import Password from '@src/account/domain/model/password';
 
 export default class AccountFactory {
-  constructor(@Inject(PasswordFactory) private readonly passwordFactory: PasswordFactory) {}
-
-  public create(id: string, email: string, password: string): Account {
+  public create = (id: string, email: string, password: string): Account => {
+    const salt = bcrypt.genSaltSync();
+    const now = new Date();
     const account = new Account({
       id,
       email,
-      password: this.passwordFactory.create(password),
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      password: new Password({
+        encrypted: bcrypt.hashSync(password, salt), salt, createdAt: now, comparedAt: now,
+      }),
+      createdAt: now,
+      updatedAt: now,
       deletedAt: undefined,
     });
     account.apply(new AccountCreated(id, email));
     return account;
-  }
+  };
 
-  public reconstitute(anemic: AnemicAccount): Account {
+  public reconstitute = (anemic: AnemicAccount): Account => {
     const {
       id, email, createdAt, updatedAt, deletedAt,
     } = anemic;
-    const password = this.passwordFactory.reconstitute(anemic.password);
+    const password = new Password({ ...anemic.password });
     return new Account({
       id, email, password, createdAt, updatedAt, deletedAt,
     });
-  }
+  };
 }
