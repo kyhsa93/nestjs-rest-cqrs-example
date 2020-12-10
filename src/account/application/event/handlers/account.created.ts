@@ -1,24 +1,22 @@
 import { Inject } from '@nestjs/common';
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 
-import IntegrationEventPublisher from '@src/account/infrastructure/message/publisher';
-
-import AccountCreatedIntegrationEvent from '@src/account/application/event/implements/account.created';
+import IntegrationEvent from '@src/account/application/event/implements/account.created';
+import { Publisher } from '@src/account/application/event/publisher';
 
 import AccountCreatedDomainEvent from '@src/account/domain/event/account.created';
+
+const MESSAGE_KEY = 'account.created';
 
 @EventsHandler(AccountCreatedDomainEvent)
 export default class AccountCreatedDomainEventHandler
 implements IEventHandler<AccountCreatedDomainEvent> {
   constructor(
-    @Inject(IntegrationEventPublisher)
-    private readonly integrationEventPublisher: IntegrationEventPublisher,
+    @Inject('IntegrationEventPublisher') private readonly publisher: Publisher,
   ) {}
 
   public async handle(event: AccountCreatedDomainEvent): Promise<void> {
-    const messageKey = 'account.created';
-    const data = JSON.stringify(event);
-    const integrationEvent = new AccountCreatedIntegrationEvent(messageKey, data);
-    await this.integrationEventPublisher.publish(integrationEvent);
+    const integrationEvent = new IntegrationEvent(MESSAGE_KEY, event);
+    await this.publisher.publish(integrationEvent);
   }
 }
