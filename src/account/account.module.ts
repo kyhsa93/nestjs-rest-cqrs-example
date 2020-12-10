@@ -1,9 +1,8 @@
 import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 
-import AccountMapper from '@src/account/infrastructure/mapper/account';
-import AccountQuery from '@src/account/infrastructure/query/account';
-import RedisAdapter from '@src/account/infrastructure/redis/adapter';
+import AccountQuery from '@src/account/infrastructure/query';
+import RedisAdapter from '@src/account/infrastructure/cache/adapter';
 import AccountRepository from '@src/account/infrastructure/repository';
 import IntegrationEventPublisher from '@src/account/infrastructure/message/publisher';
 
@@ -26,8 +25,6 @@ const adapters = [RedisAdapter];
 const repositories = [AccountRepository];
 
 const queries = [AccountQuery];
-
-const mappers = [AccountMapper];
 
 const controllers = [AccountController];
 
