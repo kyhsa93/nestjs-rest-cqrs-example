@@ -20,5 +20,5 @@ export default class AccountEntity {
   public updatedAt!: Date;
 
   @Column({ type: 'datetime', default: null, nullable: true })
-  public deletedAt?: Date;
+  public deletedAt!: Date | undefined;
 }
