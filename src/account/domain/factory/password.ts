@@ -6,13 +6,17 @@ export default class PasswordFactory {
   public create = (password: string): Password => {
     const salt = bcrypt.genSaltSync();
     const encrypted = bcrypt.hashSync(password, salt);
-    return new Password(encrypted, salt, new Date(), new Date());
+    return new Password({
+      encrypted, salt, createdAt: new Date(), comparedAt: new Date(),
+    });
   };
 
   public reconstitute = (anemic: AnemicPassword): Password => {
     const {
       encrypted, salt, createdAt, comparedAt,
     } = anemic;
-    return new Password(encrypted, salt, createdAt, comparedAt);
+    return new Password({
+      encrypted, salt, createdAt, comparedAt,
+    });
   };
 }

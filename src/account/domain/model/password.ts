@@ -8,12 +8,25 @@ export interface AnemicPassword {
 }
 
 export default class Password {
-  constructor(
-    private readonly encrypted: string,
-    private readonly salt: string,
-    private readonly createdAt: Date,
-    private readonly comparedAt: Date,
-  ) {}
+  private readonly encrypted: string;
+
+  private readonly salt: string;
+
+  private readonly createdAt: Date;
+
+  private readonly comparedAt: Date;
+
+  constructor(attributes: {
+    encrypted: string;
+    salt: string;
+    createdAt: Date;
+    comparedAt: Date;
+  }) {
+    this.encrypted = attributes.encrypted;
+    this.salt = attributes.salt;
+    this.createdAt = attributes.createdAt;
+    this.comparedAt = attributes.comparedAt;
+  }
 
   public toAnemic(): AnemicPassword {
     return {

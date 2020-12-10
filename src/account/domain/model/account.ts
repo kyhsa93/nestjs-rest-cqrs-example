@@ -63,7 +63,9 @@ export default class Account extends AggregateRoot {
 
     this.updatedAt = new Date();
     const salt = bcrypt.genSaltSync();
-    this.password = new Password(bcrypt.hashSync(data, salt), salt, new Date(), new Date());
+    this.password = new Password({
+      encrypted: bcrypt.hashSync(data, salt), salt, createdAt: new Date(), comparedAt: new Date(),
+    });
     this.apply(new AccountUpdated(this.id, this.email));
   }
 
