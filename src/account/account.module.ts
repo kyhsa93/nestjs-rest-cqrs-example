@@ -17,8 +17,7 @@ import AccountCreatedDomainEventHandler from '@src/account/application/event/han
 import AccountUpdatedDomainEventHandler from '@src/account/application/event/handlers/account.updated';
 import AccountDeletedDomainEventHandler from '@src/account/application/event/handlers/account.deleted';
 
-import AccountFactory from '@src/account/domain/factory/account';
-import PasswordFactory from '@src/account/domain/factory/password';
+import AccountFactory from '@src/account/domain/factory';
 
 const publishers = [IntegrationEventPublisher];
 
@@ -46,7 +45,7 @@ const eventHandler = [
   AccountDeletedDomainEventHandler,
 ];
 
-const factories = [AccountFactory, PasswordFactory];
+const factories = [AccountFactory];
 
 @Module({
   imports: [CqrsModule],

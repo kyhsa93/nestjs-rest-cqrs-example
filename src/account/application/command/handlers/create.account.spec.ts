@@ -8,7 +8,7 @@ import AccountRepository from '@src/account/infrastructure/repository/account';
 import CreateAccountCommandHandler from '@src/account/application/command/handlers/create.account';
 import CreateAccountCommand from '@src/account/application/command/implements/create.account';
 
-import AccountFactory from '@src/account/domain/factory/account';
+import AccountFactory from '@src/account/domain/factory';
 import Account from '@src/account/domain/model/account';
 
 describe('CreateAccountHandler', () => {
