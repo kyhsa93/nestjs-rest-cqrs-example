@@ -8,14 +8,14 @@ export default class AccountFactory {
   constructor(@Inject(PasswordFactory) private readonly passwordFactory: PasswordFactory) {}
 
   public create(id: string, email: string, password: string): Account {
-    const account = new Account(
+    const account = new Account({
       id,
       email,
-      this.passwordFactory.create(password),
-      new Date(),
-      new Date(),
-      undefined,
-    );
+      password: this.passwordFactory.create(password),
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      deletedAt: undefined,
+    });
     account.apply(new AccountCreated(id, email));
     return account;
   }
@@ -25,6 +25,8 @@ export default class AccountFactory {
       id, email, createdAt, updatedAt, deletedAt,
     } = anemic;
     const password = this.passwordFactory.reconstitute(anemic.password);
-    return new Account(id, email, password, createdAt, updatedAt, deletedAt);
+    return new Account({
+      id, email, password, createdAt, updatedAt, deletedAt,
+    });
   }
 }

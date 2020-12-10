@@ -16,15 +16,33 @@ export interface AnemicAccount {
 }
 
 export default class Account extends AggregateRoot {
-  constructor(
-    private readonly id: string,
-    private readonly email: string,
-    private password: Password,
-    private readonly createdAt: Date,
-    private updatedAt: Date,
-    private deletedAt: Date | undefined,
-  ) {
+  private readonly id: string;
+
+  private readonly email: string;
+
+  private password: Password;
+
+  private readonly createdAt: Date;
+
+  private updatedAt: Date;
+
+  private deletedAt: Date | undefined;
+
+  constructor(attributes: {
+    id: string;
+    email: string;
+    password: Password;
+    createdAt: Date;
+    updatedAt: Date;
+    deletedAt: Date | undefined;
+  }) {
     super();
+    this.id = attributes.id;
+    this.email = attributes.email;
+    this.password = attributes.password;
+    this.createdAt = attributes.createdAt;
+    this.updatedAt = attributes.updatedAt;
+    this.deletedAt = attributes.deletedAt;
   }
 
   public toAnemic(): AnemicAccount {
