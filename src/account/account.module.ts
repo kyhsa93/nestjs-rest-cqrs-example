@@ -4,7 +4,7 @@ import { CqrsModule } from '@nestjs/cqrs';
 import AccountMapper from '@src/account/infrastructure/mapper/account';
 import AccountQuery from '@src/account/infrastructure/query/account';
 import RedisAdapter from '@src/account/infrastructure/redis/adapter';
-import AccountRepository from '@src/account/infrastructure/repository/account';
+import AccountRepository from '@src/account/infrastructure/repository';
 import IntegrationEventPublisher from '@src/account/infrastructure/message/publisher';
 
 import AccountController from '@src/account/interface/controller/account';
