@@ -28,11 +28,10 @@ export default class Account extends AggregateRoot {
   }
 
   public toAnemic(): AnemicAccount {
-    const password = this.password.toAnemic();
     return {
       id: this.id,
       email: this.email,
-      password,
+      password: this.password.toAnemic(),
       createdAt: this.createdAt,
       updatedAt: this.updatedAt,
       deletedAt: this.deletedAt,
