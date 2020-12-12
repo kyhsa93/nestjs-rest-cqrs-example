@@ -12,7 +12,10 @@ export default class AccountFactory {
       id,
       email,
       password: new Password({
-        encrypted: bcrypt.hashSync(password, salt), salt, createdAt: now, comparedAt: now,
+        encrypted: bcrypt.hashSync(password, salt),
+        salt,
+        createdAt: now,
+        comparedAt: now,
       }),
       createdAt: now,
       updatedAt: now,
@@ -23,12 +26,15 @@ export default class AccountFactory {
   };
 
   public reconstitute = (anemic: AnemicAccount): Account => {
-    const {
-      id, email, createdAt, updatedAt, deletedAt,
-    } = anemic;
+    const { id, email, createdAt, updatedAt, deletedAt } = anemic;
     const password = new Password({ ...anemic.password });
     return new Account({
-      id, email, password, createdAt, updatedAt, deletedAt,
+      id,
+      email,
+      password,
+      createdAt,
+      updatedAt,
+      deletedAt,
     });
   };
 }
