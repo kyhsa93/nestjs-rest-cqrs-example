@@ -12,11 +12,11 @@ export default class RedisAdapter {
     this.slave = new Redis(AppConfiguration.redis.slave.port, AppConfiguration.redis.master.host);
   }
 
-  async set(key: string, value: string): Promise<void> {
+  public async set(key: string, value: string): Promise<void> {
     await this.master.set(key, value, 'EX', 1);
   }
 
-  async get(key: string): Promise<string | null> {
+  public async get(key: string): Promise<string | null> {
     return this.slave
       .get(key)
       .then((result) => result)
