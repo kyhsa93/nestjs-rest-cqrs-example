@@ -14,12 +14,12 @@ import {
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
 import UserDTO from '@src/account/interface/dto/user.dto';
-import CreateAccountBody from '@src/account/interface/dto/create/body';
-import UpdateAccountPathParam from '@src/account/interface/dto/update/path';
-import UpdateAccountBody from '@src/account/interface/dto/update/body';
-import DeleteAccountPathParam from '@src/account/interface/dto/delete/path';
-import DeleteAccountBody from '@src/account/interface/dto/delete/body';
-import ReadAccountPathParam from '@src/account/interface/dto/read/path';
+import CreateAccountBody from '@src/account/interface/dto/create.account.body';
+import UpdateAccountPathParam from '@src/account/interface/dto/update.account.param';
+import UpdateAccountBody from '@src/account/interface/dto/update.account.body';
+import DeleteAccountPathParam from '@src/account/interface/dto/delete.account.param';
+import DeleteAccountBody from '@src/account/interface/dto/delete.account.body';
+import ReadAccountPathParam from '@src/account/interface/dto/get.account.by.id.param';
 
 import CreateAccountCommand from '@src/account/application/command/implements/create.account';
 import ReadAccountQuery from '@src/account/application/query/implements/find.by.id';
