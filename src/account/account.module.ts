@@ -6,7 +6,7 @@ import RedisAdapter from '@src/account/infrastructure/cache/adapter';
 import AccountRepository from '@src/account/infrastructure/repository';
 import IntegrationEventPublisher from '@src/account/infrastructure/message/publisher';
 
-import AccountController from '@src/account/interface/controller/account';
+import AccountController from '@src/account/interface/account.controller';
 
 import FindAccountByIdHandler from '@src/account/application/query/handlers/find.by.id';
 import UpdateAccountCommandHandler from '@src/account/application/command/handlers/update.account';
