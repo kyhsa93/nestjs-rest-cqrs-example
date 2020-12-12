@@ -10,10 +10,8 @@ const MESSAGE_KEY = 'account.created';
 
 @EventsHandler(AccountCreatedDomainEvent)
 export default class AccountCreatedDomainEventHandler
-implements IEventHandler<AccountCreatedDomainEvent> {
-  constructor(
-    @Inject('IntegrationEventPublisher') private readonly publisher: Publisher,
-  ) {}
+  implements IEventHandler<AccountCreatedDomainEvent> {
+  constructor(@Inject('IntegrationEventPublisher') private readonly publisher: Publisher) {}
 
   public async handle(event: AccountCreatedDomainEvent): Promise<void> {
     const integrationEvent = new IntegrationEvent(MESSAGE_KEY, event);

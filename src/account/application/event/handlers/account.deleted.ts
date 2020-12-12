@@ -10,10 +10,8 @@ const MESSAGE_KEY = 'account.deleted';
 
 @EventsHandler(AccountDeletedDomainEvent)
 export default class AccountDeletedDomainEventHandler
-implements IEventHandler<AccountDeletedDomainEvent> {
-  constructor(
-    @Inject('IntegrationEventPublisher') private readonly publisher: Publisher,
-  ) {}
+  implements IEventHandler<AccountDeletedDomainEvent> {
+  constructor(@Inject('IntegrationEventPublisher') private readonly publisher: Publisher) {}
 
   public async handle(event: AccountDeletedDomainEvent): Promise<void> {
     const integrationEvent = new IntegrationEvent(MESSAGE_KEY, event);
