@@ -8,7 +8,7 @@ import IntegrationEventPublisher from '@src/account/infrastructure/message/publi
 
 import AccountController from '@src/account/interface/controller/account';
 
-import FindAccountByIdQueryHandler from '@src/account/application/query/handlers/account.query.by.id';
+import FindAccountByIdHandler from '@src/account/application/query/handlers/find.by.id';
 import UpdateAccountCommandHandler from '@src/account/application/command/handlers/update.account';
 import DeleteAccountCommandHandler from '@src/account/application/command/handlers/delete.account';
 import CreateAccountCommandHandler from '@src/account/application/command/handlers/create.account';
@@ -28,7 +28,7 @@ const queries = [AccountQuery];
 
 const controllers = [AccountController];
 
-const queryHandler = [FindAccountByIdQueryHandler];
+const queryHandler = [FindAccountByIdHandler];
 
 const commandHandler = [
   CreateAccountCommandHandler,
@@ -52,7 +52,6 @@ const factories = [AccountFactory];
     ...adapters,
     ...queries,
     ...repositories,
-    ...mappers,
     ...commandHandler,
     ...queryHandler,
     ...eventHandler,
