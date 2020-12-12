@@ -18,7 +18,10 @@ describe('CreateAccountHandler', () => {
 
   beforeEach(async () => {
     const accountFactoryProvider: Provider = { provide: AccountFactory, useValue: {} };
-    const accountRepositoryProvider: Provider = { provide: 'AccountRepositoryImplement', useValue: {} };
+    const accountRepositoryProvider: Provider = {
+      provide: 'AccountRepositoryImplement',
+      useValue: {},
+    };
     const eventPublisherProvider: Provider = { provide: EventPublisher, useValue: {} };
 
     const providers: Provider[] = [
