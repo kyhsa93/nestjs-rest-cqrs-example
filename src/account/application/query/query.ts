@@ -1,4 +1,6 @@
-export interface Account {
+import { IQueryResult } from "@nestjs/cqrs";
+
+export interface Account extends IQueryResult {
   readonly id: string;
   readonly email: string;
   readonly createdAt: Date;
@@ -11,7 +13,7 @@ export interface Accounts
     readonly id: string;
     readonly email: string;
     readonly createdAt: Date;
-  }> {}
+  }>, IQueryResult {}
 
 export interface Query {
   findById(id: string): Promise<undefined | Account>;
