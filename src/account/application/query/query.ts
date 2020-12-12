@@ -14,6 +14,7 @@ export interface Accounts
   }> {}
 
 export interface Query {
-  findById(id: string | string[]): Promise<undefined | Account | Accounts>;
-  findByEmail(email: string | string[]): Promise<undefined | Account | Accounts>;
+  findById(id: string): Promise<undefined | Account>;
+  findByIds(id: string[]): Promise<Accounts>;
+  findByEmail(email: string | string[]): Promise<Accounts>;
 }

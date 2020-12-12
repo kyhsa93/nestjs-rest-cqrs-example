@@ -4,19 +4,18 @@ import AccountEntity from '@src/account/infrastructure/entity/account';
 
 import { Account, Accounts, Query } from '@src/account/application/query/query';
 
-type QueryResult = Promise<undefined | Account | Accounts>;
-
 export default class AccountQuery implements Query {
-  public findById = async (id: string | string[]): QueryResult => {
-    return Array.isArray(id)
-      ? this.convertAccountsFromEntities(await getRepository(AccountEntity).findByIds(id))
-      : this.convertAccountFromEntity(await getRepository(AccountEntity).findOne(id));
+  public findById = async (id: string): Promise<undefined | Account> => {
+    return this.convertAccountFromEntity(await getRepository(AccountEntity).findOne(id));
   };
 
-  public findByEmail = async (email: string | string[]): QueryResult => {
-    return Array.isArray(email)
-      ? this.convertAccountsFromEntities(await getRepository(AccountEntity).find({ email: In(email) }))
-      : this.convertAccountFromEntity(await getRepository(AccountEntity).findOne({ email }));
+  public findByIds = async (id: string[]): Promise<Accounts> => {
+    return this.convertAccountsFromEntities(await getRepository(AccountEntity).findByIds(id));
+  }
+
+  public findByEmail = async (email: string | string[]): Promise<Accounts> => {
+    const condition = Array.isArray(email) ? email : [email];
+    return this.convertAccountsFromEntities(await getRepository(AccountEntity).find({ email: In(condition) }));
   };
 
   private convertAccountFromEntity = (entity: AccountEntity | undefined): Account | undefined => {
