@@ -15,6 +15,7 @@ import CreateAccountCommandHandler from '@src/account/application/command/handle
 import AccountCreatedDomainEventHandler from '@src/account/application/event/handlers/account.created';
 import AccountUpdatedDomainEventHandler from '@src/account/application/event/handlers/account.updated';
 import AccountDeletedDomainEventHandler from '@src/account/application/event/handlers/account.deleted';
+import FindAccountsQueryHandler from '@src/account/application/query/handlers/find';
 
 import AccountFactory from '@src/account/domain/factory';
 
@@ -28,7 +29,7 @@ const queries = [AccountQuery];
 
 const controllers = [AccountController];
 
-const queryHandler = [FindAccountByIdHandler];
+const queryHandler = [FindAccountByIdHandler, FindAccountsQueryHandler];
 
 const commandHandler = [
   CreateAccountCommandHandler,

@@ -8,6 +8,7 @@ import {
   Put,
   Delete,
   NotFoundException,
+  Query,
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
@@ -17,12 +18,14 @@ import UpdateAccountBody from '@src/account/interface/dto/update.account.body';
 import DeleteAccountPathParam from '@src/account/interface/dto/delete.account.param';
 import DeleteAccountBody from '@src/account/interface/dto/delete.account.body';
 import ReadAccountPathParam from '@src/account/interface/dto/get.account.by.id.param';
+import GetAccountQuery from '@src/account/interface/dto/get.account.query';
 
 import CreateAccountCommand from '@src/account/application/command/implements/create.account';
 import ReadAccountQuery from '@src/account/application/query/implements/find.by.id';
 import UpdateAccountCommand from '@src/account/application/command/implements/update.account';
 import DeleteAccountCommand from '@src/account/application/command/implements/delete.account';
-import { Account } from '@src/account/application/query/query';
+import { Account, AccountsAndCount } from '@src/account/application/query/query';
+import FindAccountQuery from '@src/account/application/query/implements/find';
 
 @ApiTags('Accounts')
 @Controller('accounts')
@@ -53,6 +56,15 @@ export default class AccountController {
     await this.commandBus.execute(new DeleteAccountCommand(param.id, password));
   }
 
+  @Get()
+  public async handleGetAccountRequest(
+    @Query() { take = 10, page = 1, emails = [] }: GetAccountQuery,
+  ): Promise<AccountsAndCount> {
+    const conditions = { emails: this.toArray(emails) };
+    const query = new FindAccountQuery(take, page, conditions);
+    return this.queryBus.execute(query);
+  }
+
   @Get(':id')
   public async handlerGetAccountByIdRequest(
     @Param() param: ReadAccountPathParam,
@@ -60,5 +72,9 @@ export default class AccountController {
     const account: Account = await this.queryBus.execute(new ReadAccountQuery(param.id));
     if (!account) throw new NotFoundException();
     return account;
+  }
+
+  private toArray(value: string | string[]): string[] {
+    return Array.isArray(value) ? value : [value].filter(item => item !== undefined);
   }
 }

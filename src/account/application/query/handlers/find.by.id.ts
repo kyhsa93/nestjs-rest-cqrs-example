@@ -10,8 +10,9 @@ export default class FindAccountByIdQueryHandler implements IQueryHandler<FindAc
     @Inject('AccountQuery') private readonly accountQuery: Query,
   ) {}
 
-  public async execute(query: FindAccountByIdQuery): Promise<Account | undefined> {
-    const account =  this.accountQuery.findById(query.id);
-    return !!account ? { ...account } : undefined;
+  public async execute(query: FindAccountByIdQuery): Promise<undefined | Account> {
+    return this.accountQuery
+      .findById(query.id)
+      .then(account => !!account ? ({ ...account }) : undefined);
   }
 }
