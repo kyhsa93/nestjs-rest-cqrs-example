@@ -21,6 +21,6 @@ export default class IntegrationEventPublisher implements Publisher {
     await channel.assertExchange(this.exchange, 'topic', { durable: true });
     if (!channel) throw new InternalServerErrorException('cannot get publisher channel');
 
-    channel.publish(this.exchange, message.key, Buffer.from(message.data));
+    channel.publish(this.exchange, message.key, Buffer.from(JSON.stringify(message.data)));
   }
 }
