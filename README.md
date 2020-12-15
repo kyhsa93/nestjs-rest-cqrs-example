@@ -76,6 +76,10 @@ Examples include database implementation and access, communication or messaging 
 
 By having all of these detailed implementations in the infrastructure layer, you can isolate technical changes so that changes do not spread to other parts.
 
+Please refer to the image below.[[image source]](http://seedstack.org/docs/business/layers/)
+
+<img width="502" alt="Screenshot 2020-12-15 at 11 32 25 PM" src="https://user-images.githubusercontent.com/20676870/102228546-2b27b480-3f2e-11eb-8312-453fa669612e.png">
+
 ## Getting started
 This is REST api made by node.js, nest, redis, mysql with typescript.
 
