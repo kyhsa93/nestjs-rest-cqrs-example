@@ -32,7 +32,7 @@ export default class Password {
     };
   }
 
-  public async compare(password: string): Promise<boolean> {
-    return bcrypt.compare(password, this.encrypted);
+  public compare(password: string): boolean {
+    return bcrypt.compareSync(password, this.encrypted)
   }
 }

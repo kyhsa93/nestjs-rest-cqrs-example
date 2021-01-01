@@ -17,7 +17,7 @@ export default class DeleteAccountCommandHandler implements ICommandHandler<Dele
 
     const model = await this.accountRepository.findById(id);
     if (!model) throw new NotFoundException();
-    if (!(await model.comparePassword(password))) throw new UnauthorizedException();
+    if (!(model.comparePassword(password))) throw new UnauthorizedException();
 
     const account = this.eventPublisher.mergeObjectContext(model);
 

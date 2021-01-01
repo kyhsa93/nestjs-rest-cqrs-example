@@ -4,9 +4,9 @@ import { UnauthorizedException } from '@nestjs/common';
 import Password from '@src/account/domain/model/password';
 import Account from '@src/account/domain/model/account';
 
-describe('AccountModel', () => {
+describe('Account', () => {
   describe('updatePassword', () => {
-    it('should throw UnauthorizedException when password is not matched', async () => {
+    it('should throw UnauthorizedException when password is not matched', () => {
       const password = new Password({
         encrypted: 'encrypted',
         salt: 'salt',
@@ -22,14 +22,14 @@ describe('AccountModel', () => {
         deletedAt: undefined,
       });
 
-      jest.spyOn(bcrypt, 'compare').mockResolvedValue(false);
+      jest.spyOn(bcrypt, 'compareSync').mockReturnValue(false);
 
-      await expect(account.updatePassword('password', 'new password')).rejects.toThrow(
+      expect(() => account.updatePassword('password', 'new password')).toThrow(
         UnauthorizedException,
       );
     });
 
-    it('should return Promise<void>', async () => {
+    it('should return void', () => {
       const password = new Password({
         encrypted: 'encrypted',
         salt: 'salt',
@@ -45,14 +45,14 @@ describe('AccountModel', () => {
         deletedAt: undefined,
       });
 
-      jest.spyOn(bcrypt, 'compare').mockResolvedValue(true);
+      jest.spyOn(bcrypt, 'compareSync').mockReturnValue(true);
 
-      await expect(account.updatePassword('password', 'new password')).resolves.toEqual(undefined);
+      expect(account.updatePassword('password', 'new password')).toEqual(undefined);
     });
   });
 
   describe('comparedPassword', () => {
-    it('should return true when password is matched', async () => {
+    it('should return true when password is matched', () => {
       const password = new Password({
         encrypted: 'encrypted',
         salt: 'salt',
@@ -68,12 +68,12 @@ describe('AccountModel', () => {
         deletedAt: undefined,
       });
 
-      jest.spyOn(bcrypt, 'compare').mockResolvedValue(true);
+      jest.spyOn(bcrypt, 'compareSync').mockReturnValue(true);
 
-      await expect(account.comparePassword('password')).resolves.toEqual(true);
+      expect(account.comparePassword('password')).toEqual(true);
     });
 
-    it('should return false when password is not matched', async () => {
+    it('should return false when password is not matched', () => {
       const password = new Password({
         encrypted: 'encrypted',
         salt: 'salt',
@@ -89,9 +89,9 @@ describe('AccountModel', () => {
         deletedAt: undefined,
       });
 
-      jest.spyOn(bcrypt, 'compare').mockResolvedValue(false);
+      jest.spyOn(bcrypt, 'compareSync').mockReturnValue(false);
 
-      await expect(account.comparePassword('password')).resolves.toEqual(false);
+      expect(account.comparePassword('password')).toEqual(false);
     });
   });
 

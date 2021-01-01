@@ -56,8 +56,8 @@ export default class Account extends AggregateRoot {
     };
   }
 
-  public async updatePassword(password: string, data: string): Promise<void> {
-    if (!(await this.password.compare(password))) {
+  public updatePassword(password: string, data: string): void {
+    if (!(this.comparePassword(password))) {
       throw new UnauthorizedException();
     }
 
@@ -72,7 +72,7 @@ export default class Account extends AggregateRoot {
     this.apply(new AccountUpdated(this.id, this.email));
   }
 
-  public async comparePassword(password: string): Promise<boolean> {
+  public comparePassword(password: string): boolean {
     return this.password.compare(password);
   }
 

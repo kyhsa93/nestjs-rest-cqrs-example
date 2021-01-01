@@ -1,4 +1,4 @@
-import { FindConditions, FindManyOptions, FindOperator, getRepository, In } from 'typeorm';
+import { FindConditions, FindManyOptions, getRepository, In } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 
 import AccountEntity from '@src/account/infrastructure/entity/account';
