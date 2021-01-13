@@ -1,18 +1,20 @@
-import { NotFoundException, Provider, UnauthorizedException } from '@nestjs/common';
+import { NotFoundException, Provider } from '@nestjs/common';
 import { ModuleMetadata } from '@nestjs/common/interfaces';
 import { EventPublisher } from '@nestjs/cqrs';
 import { Test } from '@nestjs/testing';
 
-import DeleteAccountCommandHandler from '@src/account/application/command/handlers/delete.account';
-import DeleteAccountCommand from '@src/account/application/command/implements/delete.account';
+import CloseAccountCommandHandler from '@src/account/application/command/handlers/close.account';
+import CloseAccountCommand from '@src/account/application/command/implements/close.account';
 
 import Account from '@src/account/domain/model/account';
 import AccountRepository from '@src/account/domain/repository';
 
-describe('DeleteAccountCommandHandler', () => {
+jest.mock('typeorm', () => ({ Transaction: () => () => {} }));
+
+describe('CloseAccountCommandHandler', () => {
   let accountRepository: AccountRepository;
   let eventPublisher: EventPublisher;
-  let deleteAccountCommandHandler: DeleteAccountCommandHandler;
+  let closeAccountCommandHandler: CloseAccountCommandHandler;
 
   beforeEach(async () => {
     const accountRepositoryProvider: Provider = {
@@ -24,7 +26,7 @@ describe('DeleteAccountCommandHandler', () => {
     const providers: Provider[] = [
       accountRepositoryProvider,
       eventPublisherProvider,
-      DeleteAccountCommandHandler,
+      CloseAccountCommandHandler,
     ];
 
     const moduleMetadata: ModuleMetadata = { providers };
@@ -32,42 +34,29 @@ describe('DeleteAccountCommandHandler', () => {
 
     accountRepository = testModule.get('AccountRepositoryImplement');
     eventPublisher = testModule.get(EventPublisher);
-    deleteAccountCommandHandler = testModule.get(DeleteAccountCommandHandler);
+    closeAccountCommandHandler = testModule.get(CloseAccountCommandHandler);
   });
 
   describe('execute', () => {
     it('should throw NotFoundException when account is not found', async () => {
-      const command = new DeleteAccountCommand('id', 'password');
+      const command = new CloseAccountCommand('id', 'password');
 
       accountRepository.findById = jest.fn().mockResolvedValue(undefined);
 
-      await expect(deleteAccountCommandHandler.execute(command)).rejects.toThrow(NotFoundException);
-    });
-
-    it('should throw UnauthorizedException when password is not matched', async () => {
-      const command = new DeleteAccountCommand('id', 'password');
-
-      const account = {} as Account;
-      accountRepository.findById = jest.fn().mockResolvedValue(account);
-      account.comparePassword = jest.fn().mockReturnValue(false);
-
-      await expect(deleteAccountCommandHandler.execute(command)).rejects.toThrow(
-        UnauthorizedException,
-      );
+      await expect(closeAccountCommandHandler.execute(command)).rejects.toThrow(NotFoundException);
     });
 
     it('should return Promise<void>', async () => {
-      const command = new DeleteAccountCommand('id', 'password');
+      const command = new CloseAccountCommand('id', 'password');
 
       const account = {} as Account;
       accountRepository.findById = jest.fn().mockResolvedValue(account);
-      account.comparePassword = jest.fn().mockReturnValue(true);
       eventPublisher.mergeObjectContext = jest.fn().mockReturnValue(account);
-      account.delete = jest.fn().mockReturnValue(undefined);
+      account.close = jest.fn().mockReturnValue(undefined);
       account.commit = jest.fn().mockReturnValue(undefined);
       accountRepository.save = jest.fn().mockResolvedValue(undefined);
 
-      await expect(deleteAccountCommandHandler.execute(command)).resolves.toEqual(undefined);
+      await expect(closeAccountCommandHandler.execute(command)).resolves.toEqual(undefined);
     });
   });
 });

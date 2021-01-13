@@ -7,18 +7,21 @@ export default class AccountEntity {
   @PrimaryGeneratedColumn('uuid')
   public id!: string;
 
-  @Column({ unique: true })
-  public email!: string;
+  @Column()
+  public name!: string;
 
   @Column(() => PasswordEntity)
   public password!: PasswordEntity;
 
+  @Column()
+  public balance!: number;
+
   @Column({ type: 'datetime' })
-  public createdAt!: Date;
+  public openedAt!: Date;
 
   @Column({ type: 'timestamp' })
   public updatedAt!: Date;
 
   @Column({ type: 'datetime', default: null, nullable: true })
-  public deletedAt!: Date | undefined;
+  public closedAt!: Date | undefined;
 }

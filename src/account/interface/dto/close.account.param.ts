@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-export default class DeleteAccountPathParam {
+export default class CloseAccountPathParam {
   @ApiProperty()
   public readonly id: string = '';
 }

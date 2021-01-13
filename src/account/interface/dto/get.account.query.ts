@@ -7,6 +7,6 @@ export default class GetAccountQuery {
   @ApiProperty({ example: '1' })
   public readonly page!: number;
 
-  @ApiProperty({ isArray: true, name: 'emails', required: false })
-  public readonly emails?: string[];
+  @ApiProperty({ isArray: true, name: 'names', required: false })
+  public readonly names?: string[];
 }

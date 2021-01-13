@@ -7,30 +7,30 @@ export interface AccountFindConditions {
 }
 
 export interface AccountWhereConditions {
-  readonly emails: string[];
+  readonly names: string[];
 }
 
 export interface Account extends IQueryResult {
   readonly id: string;
-  readonly email: string;
-  readonly createdAt: Date;
+  readonly name: string;
+  readonly openedAt: Date;
   readonly updatedAt: Date;
-  readonly deletedAt?: Date;
+  readonly closedAt?: Date;
 }
 
 export interface Accounts
   extends Array<{
     readonly id: string;
-    readonly email: string;
-    readonly createdAt: Date;
+    readonly name: string;
+    readonly openedAt: Date;
   }>, IQueryResult {}
 
 export interface AccountsAndCount extends IQueryResult {
   readonly count: number;
   readonly data: { 
     readonly id: string;
-    readonly email: string;
-    readonly createdAt: Date;
+    readonly name: string;
+    readonly openedAt: Date;
    }[]
 }
 

@@ -1,5 +1,5 @@
 import { IEvent } from '@nestjs/cqrs';
 
-export default class AccountUpdatedDomainEvent implements IEvent {
+export default class AccountClosedDomainEvent implements IEvent {
   constructor(public readonly id: string) {}
 }

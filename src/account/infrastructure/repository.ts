@@ -13,8 +13,8 @@ export default class AccountRepositoryImplement implements AccountRepository {
 
   public newId = async (): Promise<string> => {
     const emptyEntity = new AccountEntity();
-    emptyEntity.email = uuid.v1();
-    emptyEntity.createdAt = new Date();
+    emptyEntity.name = uuid.v1();
+    emptyEntity.openedAt = new Date();
     emptyEntity.updatedAt = new Date();
     const entity = await getRepository(AccountEntity).save(emptyEntity);
     return entity.id;
@@ -31,8 +31,8 @@ export default class AccountRepositoryImplement implements AccountRepository {
     return entity ? this.entityToModel(entity) : undefined;
   }
 
-  public async findByEmail(email: string): Promise<Account[]> {
-    const entities = await getRepository(AccountEntity).find({ email });
+  public async findByName(name: string): Promise<Account[]> {
+    const entities = await getRepository(AccountEntity).find({ name });
     return entities.map((entity) => this.entityToModel(entity));
   }
 

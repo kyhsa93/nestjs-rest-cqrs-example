@@ -10,14 +10,16 @@ import AccountController from '@src/account/interface/account.controller';
 
 import FindAccountByIdHandler from '@src/account/application/query/handlers/find.by.id';
 import UpdateAccountCommandHandler from '@src/account/application/command/handlers/update.account';
-import DeleteAccountCommandHandler from '@src/account/application/command/handlers/delete.account';
-import CreateAccountCommandHandler from '@src/account/application/command/handlers/create.account';
-import AccountCreatedDomainEventHandler from '@src/account/application/event/handlers/account.created';
+import CloseAccountCommandHandler from '@src/account/application/command/handlers/close.account';
+import OpenAccountCommandHandler from '@src/account/application/command/handlers/open.account';
+import RemittanceCommandHandler from '@src/account/application/command/handlers/remittance';
+import AccountOpenedDomainEventHandler from '@src/account/application/event/handlers/account.opened';
 import AccountUpdatedDomainEventHandler from '@src/account/application/event/handlers/account.updated';
-import AccountDeletedDomainEventHandler from '@src/account/application/event/handlers/account.deleted';
+import AccountClosedDomainEventHandler from '@src/account/application/event/handlers/account.closed';
 import FindAccountsQueryHandler from '@src/account/application/query/handlers/find';
 
 import AccountFactory from '@src/account/domain/factory';
+import AccountDomainService from '@src/account/domain/service';
 
 const publishers = [IntegrationEventPublisher];
 
@@ -32,18 +34,21 @@ const controllers = [AccountController];
 const queryHandler = [FindAccountByIdHandler, FindAccountsQueryHandler];
 
 const commandHandler = [
-  CreateAccountCommandHandler,
+  OpenAccountCommandHandler,
   UpdateAccountCommandHandler,
-  DeleteAccountCommandHandler,
+  CloseAccountCommandHandler,
+  RemittanceCommandHandler,
 ];
 
 const eventHandler = [
-  AccountCreatedDomainEventHandler,
+  AccountOpenedDomainEventHandler,
   AccountUpdatedDomainEventHandler,
-  AccountDeletedDomainEventHandler,
+  AccountClosedDomainEventHandler,
 ];
 
 const factories = [AccountFactory];
+
+const domainService = [AccountDomainService];
 
 @Module({
   imports: [CqrsModule],
@@ -57,6 +62,7 @@ const factories = [AccountFactory];
     ...queryHandler,
     ...eventHandler,
     ...factories,
+    ...domainService,
   ],
 })
 export default class AccountModule {}

@@ -8,10 +8,10 @@ describe('AccountFactory', () => {
       const factory = new AccountFactory();
 
       const id = 'accountId';
-      const email = 'accountEmail';
+      const name = 'accountName';
       const password = 'accountPassword';
 
-      expect(factory.create(id, email, password)).toBeInstanceOf(Account);
+      expect(factory.create(id, name, password)).toBeInstanceOf(Account);
     });
   });
 
@@ -28,11 +28,12 @@ describe('AccountFactory', () => {
 
       const anemic: AnemicAccount = {
         id: 'accountId',
-        email: 'accountEmail',
+        name: 'accountName',
         password: anemicPassword,
-        createdAt: new Date(),
+        balance: 0,
+        openedAt: new Date(),
         updatedAt: new Date(),
-        deletedAt: undefined,
+        closedAt: undefined,
       };
 
       expect(factory.reconstitute(anemic)).toBeInstanceOf(Account);

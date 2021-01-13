@@ -1,58 +1,66 @@
-import { UnauthorizedException } from '@nestjs/common';
+import { UnprocessableEntityException, UnauthorizedException } from '@nestjs/common';
 import { AggregateRoot } from '@nestjs/cqrs';
 import bcrypt from 'bcrypt';
 
-import AccountDeleted from '@src/account/domain/event/account.deleted';
+import AccountClosed from '@src/account/domain/event/account.closed';
 import AccountUpdated from '@src/account/domain/event/account.updated';
 import Password, { AnemicPassword } from '@src/account/domain/model/password';
 
+interface AccountAttribute {
+  readonly id: string;
+  readonly name: string;
+  readonly password: Password;
+  readonly balance: number;
+  readonly openedAt: Date;
+  readonly updatedAt: Date;
+  readonly closedAt: Date | undefined;
+}
+
 export interface AnemicAccount {
   readonly id: string;
-  readonly email: string;
+  readonly name: string;
   readonly password: AnemicPassword;
-  readonly createdAt: Date;
+  readonly balance: number;
+  readonly openedAt: Date;
   readonly updatedAt: Date;
-  readonly deletedAt: Date | undefined;
+  readonly closedAt: Date | undefined;
 }
 
 export default class Account extends AggregateRoot {
   private readonly id: string;
 
-  private readonly email: string;
+  private readonly name: string;
 
   private password: Password;
 
-  private readonly createdAt: Date;
+  private balance: number;
+
+  private readonly openedAt: Date;
 
   private updatedAt: Date;
 
-  private deletedAt: Date | undefined;
+  private closedAt: Date | undefined;
 
-  constructor(attributes: {
-    id: string;
-    email: string;
-    password: Password;
-    createdAt: Date;
-    updatedAt: Date;
-    deletedAt: Date | undefined;
-  }) {
+  constructor(attributes: AccountAttribute) {
     super();
     this.id = attributes.id;
-    this.email = attributes.email;
+    this.name = attributes.name;
     this.password = attributes.password;
-    this.createdAt = attributes.createdAt;
+    this.balance = attributes.balance;
+    this.openedAt = attributes.openedAt;
     this.updatedAt = attributes.updatedAt;
-    this.deletedAt = attributes.deletedAt;
+    this.closedAt = attributes.closedAt;
   }
 
   public toAnemic(): AnemicAccount {
     return {
       id: this.id,
-      email: this.email,
+      name: this.name,
       password: this.password.toAnemic(),
-      createdAt: this.createdAt,
+      balance: this.balance,
+      openedAt: this.openedAt,
       updatedAt: this.updatedAt,
-      deletedAt: this.deletedAt,
+      closedAt: this.closedAt,
     };
   }
 
@@ -69,19 +77,46 @@ export default class Account extends AggregateRoot {
       createdAt: new Date(),
       comparedAt: new Date(),
     });
-    this.apply(new AccountUpdated(this.id, this.email));
+    this.apply(new AccountUpdated(this.id));
   }
 
-  public comparePassword(password: string): boolean {
+  public withdraw(amount: number, password: string): void {
+    if (!(this.comparePassword(password))) {
+      throw new UnauthorizedException();
+    }
+    if (amount < 0) {
+      throw new UnprocessableEntityException('Can not withdraw under 0');
+    }
+    if (this.balance < amount) {
+      throw new UnprocessableEntityException('Requested amount exceeds your withdrawal limit');
+    }
+    this.balance = this.balance - amount;
+    this.apply(new AccountUpdated(this.id));
+  }
+
+  public deposit(amount: number, password: string): void {
+    if (!(this.comparePassword(password))) {
+      throw new UnauthorizedException();
+    }
+    if (amount < 0) {
+      throw new UnprocessableEntityException('Can not deposit under 0')
+    }
+    this.balance = this.balance + amount;
+    this.apply(new AccountUpdated(this.id));
+  }
+  
+  public close(password: string): void {
+    if (!(this.comparePassword(password))) {
+      throw new UnauthorizedException();
+    }    
+    if (0 < this.balance) {
+      throw new UnprocessableEntityException('Account balance is remained');
+    }
+    this.closedAt = new Date();
+    this.apply(new AccountClosed(this.id));
+  }
+
+  private comparePassword(password: string): boolean {
     return this.password.compare(password);
-  }
-
-  public delete(): void {
-    this.deletedAt = new Date();
-    this.apply(new AccountDeleted(this.id, this.email));
-  }
-
-  public deleted(): boolean {
-    return !!this.deletedAt;
   }
 }

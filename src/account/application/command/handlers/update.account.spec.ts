@@ -9,6 +9,8 @@ import UpdateAccountCommand from '@src/account/application/command/implements/up
 import Account from '@src/account/domain/model/account';
 import AccountRepository from '@src/account/domain/repository';
 
+jest.mock('typeorm', () => ({ Transaction: () => () => {} }));
+
 describe('UpdateAccountCommandHandler', () => {
   let accountRepository: AccountRepository;
   let eventPublisher: EventPublisher;

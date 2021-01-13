@@ -1,5 +1,6 @@
 import { CommandHandler, ICommandHandler, EventPublisher } from '@nestjs/cqrs';
 import { Inject, NotFoundException } from '@nestjs/common';
+import { Transaction } from 'typeorm';
 
 import UpdateAccountCommand from '@src/account/application/command/implements/update.account';
 
@@ -12,14 +13,15 @@ export default class UpdateAccountCommandHandler implements ICommandHandler<Upda
     private readonly eventPublisher: EventPublisher,
   ) {}
 
+  @Transaction()
   public async execute(command: UpdateAccountCommand): Promise<void> {
-    const { id, oldPassword, newPassword } = command;
+    const { id, password, newPassword } = command;
     const model = await this.accountRepository.findById(id);
     if (!model) throw new NotFoundException();
 
     const account = this.eventPublisher.mergeObjectContext(model);
 
-    account.updatePassword(oldPassword, newPassword);
+    account.updatePassword(password, newPassword);
 
     account.commit();
 

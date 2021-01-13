@@ -27,7 +27,7 @@ export default class AccountQuery implements Query {
 
   private convertWhereConditions(conditions: AccountWhereConditions): undefined | FindConditions<AccountEntity> {
     let result = {};
-    conditions.emails.length === 0 ? undefined : Object.assign(result, { email: In(conditions.emails) });
+    conditions.names.length === 0 ? undefined : Object.assign(result, { name: In(conditions.names) });
     return Object.keys(result).length === 0 ? undefined : result;
   }
 
