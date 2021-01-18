@@ -9,7 +9,7 @@ export default class RedisAdapter {
 
   constructor() {
     this.master = new Redis(AppConfiguration.redis.master.port, AppConfiguration.redis.master.host);
-    this.slave = new Redis(AppConfiguration.redis.slave.port, AppConfiguration.redis.master.host);
+    this.slave = new Redis(AppConfiguration.redis.slave.port, AppConfiguration.redis.slave.host);
   }
 
   public async set(key: string, value: string): Promise<void> {
