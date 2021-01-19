@@ -25,8 +25,8 @@ export default class OpenAccountCommandHandler implements ICommandHandler<OpenAc
       this.accountFactory.create(id, name, password),
     );
 
-    account.commit();
-
     await this.accountRepository.save(account);
+    
+    account.commit();
   }
 }

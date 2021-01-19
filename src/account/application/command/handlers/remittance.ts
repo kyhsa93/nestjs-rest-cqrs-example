@@ -35,5 +35,8 @@ export default class RemittanceCommandHandler implements ICommandHandler<Remitta
     this.accountDomainService.remit({ sender, receiver, password, amount });
 
     await this.accountRepository.save([sender, receiver]);
+
+    sender.commit();
+    receiver.commit();
   }
 }

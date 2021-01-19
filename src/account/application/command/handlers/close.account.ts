@@ -23,8 +23,8 @@ export default class CloseAccountCommandHandler implements ICommandHandler<Close
 
     account.close(password);
 
-    account.commit();
-
     await this.accountRepository.save(account);
+    
+    account.commit();
   }
 }
