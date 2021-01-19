@@ -58,8 +58,9 @@ describe('RemittanceCommandHandler', () => {
     it('should return Promise<void> when success', async () => {
       const command = new RemittanceCommand('senderId', 'receiverId', 'password', 0);
 
-      accountRepository.findById = jest.fn().mockResolvedValue({} as Account);
-      eventPublisher.mergeObjectContext = jest.fn().mockReturnValue({} as Account);
+      const account = { commit: () => undefined } as unknown as Account;
+      accountRepository.findById = jest.fn().mockResolvedValue(account);
+      eventPublisher.mergeObjectContext = jest.fn().mockReturnValue(account);
       accountDomainService.remit = jest.fn().mockReturnValue(undefined);
       accountRepository.save = jest.fn().mockResolvedValue(undefined);
 

@@ -23,8 +23,8 @@ export default class UpdateAccountCommandHandler implements ICommandHandler<Upda
 
     account.updatePassword(password, newPassword);
 
-    account.commit();
-
     await this.accountRepository.save(account);
+    
+    account.commit();
   }
 }
