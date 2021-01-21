@@ -4,17 +4,17 @@ import { IsInt, IsString } from "class-validator";
 export default class RemittanceBody {
   @ApiProperty({ example: 'senderId' })
   @IsString()
-  public readonly senderId: string = '';
+  public readonly senderId!: string;
 
   @ApiProperty({ example: 'receiverId' })
   @IsString()
-  public readonly receiverId: string = '';
+  public readonly receiverId!: string;
 
   @ApiProperty({ example: 'password' })
   @IsString()
-  public readonly password: string = '';
+  public readonly password!: string;
 
   @ApiProperty({ example: 0 })
   @IsInt()
-  public readonly amount: number = 0;
+  public readonly amount!: number;
 }

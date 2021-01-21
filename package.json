@@ -25,6 +25,7 @@
     "@types/passport-jwt": "^3.0.3",
     "amqplib": "^0.6.0",
     "bcrypt": "^5.0.0",
+    "class-transformer": "^0.3.2",
     "class-validator": "^0.13.1",
     "compression": "^1.7.4",
     "express-rate-limit": "^5.2.3",

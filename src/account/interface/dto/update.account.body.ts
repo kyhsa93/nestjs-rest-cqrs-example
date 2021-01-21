@@ -4,9 +4,9 @@ import { IsString } from 'class-validator';
 export default class UpdateAccountBody {
   @ApiProperty({ example: 'testpassword' })
   @IsString()
-  public readonly newPassword: string = '';
+  public readonly newPassword!: string;
 
   @ApiProperty({ example: 'testpassword' })
   @IsString()
-  public readonly oldPassword: string = '';
+  public readonly oldPassword!: string;
 }

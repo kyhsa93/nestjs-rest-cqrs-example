@@ -4,5 +4,5 @@ import { IsString } from 'class-validator';
 export default class ReadAccountPathParam {
   @ApiProperty()
   @IsString()
-  public readonly id: string = '';
+  public readonly id!: string;
 }
