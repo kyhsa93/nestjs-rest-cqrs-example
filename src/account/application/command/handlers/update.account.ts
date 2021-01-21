@@ -13,7 +13,6 @@ export default class UpdateAccountCommandHandler implements ICommandHandler<Upda
     private readonly eventPublisher: EventPublisher,
   ) {}
 
-  @Transaction()
   public async execute(command: UpdateAccountCommand): Promise<void> {
     const { id, password, newPassword } = command;
     const model = await this.accountRepository.findById(id);

@@ -14,7 +14,6 @@ export default class RemittanceCommandHandler implements ICommandHandler<Remitta
     @Inject('AccountRepositoryImplement') private readonly accountRepository: AccountRepository,
   ) {}
 
-  @Transaction()
   public async execute(command: RemittanceCommand): Promise<void> {
     const { senderId } = command;
     const senderObject = await this.accountRepository.findById(senderId);

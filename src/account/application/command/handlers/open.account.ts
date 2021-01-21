@@ -15,7 +15,6 @@ export default class OpenAccountCommandHandler implements ICommandHandler<OpenAc
     @Inject('AccountRepositoryImplement') private readonly accountRepository: AccountRepository,
   ) {}
 
-  @Transaction()
   public async execute(command: OpenAccountCommand): Promise<void> {
     const { name, password } = command;
 

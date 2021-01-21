@@ -13,7 +13,6 @@ export default class CloseAccountCommandHandler implements ICommandHandler<Close
     private readonly eventPublisher: EventPublisher,
   ) {}
 
-  @Transaction()
   public async execute(command: CloseAccountCommand): Promise<void> {
     const { id, password } = command;
     const model = await this.accountRepository.findById(id);
