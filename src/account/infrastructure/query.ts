@@ -9,7 +9,7 @@ import {
 
 @Injectable()
 export default class AccountQuery implements Query {
-  private convertAccountFromEntity = (entity?: AccountEntity): undefined | Account => {
+  private convertAccountFromEntity(entity?: AccountEntity): undefined | Account {
     return entity ? { ...entity } : undefined;
   }
 
@@ -17,7 +17,7 @@ export default class AccountQuery implements Query {
     return this.convertAccountFromEntity(await getRepository(AccountEntity).findOne(id));
   };
 
-  private convertAccountsFromEntities = (entities: AccountEntity[]): Accounts => {
+  private convertAccountsFromEntities(entities: AccountEntity[]): Accounts {
     return entities.map(entity => ({ ...entity }));
   }
 
