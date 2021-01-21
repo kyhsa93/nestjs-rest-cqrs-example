@@ -1,4 +1,3 @@
-import { Transaction } from 'typeorm';
 import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
 import { Inject } from '@nestjs/common';
 

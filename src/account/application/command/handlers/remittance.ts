@@ -1,5 +1,4 @@
 import { EventPublisher, ICommandHandler } from "@nestjs/cqrs";
-import { Transaction } from "typeorm";
 import { Inject, NotFoundException } from "@nestjs/common";
 
 import RemittanceCommand from "@src/account/application/command/implements/remittance";

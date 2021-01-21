@@ -1,6 +1,5 @@
 import { CommandHandler, ICommandHandler, EventPublisher } from '@nestjs/cqrs';
 import { Inject, NotFoundException } from '@nestjs/common';
-import { Transaction } from 'typeorm';
 
 import CloseAccountCommand from '@src/account/application/command/implements/close.account';
 
