@@ -1,4 +1,4 @@
-import { EntityRepository, getRepository } from 'typeorm';
+import { getRepository } from 'typeorm';
 import uuid from 'uuid';
 
 import AccountEntity from '@src/account/infrastructure/entity/account';
@@ -7,7 +7,6 @@ import Account from '@src/account/domain/model/account';
 import AccountRepository from '@src/account/domain/repository';
 import AccountFactory from '@src/account/domain/factory';
 
-@EntityRepository(AccountEntity)
 export default class AccountRepositoryImplement implements AccountRepository {
   constructor(private readonly accountFactory: AccountFactory) {}
 
