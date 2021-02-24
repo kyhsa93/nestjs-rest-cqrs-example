@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt';
 
 import AccountClosed from '@src/account/domain/event/account.closed';
 import AccountUpdated from '@src/account/domain/event/account.updated';
-import Password, { AnemicPassword } from '@src/account/domain/model/password';
+import Password, { PasswordAttributes } from '@src/account/domain/model/password';
 
 interface AccountAttribute {
   readonly id: string;
@@ -16,10 +16,10 @@ interface AccountAttribute {
   readonly closedAt: Date | undefined;
 }
 
-export interface AnemicAccount {
+export interface AccountAttributes {
   readonly id: string;
   readonly name: string;
-  readonly password: AnemicPassword;
+  readonly password: PasswordAttributes;
   readonly balance: number;
   readonly openedAt: Date;
   readonly updatedAt: Date;
@@ -52,11 +52,11 @@ export default class Account extends AggregateRoot {
     this.closedAt = attributes.closedAt;
   }
 
-  public toAnemic(): AnemicAccount {
+  public attributes(): AccountAttributes {
     return {
       id: this.id,
       name: this.name,
-      password: this.password.toAnemic(),
+      password: this.password.attributes(),
       balance: this.balance,
       openedAt: this.openedAt,
       updatedAt: this.updatedAt,

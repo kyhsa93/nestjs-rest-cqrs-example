@@ -256,7 +256,7 @@ describe('Account', () => {
       jest.spyOn(bcrypt, 'compareSync').mockReturnValue(true);
 
       expect(account.close('password')).toEqual(undefined);
-      expect(account.toAnemic().closedAt).not.toEqual(undefined);
+      expect(account.attributes().closedAt).not.toEqual(undefined);
     });
   });
 });

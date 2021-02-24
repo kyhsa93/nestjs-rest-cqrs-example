@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 
-export interface AnemicPassword {
+export interface PasswordAttributes {
   readonly encrypted: string;
   readonly salt: string;
   readonly createdAt: Date;
@@ -23,7 +23,7 @@ export default class Password {
     this.comparedAt = attributes.comparedAt;
   }
 
-  public toAnemic(): AnemicPassword {
+  public attributes(): PasswordAttributes {
     return {
       encrypted: this.encrypted,
       salt: this.salt,

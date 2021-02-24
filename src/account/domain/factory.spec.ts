@@ -1,6 +1,6 @@
 import AccountFactory from '@src/account/domain/factory';
-import Account, { AnemicAccount } from '@src/account/domain/model/account';
-import { AnemicPassword } from '@src/account/domain/model/password';
+import Account, { AccountAttributes } from '@src/account/domain/model/account';
+import { PasswordAttributes } from '@src/account/domain/model/password';
 
 describe('AccountFactory', () => {
   describe('create', () => {
@@ -19,24 +19,24 @@ describe('AccountFactory', () => {
     it('should return Account', () => {
       const factory = new AccountFactory();
 
-      const anemicPassword: AnemicPassword = {
+      const passwordAttributes: PasswordAttributes = {
         encrypted: 'passwordHash',
         salt: 'salt',
         createdAt: new Date(),
         comparedAt: new Date(),
       };
 
-      const anemic: AnemicAccount = {
+      const attributes: AccountAttributes = {
         id: 'accountId',
         name: 'accountName',
-        password: anemicPassword,
+        password: passwordAttributes,
         balance: 0,
         openedAt: new Date(),
         updatedAt: new Date(),
         closedAt: undefined,
       };
 
-      expect(factory.reconstitute(anemic)).toBeInstanceOf(Account);
+      expect(factory.reconstitute(attributes)).toBeInstanceOf(Account);
     });
   });
 });

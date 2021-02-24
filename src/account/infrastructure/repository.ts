@@ -38,8 +38,8 @@ export default class AccountRepositoryImplement implements AccountRepository {
   }
 
   private modelToEntity(model: Account): AccountEntity {
-    const anemic = model.toAnemic();
-    return { ...anemic, password: { ...anemic.password } };
+    const attributes = model.attributes();
+    return { ...attributes, password: { ...attributes.password } };
   };
 
   private entityToModel(entity: AccountEntity): Account {

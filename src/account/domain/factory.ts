@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 
 import AccountCreated from '@src/account/domain/event/account.opened';
-import Account, { AnemicAccount } from '@src/account/domain/model/account';
+import Account, { AccountAttributes } from '@src/account/domain/model/account';
 import Password from '@src/account/domain/model/password';
 
 export default class AccountFactory {
@@ -34,9 +34,9 @@ export default class AccountFactory {
     return account;
   };
 
-  public reconstitute(anemic: AnemicAccount): Account {
-    const { id, name, balance, openedAt, updatedAt, closedAt } = anemic;
-    const password = new Password({ ...anemic.password });
+  public reconstitute(attributes: AccountAttributes): Account {
+    const { id, name, balance, openedAt, updatedAt, closedAt } = attributes;
+    const password = new Password({ ...attributes.password });
     return new Account({
       id,
       name,
