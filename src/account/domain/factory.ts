@@ -3,7 +3,10 @@ import bcrypt from 'bcrypt';
 import AccountCreated from '@src/account/domain/event/account.opened';
 import Account, { AccountAttributes } from '@src/account/domain/model/account';
 import Password from '@src/account/domain/model/password';
+import { Injectable } from '@nestjs/common';
 
+
+@Injectable()
 export default class AccountFactory {
   private genPasswordSaltSync(): string {
     return bcrypt.genSaltSync();

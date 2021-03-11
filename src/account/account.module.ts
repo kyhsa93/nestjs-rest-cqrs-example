@@ -20,6 +20,7 @@ import FindAccountsQueryHandler from '@src/account/application/query/handlers/fi
 
 import AccountFactory from '@src/account/domain/factory';
 import AccountDomainService from '@src/account/domain/service';
+import RemittedDomainEventHandler from '@src/account/application/event/handlers/remitted';
 
 const publishers = [IntegrationEventPublisher];
 
@@ -44,6 +45,7 @@ const eventHandler = [
   AccountOpenedDomainEventHandler,
   AccountUpdatedDomainEventHandler,
   AccountClosedDomainEventHandler,
+  RemittedDomainEventHandler,
 ];
 
 const factories = [AccountFactory];

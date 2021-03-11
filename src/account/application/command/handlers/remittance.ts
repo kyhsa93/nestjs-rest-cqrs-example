@@ -1,4 +1,4 @@
-import { EventPublisher, ICommandHandler } from "@nestjs/cqrs";
+import { CommandHandler, EventPublisher, ICommandHandler } from "@nestjs/cqrs";
 import { Inject, NotFoundException } from "@nestjs/common";
 
 import RemittanceCommand from "@src/account/application/command/implements/remittance";
@@ -6,6 +6,7 @@ import RemittanceCommand from "@src/account/application/command/implements/remit
 import AccountDomainService from "@src/account/domain/service";
 import AccountRepository from "@src/account/domain/repository";
 
+@CommandHandler(RemittanceCommand)
 export default class RemittanceCommandHandler implements ICommandHandler<RemittanceCommand> {
   constructor(
     private readonly accountDomainService: AccountDomainService,

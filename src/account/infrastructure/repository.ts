@@ -6,9 +6,10 @@ import AccountEntity from '@src/account/infrastructure/entity/account';
 import Account from '@src/account/domain/model/account';
 import AccountRepository from '@src/account/domain/repository';
 import AccountFactory from '@src/account/domain/factory';
+import { Inject } from '@nestjs/common';
 
 export default class AccountRepositoryImplement implements AccountRepository {
-  constructor(private readonly accountFactory: AccountFactory) {}
+  constructor(@Inject('AccountFactory') private readonly accountFactory: AccountFactory) {}
 
   public async newId (): Promise<string> {
     const emptyEntity = new AccountEntity();

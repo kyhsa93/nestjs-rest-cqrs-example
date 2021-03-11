@@ -9,7 +9,7 @@ function throwError(error: Error): never {
 }
 
 async function bootstrap(): Promise<void> {
-  const app = await NestFactory.create(ApplicationModule, { cors: true });
+  const app = await NestFactory.create(ApplicationModule, { cors: true, logger: ['debug', 'verbose','warn','error','log'] });
   app.useGlobalPipes(new ValidationPipe());
   setUp(app).catch(throwError);
 }

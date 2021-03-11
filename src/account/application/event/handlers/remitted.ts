@@ -1,6 +1,6 @@
 import { Inject } from "@nestjs/common";
 import { EventsHandler, IEventHandler } from "@nestjs/cqrs";
-import IntegrationEvent from "@src/account/application/event/implements/remitted";
+import RemittedIntegrationEvent from "@src/account/application/event/implements/remitted";
 
 
 import { Publisher } from "@src/account/application/event/publisher";
@@ -14,7 +14,7 @@ export default class RemittedDomainEventHandler implements IEventHandler<Remitte
   constructor(@Inject('IntegrationEventPublisher') private readonly publisher: Publisher){}
 
   public async handle(event: RemittedDomainEvent): Promise<void> {
-    const integrationEvent = new IntegrationEvent(MESSAGE_KEY, event);
+    const integrationEvent = new RemittedIntegrationEvent(MESSAGE_KEY, event);
     await this.publisher.publish(integrationEvent);
   }
 }
