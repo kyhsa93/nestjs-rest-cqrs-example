@@ -1,14 +1,14 @@
-import { Inject, NotFoundException } from "@nestjs/common";
-import { CommandHandler, EventPublisher, ICommandHandler } from "@nestjs/cqrs";
-import { RemitCommand } from "src/accounts/application/commands/remit.command";
-import AccountRepository from "src/accounts/domain/repository";
-import { AccountDomainService } from "src/accounts/domain/service";
+import { Inject, NotFoundException } from '@nestjs/common';
+import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
+import { RemitCommand } from 'src/accounts/application/commands/remit.command';
+import AccountRepository from 'src/accounts/domain/repository';
+import { AccountDomainService } from 'src/accounts/domain/service';
 
 @CommandHandler(RemitCommand)
 export class RemitHandler implements ICommandHandler<RemitCommand> {
-
   constructor(
-    @Inject('AccountRepositoryImplement') readonly accountRepository: AccountRepository,
+    @Inject('AccountRepositoryImplement')
+    readonly accountRepository: AccountRepository,
     readonly eventPublisher: EventPublisher,
     readonly accountDomainService: AccountDomainService,
   ) {}
@@ -19,7 +19,9 @@ export class RemitHandler implements ICommandHandler<RemitCommand> {
 
     const sender = this.eventPublisher.mergeObjectContext(senderData);
 
-    const receiverData = await this.accountRepository.findById(command.receiverId);
+    const receiverData = await this.accountRepository.findById(
+      command.receiverId,
+    );
     if (!receiverData) throw new NotFoundException();
 
     const receiver = this.eventPublisher.mergeObjectContext(receiverData);

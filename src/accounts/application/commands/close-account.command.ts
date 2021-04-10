@@ -1,5 +1,5 @@
-import { ICommand } from "@nestjs/cqrs";
+import { ICommand } from '@nestjs/cqrs';
 
 export class CloseAccountCommand implements ICommand {
-  constructor(readonly id: string, readonly password: string){}
+  constructor(readonly id: string, readonly password: string) {}
 }
