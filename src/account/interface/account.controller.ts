@@ -35,20 +35,20 @@ export default class AccountController {
   constructor(private readonly commandBus: CommandBus, private readonly queryBus: QueryBus) {}
 
   @Post()
-  public async handleOpenAccountRequest(@Body() body: OpenAccountBody): Promise<void> {
+  public async openAccount(@Body() body: OpenAccountBody): Promise<void> {
     const { name, password } = body;
     await this.commandBus.execute(new OpenAccountCommand(name, password));
   }
 
   @Post('/remittance')
-  public async handleRemittanceRequest(@Body() body: RemittanceBody): Promise<void> {
+  public async remittance(@Body() body: RemittanceBody): Promise<void> {
     const { senderId, receiverId, password, amount } = body;
     const command = new RemittanceCommand(senderId, receiverId, password, amount);
     await this.commandBus.execute(command);
   }
 
   @Put(':id')
-  public async handleUpdateAccountRequest(
+  public async updateAccount(
     @Param() param: UpdateAccountPathParam,
     @Body() body: UpdateAccountBody,
   ): Promise<void> {
@@ -57,7 +57,7 @@ export default class AccountController {
   }
 
   @Delete(':id')
-  public async handleCloseAccountRequest(
+  public async closeAccount(
     @Param() param: CloseAccountPathParam,
     @Body() body: CloseAccountBody,
   ): Promise<void> {
@@ -66,7 +66,7 @@ export default class AccountController {
   }
 
   @Get()
-  public async handleGetAccountRequest(
+  public async getAccount(
     @Query() { take = 10, page = 1, names = [] }: GetAccountQuery,
   ): Promise<AccountsAndCount> {
     const conditions = { names: this.toArray(names) };
@@ -75,7 +75,7 @@ export default class AccountController {
   }
 
   @Get(':id')
-  public async handlerGetAccountByIdRequest(
+  public async getAccountById(
     @Param() param: ReadAccountPathParam,
   ): Promise<Account> {
     const account: Account = await this.queryBus.execute(new ReadAccountQuery(param.id));
