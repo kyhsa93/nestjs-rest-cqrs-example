@@ -28,6 +28,8 @@ import { Account, AccountsAndCount } from '@src/account/application/query/query'
 import FindAccountQuery from '@src/account/application/query/implements/find';
 import RemittanceBody from '@src/account/interface/dto/remittance.body';
 import RemittanceCommand from '@src/account/application/command/implements/remittance';
+import { WithdrawBody } from '@src/account/interface/dto/withdraw.body';
+import { Withdraw } from '@src/account/application/command/implements/withdraw.account';
 
 @ApiTags('Accounts')
 @Controller('/accounts')
@@ -46,6 +48,12 @@ export default class AccountController {
       senderId, receiverId, password, amount,
     } = body;
     const command = new RemittanceCommand(senderId, receiverId, password, amount);
+    await this.commandBus.execute(command);
+  }
+
+  @Post('/withdraw')
+  public async withdraw(@Param() id: string, @Body() body: WithdrawBody): Promise<void> {
+    const command = new Withdraw(id, body.amount, body.password);
     await this.commandBus.execute(command);
   }
 

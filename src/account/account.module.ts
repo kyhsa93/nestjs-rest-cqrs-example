@@ -20,6 +20,7 @@ import FindAccountsQueryHandler from '@src/account/application/query/handlers/fi
 
 import AccountFactory from '@src/account/domain/factory';
 import AccountDomainService from '@src/account/domain/service';
+import { WithdrawHandler } from '@src/account/application/command/handlers/withdraw';
 
 const publishers = [IntegrationEventPublisher];
 
@@ -38,6 +39,7 @@ const commandHandler = [
   UpdateAccountCommandHandler,
   CloseAccountCommandHandler,
   RemittanceCommandHandler,
+  WithdrawHandler,
 ];
 
 const eventHandler = [
