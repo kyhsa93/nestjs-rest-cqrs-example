@@ -33,6 +33,6 @@ export default class Password {
   }
 
   public compare(password: string): boolean {
-    return bcrypt.compareSync(password, this.encrypted)
+    return bcrypt.compareSync(password, this.encrypted);
   }
 }

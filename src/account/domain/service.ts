@@ -1,4 +1,4 @@
-import Account from "@src/account/domain/model/account";
+import Account from '@src/account/domain/model/account';
 
 export interface RemittanceOptions {
   readonly password: string;
@@ -9,7 +9,9 @@ export interface RemittanceOptions {
 
 export default class AccountDomainService {
   public remit(options: RemittanceOptions): void {
-    const { sender, receiver, password, amount } = options;
+    const {
+      sender, receiver, password, amount,
+    } = options;
     sender.withdraw(amount, password);
     receiver.deposit(amount, password);
   }

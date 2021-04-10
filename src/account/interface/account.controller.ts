@@ -42,7 +42,9 @@ export default class AccountController {
 
   @Post('/remittance')
   public async remittance(@Body() body: RemittanceBody): Promise<void> {
-    const { senderId, receiverId, password, amount } = body;
+    const {
+      senderId, receiverId, password, amount,
+    } = body;
     const command = new RemittanceCommand(senderId, receiverId, password, amount);
     await this.commandBus.execute(command);
   }
@@ -50,7 +52,7 @@ export default class AccountController {
   @Put(':id')
   public async updateAccount(
     @Param() param: UpdateAccountPathParam,
-    @Body() body: UpdateAccountBody,
+      @Body() body: UpdateAccountBody,
   ): Promise<void> {
     const { oldPassword, newPassword } = body;
     await this.commandBus.execute(new UpdateAccountCommand(param.id, oldPassword, newPassword));
@@ -59,7 +61,7 @@ export default class AccountController {
   @Delete(':id')
   public async closeAccount(
     @Param() param: CloseAccountPathParam,
-    @Body() body: CloseAccountBody,
+      @Body() body: CloseAccountBody,
   ): Promise<void> {
     const { password } = body;
     await this.commandBus.execute(new CloseAccountCommand(param.id, password));
@@ -84,6 +86,6 @@ export default class AccountController {
   }
 
   private toArray(value: string | string[]): string[] {
-    return Array.isArray(value) ? value : [value].filter(item => item !== undefined);
+    return Array.isArray(value) ? value : [value].filter((item) => item !== undefined);
   }
 }

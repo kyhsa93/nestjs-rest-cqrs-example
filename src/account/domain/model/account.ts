@@ -90,7 +90,7 @@ export default class Account extends AggregateRoot {
     if (this.balance < amount) {
       throw new UnprocessableEntityException('Requested amount exceeds your withdrawal limit');
     }
-    this.balance = this.balance - amount;
+    this.balance -= amount;
     this.apply(new AccountUpdated(this.id));
   }
 
@@ -99,17 +99,17 @@ export default class Account extends AggregateRoot {
       throw new UnauthorizedException();
     }
     if (amount < 0) {
-      throw new UnprocessableEntityException('Can not deposit under 0')
+      throw new UnprocessableEntityException('Can not deposit under 0');
     }
-    this.balance = this.balance + amount;
+    this.balance += amount;
     this.apply(new AccountUpdated(this.id));
   }
-  
+
   public close(password: string): void {
     if (!(this.comparePassword(password))) {
       throw new UnauthorizedException();
-    }    
-    if (0 < this.balance) {
+    }
+    if (this.balance > 0) {
       throw new UnprocessableEntityException('Account balance is remained');
     }
     this.closedAt = new Date();

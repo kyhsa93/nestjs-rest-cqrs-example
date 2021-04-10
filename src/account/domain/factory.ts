@@ -14,7 +14,7 @@ export default class AccountFactory {
   }
 
   public create(id: string, name: string, password: string): Account {
-    const salt = this.genPasswordSaltSync()
+    const salt = this.genPasswordSaltSync();
     const now = new Date();
     const account = new Account({
       id,
@@ -32,10 +32,12 @@ export default class AccountFactory {
     });
     account.apply(new AccountCreated(id));
     return account;
-  };
+  }
 
   public reconstitute(attributes: AccountAttributes): Account {
-    const { id, name, balance, openedAt, updatedAt, closedAt } = attributes;
+    const {
+      id, name, balance, openedAt, updatedAt, closedAt,
+    } = attributes;
     const password = new Password({ ...attributes.password });
     return new Account({
       id,
@@ -46,5 +48,5 @@ export default class AccountFactory {
       updatedAt,
       closedAt,
     });
-  };
+  }
 }

@@ -10,7 +10,7 @@ import AccountFactory from '@src/account/domain/factory';
 export default class AccountRepositoryImplement implements AccountRepository {
   constructor(private readonly accountFactory: AccountFactory) {}
 
-  public async newId (): Promise<string> {
+  public async newId(): Promise<string> {
     const emptyEntity = new AccountEntity();
     emptyEntity.name = uuid.v1();
     emptyEntity.balance = 0;
@@ -18,7 +18,7 @@ export default class AccountRepositoryImplement implements AccountRepository {
     emptyEntity.updatedAt = new Date();
     const entity = await getRepository(AccountEntity).save(emptyEntity);
     return entity.id;
-  };
+  }
 
   public async save(data: Account | Account[]): Promise<void> {
     const models = Array.isArray(data) ? data : [data];
@@ -39,7 +39,7 @@ export default class AccountRepositoryImplement implements AccountRepository {
   private modelToEntity(model: Account): AccountEntity {
     const attributes = model.attributes();
     return { ...attributes, password: { ...attributes.password } };
-  };
+  }
 
   private entityToModel(entity: AccountEntity): Account {
     return this.accountFactory.reconstitute({ ...entity });

@@ -1,10 +1,12 @@
-import { FindConditions, FindManyOptions, getRepository, In } from 'typeorm';
+import {
+  FindConditions, FindManyOptions, getRepository, In,
+} from 'typeorm';
 import { Injectable } from '@nestjs/common';
 
 import AccountEntity from '@src/account/infrastructure/entity/account';
 
-import { 
-  Account, AccountFindConditions, Accounts, AccountsAndCount, AccountWhereConditions, Query 
+import {
+  Account, AccountFindConditions, Accounts, AccountsAndCount, AccountWhereConditions, Query,
 } from '@src/account/application/query/query';
 
 @Injectable()
@@ -15,10 +17,10 @@ export default class AccountQuery implements Query {
 
   public async findById(id: string): Promise<undefined | Account> {
     return this.convertAccountFromEntity(await getRepository(AccountEntity).findOne(id));
-  };
+  }
 
   private convertAccountsFromEntities(entities: AccountEntity[]): Accounts {
-    return entities.map(entity => ({ ...entity }));
+    return entities.map((entity) => ({ ...entity }));
   }
 
   private convertAccountsAndCount([entities, count]: [AccountEntity[], number]): AccountsAndCount {
@@ -26,7 +28,7 @@ export default class AccountQuery implements Query {
   }
 
   private convertWhereConditions(conditions: AccountWhereConditions): undefined | FindConditions<AccountEntity> {
-    let result = {};
+    const result = {};
     conditions.names.length === 0 ? undefined : Object.assign(result, { name: In(conditions.names) });
     return Object.keys(result).length === 0 ? undefined : result;
   }
@@ -38,6 +40,6 @@ export default class AccountQuery implements Query {
   public async findAndCount(conditions: AccountFindConditions): Promise<AccountsAndCount> {
     return getRepository(AccountEntity)
       .findAndCount(this.convertFindConditions(conditions))
-      .then(entitiesAndCount => this.convertAccountsAndCount(entitiesAndCount));
+      .then((entitiesAndCount) => this.convertAccountsAndCount(entitiesAndCount));
   }
 }

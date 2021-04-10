@@ -95,7 +95,7 @@ describe('Account', () => {
 
       jest.spyOn(bcrypt, 'compareSync').mockReturnValue(true);
 
-      expect(() => account.withdraw(-1, 'password')).toThrow(UnprocessableEntityException)
+      expect(() => account.withdraw(-1, 'password')).toThrow(UnprocessableEntityException);
     });
 
     it('should throw UnprocessableEntityException when amount is under balance', () => {
@@ -117,7 +117,7 @@ describe('Account', () => {
 
       jest.spyOn(bcrypt, 'compareSync').mockReturnValue(true);
 
-      expect(() => account.withdraw(100, 'password')).toThrow(UnprocessableEntityException)
+      expect(() => account.withdraw(100, 'password')).toThrow(UnprocessableEntityException);
     });
 
     it('should return void when success', () => {
@@ -185,7 +185,7 @@ describe('Account', () => {
 
       jest.spyOn(bcrypt, 'compareSync').mockReturnValue(true);
 
-      expect(() => account.deposit(-1, 'password')).toThrow(UnprocessableEntityException)
+      expect(() => account.deposit(-1, 'password')).toThrow(UnprocessableEntityException);
     });
 
     it('should return void when success', () => {

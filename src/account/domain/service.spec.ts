@@ -1,8 +1,8 @@
 import bcrypt from 'bcrypt';
 
-import Account from "@src/account/domain/model/account";
-import Password from "@src/account/domain/model/password";
-import AccountDomainService from "@src/account/domain/service";
+import Account from '@src/account/domain/model/account';
+import Password from '@src/account/domain/model/password';
+import AccountDomainService from '@src/account/domain/service';
 
 describe('AccountDomainService', () => {
   describe('remit', () => {
@@ -38,7 +38,9 @@ describe('AccountDomainService', () => {
 
       const service = new AccountDomainService();
 
-      expect(service.remit({ sender, receiver, password: 'password', amount: 0 })).toEqual(undefined);
-    })
+      expect(service.remit({
+        sender, receiver, password: 'password', amount: 0,
+      })).toEqual(undefined);
+    });
   });
 });

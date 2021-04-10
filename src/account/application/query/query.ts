@@ -1,4 +1,4 @@
-import { IQueryResult } from "@nestjs/cqrs";
+import { IQueryResult } from '@nestjs/cqrs';
 
 export interface AccountFindConditions {
   readonly take: number;
@@ -27,11 +27,11 @@ export interface Accounts
 
 export interface AccountsAndCount extends IQueryResult {
   readonly count: number;
-  readonly data: { 
+  readonly data: {
     readonly id: string;
     readonly name: string;
     readonly openedAt: Date;
-   }[]
+  }[];
 }
 
 export interface Query {
