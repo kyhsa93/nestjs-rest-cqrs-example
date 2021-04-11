@@ -1,5 +1,9 @@
-import { ICommand } from "@nestjs/cqrs";
+import { ICommand } from '@nestjs/cqrs';
 
 export class UpdatePasswordCommand implements ICommand {
-  constructor(readonly id: string, readonly current: string, readonly data: string) {}
+  constructor(
+    readonly id: string,
+    readonly current: string,
+    readonly data: string,
+  ) {}
 }

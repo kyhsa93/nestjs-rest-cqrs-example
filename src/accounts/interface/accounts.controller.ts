@@ -1,4 +1,13 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Query,
+} from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { CloseAccountCommand } from 'src/accounts/application/commands/close-account.command';
 import { DepositCommand } from 'src/accounts/application/commands/deposit.command';
@@ -17,47 +26,62 @@ import { WithdrawDTO } from 'src/accounts/interface/dto/withdraw.dto';
 
 @Controller('accounts')
 export class AccountsController {
-
   constructor(readonly commandBus: CommandBus, readonly queryBus: QueryBus) {}
 
   @Post()
   async openAccount(@Body() dto: OpenAccountDTO): Promise<void> {
-    const command = new OpenAccountCommand(dto.name, dto.password)
+    const command = new OpenAccountCommand(dto.name, dto.password);
     await this.commandBus.execute(command);
   }
 
   @Post('/:id/withdraw')
-  async withdraw(@Param('id') id: string, @Body() dto: WithdrawDTO): Promise<void> {
+  async withdraw(
+    @Param('id') id: string,
+    @Body() dto: WithdrawDTO,
+  ): Promise<void> {
     const command = new WithdrawCommand(id, dto.password, dto.amount);
     await this.commandBus.execute(command);
   }
 
   @Post('/:id/deposit')
-  async deposit(@Param('id') id: string, @Body() dto: DepositDTO): Promise<void> {
+  async deposit(
+    @Param('id') id: string,
+    @Body() dto: DepositDTO,
+  ): Promise<void> {
     const command = new DepositCommand(id, dto.password, dto.amount);
     await this.commandBus.execute(command);
   }
 
   @Put('/:id/password')
-  async updatePassword(@Param('id') id: string, @Body() dto:UpdatePasswordDTO): Promise<void> {
+  async updatePassword(
+    @Param('id') id: string,
+    @Body() dto: UpdatePasswordDTO,
+  ): Promise<void> {
     const command = new UpdatePasswordCommand(id, dto.current, dto.data);
     await this.commandBus.execute(command);
   }
 
   @Delete('/:id')
-  async closeAccount(@Param('id') id: string, @Query('password') password: string): Promise<void> {
+  async closeAccount(
+    @Param('id') id: string,
+    @Query('password') password: string,
+  ): Promise<void> {
     const command = new CloseAccountCommand(id, password);
     await this.commandBus.execute(command);
   }
 
   @Get()
-  async findAccounts(@Query() dto: FindAccountsDTO): Promise<{ accounts: FindAccountsResult }> {
+  async findAccounts(
+    @Query() dto: FindAccountsDTO,
+  ): Promise<{ accounts: FindAccountsResult }> {
     const query = new FindAccountsQuery(dto.offset, dto.limit);
     return { accounts: await this.queryBus.execute(query) };
   }
 
   @Get('/:id')
-  async findAccountById(@Param('id') id: string): Promise<FindAccountByIdResult> {
+  async findAccountById(
+    @Param('id') id: string,
+  ): Promise<FindAccountByIdResult> {
     const query = new FindAccountByIdQuery(id);
     return this.queryBus.execute(query);
   }
