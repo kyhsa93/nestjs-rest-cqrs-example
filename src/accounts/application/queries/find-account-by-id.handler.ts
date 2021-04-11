@@ -7,7 +7,6 @@ import { FindAccountByIdResult } from 'src/accounts/application/queries/find-acc
 @QueryHandler(FindAccountByIdQuery)
 export class FindAccountByIdHandler
   implements IQueryHandler<FindAccountByIdQuery> {
-    
   constructor(
     @Inject('AccountQueryImplement') readonly accountQuery: AccountQuery,
   ) {}
