@@ -46,7 +46,7 @@ export default class Account extends AggregateRoot {
     this.closedAt = attributes.closedAt;
   }
 
-  public attributes(): AccountAttributes {
+  attributes(): AccountAttributes {
     return {
       id: this.id,
       name: this.name,
@@ -58,7 +58,7 @@ export default class Account extends AggregateRoot {
     };
   }
 
-  public updatePassword(password: string, data: string): void {
+  updatePassword(password: string, data: string): void {
     if (!this.comparePassword(password)) throw new UnauthorizedException();
 
     this.updatedAt = new Date();
@@ -67,7 +67,7 @@ export default class Account extends AggregateRoot {
     this.apply(new PasswordUpdatedEvent(this.id));
   }
 
-  public withdraw(amount: number, password: string): void {
+  withdraw(amount: number, password: string): void {
     if (!this.comparePassword(password)) throw new UnauthorizedException();
     if (amount < 0)
       throw new UnprocessableEntityException('Can not withdraw under 0');
@@ -79,7 +79,7 @@ export default class Account extends AggregateRoot {
     this.apply(new WithdrawnEvent(this.id));
   }
 
-  public deposit(amount: number, password: string): void {
+  deposit(amount: number, password: string): void {
     if (!this.comparePassword(password)) throw new UnauthorizedException();
     if (amount < 0)
       throw new UnprocessableEntityException('Can not deposit under 0');
@@ -87,7 +87,7 @@ export default class Account extends AggregateRoot {
     this.apply(new DepositedEvent(this.id));
   }
 
-  public close(password: string): void {
+  close(password: string): void {
     if (!this.comparePassword(password)) throw new UnauthorizedException();
     if (this.balance > 0)
       throw new UnprocessableEntityException('Account balance is remained');
