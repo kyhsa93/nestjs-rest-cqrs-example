@@ -7,7 +7,7 @@ export class PasswordUpdatedHandler
   implements IEventHandler<PasswordUpdatedEvent> {
   constructor(readonly logger: Logger) {}
 
-  handle(event: PasswordUpdatedEvent) {
+  handle(event: PasswordUpdatedEvent): void {
     this.logger.log(event);
   }
 }
