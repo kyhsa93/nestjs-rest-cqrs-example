@@ -9,6 +9,13 @@ import {
   Query,
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
+
+import { DepositDTO } from 'src/accounts/interface/dto/deposit.dto';
+import { FindAccountsDTO } from 'src/accounts/interface/dto/find-accounts.dto';
+import { OpenAccountDTO } from 'src/accounts/interface/dto/open-account.dto';
+import { UpdatePasswordDTO } from 'src/accounts/interface/dto/update-password.dto';
+import { WithdrawDTO } from 'src/accounts/interface/dto/withdraw.dto';
+
 import { CloseAccountCommand } from 'src/accounts/application/commands/close-account.command';
 import { DepositCommand } from 'src/accounts/application/commands/deposit.command';
 import { OpenAccountCommand } from 'src/accounts/application/commands/open-account.command';
@@ -18,11 +25,7 @@ import { FindAccountByIdQuery } from 'src/accounts/application/queries/find-acco
 import { FindAccountByIdResult } from 'src/accounts/application/queries/find-account-by-id.result';
 import { FindAccountsQuery } from 'src/accounts/application/queries/find-accounts.query';
 import { FindAccountsResult } from 'src/accounts/application/queries/find-accounts.result';
-import { DepositDTO } from 'src/accounts/interface/dto/deposit.dto';
-import { FindAccountsDTO } from 'src/accounts/interface/dto/find-accounts.dto';
-import { OpenAccountDTO } from 'src/accounts/interface/dto/open-account.dto';
-import { UpdatePasswordDTO } from 'src/accounts/interface/dto/update-password.dto';
-import { WithdrawDTO } from 'src/accounts/interface/dto/withdraw.dto';
+
 
 @Controller('accounts')
 export class AccountsController {
