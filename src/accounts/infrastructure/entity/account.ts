@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity()
-export default class AccountEntity {
+export class Account {
   @PrimaryGeneratedColumn('uuid')
   public id!: string;
 
@@ -21,5 +21,5 @@ export default class AccountEntity {
   public updatedAt!: Date;
 
   @Column({ type: 'datetime', default: null, nullable: true })
-  public closedAt!: Date | undefined;
+  public closedAt?: Date;
 }

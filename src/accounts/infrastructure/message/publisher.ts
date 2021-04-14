@@ -1,9 +1,8 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { connect, Options } from 'amqplib';
+import { Event, Publisher } from 'src/accounts/application/events/integration';
 
-import AppConfiguration from '@src/app.config';
-
-import { Event, Publisher } from '@src/account/application/event/publisher';
+import { AppService } from 'src/app.service';
 
 @Injectable()
 export default class IntegrationEventPublisher implements Publisher {
@@ -12,8 +11,9 @@ export default class IntegrationEventPublisher implements Publisher {
   private readonly connectionOptions: Options.Connect;
 
   constructor() {
-    this.exchange = AppConfiguration.rabbitMQ.exchange;
-    this.connectionOptions = AppConfiguration.rabbitMQ;
+    const config = AppService.rabbitMQConfig();
+    this.exchange = config.exchange;
+    this.connectionOptions = config;
   }
 
   public async publish(message: Event): Promise<void> {
@@ -26,7 +26,7 @@ export default class IntegrationEventPublisher implements Publisher {
 
     channel.publish(
       this.exchange,
-      message.key,
+      message.subject,
       Buffer.from(JSON.stringify(message.data)),
     );
   }

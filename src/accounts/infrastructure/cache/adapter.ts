@@ -1,6 +1,6 @@
 import Redis from 'ioredis';
 
-import AppConfiguration from '@src/app.config';
+import { AppService } from 'src/app.service';
 
 export default class RedisAdapter {
   private readonly master: Redis.Redis;
@@ -8,14 +8,9 @@ export default class RedisAdapter {
   private readonly slave: Redis.Redis;
 
   constructor() {
-    this.master = new Redis(
-      AppConfiguration.redis.master.port,
-      AppConfiguration.redis.master.host,
-    );
-    this.slave = new Redis(
-      AppConfiguration.redis.slave.port,
-      AppConfiguration.redis.slave.host,
-    );
+    const { master, slave } = AppService.redisClusterConfig();
+    this.master = new Redis(master.port, master.host);
+    this.slave = new Redis(slave.port, slave.host);
   }
 
   public async set(key: string, value: string): Promise<void> {

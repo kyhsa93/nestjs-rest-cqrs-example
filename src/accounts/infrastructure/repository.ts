@@ -1,15 +1,10 @@
+import Account from 'src/accounts/domain/account';
+import AccountRepository from 'src/accounts/domain/repository';
+import { Account as AccountEntity } from 'src/accounts/infrastructure/entity/account';
 import { getRepository } from 'typeorm';
 import uuid from 'uuid';
 
-import AccountEntity from '@src/account/infrastructure/entity/account';
-
-import Account from '@src/account/domain/model/account';
-import AccountRepository from '@src/account/domain/repository';
-import AccountFactory from '@src/account/domain/factory';
-
 export default class AccountRepositoryImplement implements AccountRepository {
-  constructor(private readonly accountFactory: AccountFactory) {}
-
   public async newId(): Promise<string> {
     const emptyEntity = new AccountEntity();
     emptyEntity.name = uuid.v1();
@@ -38,10 +33,10 @@ export default class AccountRepositoryImplement implements AccountRepository {
 
   private modelToEntity(model: Account): AccountEntity {
     const attributes = model.attributes();
-    return { ...attributes, password: { ...attributes.password } };
+    return { ...attributes };
   }
 
   private entityToModel(entity: AccountEntity): Account {
-    return this.accountFactory.reconstitute({ ...entity });
+    return new Account(entity);
   }
 }
