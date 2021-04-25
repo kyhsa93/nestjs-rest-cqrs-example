@@ -1,4 +1,13 @@
-import { Module } from '@nestjs/common';
+import { Logger, Module } from '@nestjs/common';
+import { CqrsModule } from '@nestjs/cqrs';
+
+import { RedisAdapter } from 'src/accounts/infrastructure/cache/adapter';
+import { IntegrationEventPublisher } from 'src/accounts/infrastructure/message/publisher';
+import { AccountQueryImplement } from 'src/accounts/infrastructure/query';
+import { AccountRepositoryImplement } from 'src/accounts/infrastructure/repository';
+
+import { AccountsController } from 'src/accounts/interface/accounts.controller';
+
 import { CloseAccountHandler } from 'src/accounts/application/commands/close-account.handler';
 import { DepositHandler } from 'src/accounts/application/commands/deposit.handler';
 import { OpenAccountHandler } from 'src/accounts/application/commands/open-account.handler';
@@ -12,12 +21,8 @@ import { PasswordUpdatedHandler } from 'src/accounts/application/events/password
 import { WithdrawnHandler } from 'src/accounts/application/events/withdrawn.handler';
 import { FindAccountByIdHandler } from 'src/accounts/application/queries/find-account-by-id.handler';
 import { FindAccountsHandler } from 'src/accounts/application/queries/find-accounts.handler';
+
 import { AccountDomainService } from 'src/accounts/domain/service';
-import RedisAdapter from 'src/accounts/infrastructure/cache/adapter';
-import IntegrationEventPublisher from 'src/accounts/infrastructure/message/publisher';
-import AccountQueryImplement from 'src/accounts/infrastructure/query';
-import AccountRepositoryImplement from 'src/accounts/infrastructure/repository';
-import { AccountsController } from 'src/accounts/interface/accounts.controller';
 
 const infrastructure = [
   AccountRepositoryImplement,
@@ -47,8 +52,10 @@ const domain = [
 ];
 
 @Module({
+  imports: [CqrsModule],
   controllers: [AccountsController],
   providers: [
+    Logger,
     ...infrastructure,
     ...application,
     ...domain,

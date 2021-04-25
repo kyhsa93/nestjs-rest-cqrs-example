@@ -3,23 +3,23 @@ import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 @Entity()
 export class Account {
   @PrimaryGeneratedColumn('uuid')
-  public id!: string;
+  id!: string;
 
   @Column()
-  public name!: string;
+  name!: string;
 
   @Column()
-  public password!: string;
+  password!: string;
 
   @Column()
-  public balance!: number;
+  balance!: number;
 
   @Column({ type: 'datetime' })
-  public openedAt!: Date;
+  openedAt!: Date;
 
   @Column({ type: 'timestamp' })
-  public updatedAt!: Date;
+  updatedAt!: Date;
 
   @Column({ type: 'datetime', default: null, nullable: true })
-  public closedAt?: Date;
+  closedAt?: Date;
 }

@@ -3,7 +3,7 @@ import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
 
 import { RemitCommand } from 'src/accounts/application/commands/remit.command';
 
-import AccountRepository from 'src/accounts/domain/repository';
+import { AccountRepository } from 'src/accounts/domain/repository';
 import { AccountDomainService } from 'src/accounts/domain/service';
 
 @CommandHandler(RemitCommand)

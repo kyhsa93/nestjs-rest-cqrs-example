@@ -1,4 +1,4 @@
-import Account from 'src/accounts/domain/account';
+import { Account } from 'src/accounts/domain/account';
 
 export interface RemittanceOptions {
   readonly password: string;

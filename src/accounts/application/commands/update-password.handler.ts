@@ -3,7 +3,7 @@ import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
 
 import { UpdatePasswordCommand } from 'src/accounts/application/commands/update-password.command';
 
-import AccountRepository from 'src/accounts/domain/repository';
+import { AccountRepository } from 'src/accounts/domain/repository';
 
 @CommandHandler(UpdatePasswordCommand)
 export class UpdatePasswordHandler

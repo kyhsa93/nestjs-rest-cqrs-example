@@ -20,7 +20,7 @@ export interface AccountAttributes {
   readonly closedAt?: Date;
 }
 
-export default class Account extends AggregateRoot {
+export class Account extends AggregateRoot {
   private readonly id: string;
 
   private readonly name: string;

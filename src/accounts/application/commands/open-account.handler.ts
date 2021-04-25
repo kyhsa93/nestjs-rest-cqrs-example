@@ -4,7 +4,7 @@ import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
 import { OpenAccountCommand } from 'src/accounts/application/commands/open-account.command';
 
 import { Account } from 'src/accounts/domain/account';
-import AccountRepository from 'src/accounts/domain/repository';
+import { AccountRepository } from 'src/accounts/domain/repository';
 
 @CommandHandler(OpenAccountCommand)
 export class OpenAccountHandler implements ICommandHandler<OpenAccountCommand> {

@@ -3,7 +3,7 @@ import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
 
 import { CloseAccountCommand } from 'src/accounts/application/commands/close-account.command';
 
-import AccountRepository from 'src/accounts/domain/repository';
+import { AccountRepository } from 'src/accounts/domain/repository';
 
 @CommandHandler(CloseAccountCommand)
 export class CloseAccountHandler

@@ -1,33 +1,43 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
-import { connect, Options } from 'amqplib';
-import { Event, Publisher } from 'src/accounts/application/events/integration';
+import { Inject, Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
+import { Channel, connect, Connection, Options, Replies } from 'amqplib';
 
 import { AppService } from 'src/app.service';
 
+import { Event, Publisher } from 'src/accounts/application/events/integration';
+
 @Injectable()
-export default class IntegrationEventPublisher implements Publisher {
+export class IntegrationEventPublisher implements Publisher {
   private readonly exchange: string;
 
   private readonly connectionOptions: Options.Connect;
+
+  private readonly channel;
 
   constructor() {
     const config = AppService.rabbitMQConfig();
     this.exchange = config.exchange;
     this.connectionOptions = config;
+    this.channel = connect(config).then(this.createChannel).catch(this.failToConnectRabbitMQ);
   }
 
-  public async publish(message: Event): Promise<void> {
-    const channel = await (
-      await connect(this.connectionOptions)
-    ).createChannel();
-    await channel.assertExchange(this.exchange, 'topic', { durable: true });
-    if (!channel)
-      throw new InternalServerErrorException('Cannot get publisher channel');
-
-    channel.publish(
+  async publish(message: Event): Promise<void> {
+    this.channel.publish(
       this.exchange,
       message.subject,
       Buffer.from(JSON.stringify(message.data)),
     );
+  }
+
+  private createChannel(connection: Connection) {
+    return connection => connection.createChannel().then(this.assertExchange);
+  }
+
+  private assertExchange(channel: Channel): Promise<Replies.AssertExchange> {
+    return channel.assertExchange(this.exchange, 'topic', { durable: true });
+  }
+
+  private failToConnectRabbitMQ(error: Error): void {
+    console.error(error);
+    process.exit(1);
   }
 }

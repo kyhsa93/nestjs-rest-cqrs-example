@@ -3,7 +3,7 @@ import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
 
 import { WithdrawCommand } from 'src/accounts/application/commands/withdraw.command';
 
-import AccountRepository from 'src/accounts/domain/repository';
+import { AccountRepository } from 'src/accounts/domain/repository';
 
 @CommandHandler(WithdrawCommand)
 export class WithdrawHandler implements ICommandHandler<WithdrawCommand> {

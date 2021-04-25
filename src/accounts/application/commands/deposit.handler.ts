@@ -3,7 +3,7 @@ import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
 
 import { DepositCommand } from 'src/accounts/application/commands/deposit.command';
 
-import AccountRepository from 'src/accounts/domain/repository';
+import { AccountRepository } from 'src/accounts/domain/repository';
 
 @CommandHandler(DepositCommand)
 export class DepositHandler implements ICommandHandler<DepositCommand> {
