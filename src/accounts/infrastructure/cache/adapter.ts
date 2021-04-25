@@ -2,15 +2,15 @@ import Redis from 'ioredis';
 
 import { AppService } from 'src/app.service';
 
-export default class RedisAdapter {
+export class RedisAdapter {
   private readonly master: Redis.Redis;
 
   private readonly slave: Redis.Redis;
 
   constructor() {
     const { master, slave } = AppService.redisClusterConfig();
-    this.master = new Redis(master.port, master.host);
-    this.slave = new Redis(slave.port, slave.host);
+    this.master = new Redis(master.port, master.host).on('error', this.failToConnectRedis);
+    this.slave = new Redis(slave.port, slave.host).on('error', this.failToConnectRedis);
   }
 
   public async set(key: string, value: string): Promise<void> {
@@ -22,5 +22,10 @@ export default class RedisAdapter {
       .get(key)
       .then((result) => result)
       .catch(() => null);
+  }
+
+  private failToConnectRedis(error: Error): Promise<void> {
+    console.error(error);
+    process.exit(1);
   }
 }
