@@ -28,6 +28,7 @@
     "amqplib": "^0.7.1",
     "bcrypt": "^5.0.1",
     "ioredis": "^4.26.0",
+    "mysql": "^2.18.1",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^6.6.3",
