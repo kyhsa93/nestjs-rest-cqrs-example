@@ -47,18 +47,11 @@ const application = [
   FindAccountsHandler,
 ];
 
-const domain = [
-  AccountDomainService,
-];
+const domain = [AccountDomainService];
 
 @Module({
   imports: [CqrsModule],
   controllers: [AccountsController],
-  providers: [
-    Logger,
-    ...infrastructure,
-    ...application,
-    ...domain,
-  ]
+  providers: [Logger, ...infrastructure, ...application, ...domain],
 })
 export class AccountsModule {}

@@ -1,4 +1,4 @@
-import { Account, AccountAttributes } from "src/accounts/domain/account";
+import { Account, AccountAttributes } from 'src/accounts/domain/account';
 
 describe('Account', () => {
   describe('attributes', () => {

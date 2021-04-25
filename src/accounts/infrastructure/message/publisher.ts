@@ -1,5 +1,5 @@
-import { Inject, Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
-import { Channel, connect, Connection, Options, Replies } from 'amqplib';
+import { Injectable } from '@nestjs/common';
+import { Channel, connect, Connection, Replies } from 'amqplib';
 
 import { AppService } from 'src/app.service';
 
@@ -9,15 +9,14 @@ import { Event, Publisher } from 'src/accounts/application/events/integration';
 export class IntegrationEventPublisher implements Publisher {
   private readonly exchange: string;
 
-  private readonly connectionOptions: Options.Connect;
-
   private readonly channel;
 
   constructor() {
     const config = AppService.rabbitMQConfig();
     this.exchange = config.exchange;
-    this.connectionOptions = config;
-    this.channel = connect(config).then(this.createChannel).catch(this.failToConnectRabbitMQ);
+    this.channel = connect(config)
+      .then(this.createChannel)
+      .catch(this.failToConnectRabbitMQ);
   }
 
   async publish(message: Event): Promise<void> {
@@ -28,8 +27,10 @@ export class IntegrationEventPublisher implements Publisher {
     );
   }
 
-  private createChannel(connection: Connection) {
-    return connection => connection.createChannel().then(this.assertExchange);
+  private createChannel(
+    connection: Connection,
+  ): Promise<Replies.AssertExchange> {
+    return connection.createChannel().then(this.assertExchange);
   }
 
   private assertExchange(channel: Channel): Promise<Replies.AssertExchange> {

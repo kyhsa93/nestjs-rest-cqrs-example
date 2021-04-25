@@ -9,8 +9,14 @@ export class RedisAdapter {
 
   constructor() {
     const { master, slave } = AppService.redisClusterConfig();
-    this.master = new Redis(master.port, master.host).on('error', this.failToConnectRedis);
-    this.slave = new Redis(slave.port, slave.host).on('error', this.failToConnectRedis);
+    this.master = new Redis(master.port, master.host).on(
+      'error',
+      this.failToConnectRedis,
+    );
+    this.slave = new Redis(slave.port, slave.host).on(
+      'error',
+      this.failToConnectRedis,
+    );
   }
 
   async set(key: string, value: string): Promise<void> {

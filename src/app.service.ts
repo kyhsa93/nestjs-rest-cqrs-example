@@ -1,4 +1,4 @@
-import { Logger, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
+import { OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { Connection, createConnection } from 'typeorm';
 
 import { Account } from 'src/accounts/infrastructure/entity/account';

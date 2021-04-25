@@ -26,7 +26,6 @@ import { FindAccountByIdResult } from 'src/accounts/application/queries/find-acc
 import { FindAccountsQuery } from 'src/accounts/application/queries/find-accounts.query';
 import { FindAccountsResult } from 'src/accounts/application/queries/find-accounts.result';
 
-
 @Controller('accounts')
 export class AccountsController {
   constructor(readonly commandBus: CommandBus, readonly queryBus: QueryBus) {}
