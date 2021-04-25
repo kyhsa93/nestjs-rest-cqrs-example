@@ -1,6 +1,7 @@
-import { OnModuleDestroy, OnModuleInit } from '@nestjs/common';
-import { Account } from 'src/accounts/infrastructure/entity/account';
+import { Logger, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { Connection, createConnection } from 'typeorm';
+
+import { Account } from 'src/accounts/infrastructure/entity/account';
 
 class DBConfig {
   readonly host: string;
@@ -30,7 +31,7 @@ class RabbitMQConfig {
 }
 
 export class AppService implements OnModuleInit, OnModuleDestroy {
-  private databaseConnection?: Connection;
+  private databaseConnection?: Connection | void;
 
   static port(): number {
     const { PORT } = process.env;
@@ -68,18 +69,17 @@ export class AppService implements OnModuleInit, OnModuleDestroy {
     const entities = [Account];
 
     this.databaseConnection = await createConnection({
-      type: 'mysql',
       ...this.loadDBConfig(),
+      type: 'mysql',
       entities,
-    });
-    if (!this.databaseConnection) this.failToConnectDatabase();
+    }).catch((error: Error) => this.failToConnectDatabase(error));
   }
 
   private loadDBConfig(): DBConfig {
     return {
       host: process.env.DATABASE_HOST || 'localhost',
       port: parseInt(process.env.DATABASE_PORT, 10) || 3306,
-      database: process.env.DATABASE_NAME || 'milkyway',
+      database: process.env.DATABASE_NAME || 'nest',
       username: process.env.DATABASE_USER || 'root',
       password: process.env.DATABASE_PASSWORD || 'test',
       synchronize: 'true' === process.env.DATABASE_SYNC || true,
@@ -87,8 +87,8 @@ export class AppService implements OnModuleInit, OnModuleDestroy {
     };
   }
 
-  private failToConnectDatabase(): void {
-    console.error('Can not get database connection');
+  private failToConnectDatabase(error: Error): void {
+    console.error(error);
     process.exit(1);
   }
 
