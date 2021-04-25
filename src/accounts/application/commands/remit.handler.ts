@@ -1,6 +1,8 @@
 import { Inject, NotFoundException } from '@nestjs/common';
 import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
+
 import { RemitCommand } from 'src/accounts/application/commands/remit.command';
+
 import AccountRepository from 'src/accounts/domain/repository';
 import { AccountDomainService } from 'src/accounts/domain/service';
 
@@ -8,9 +10,9 @@ import { AccountDomainService } from 'src/accounts/domain/service';
 export class RemitHandler implements ICommandHandler<RemitCommand> {
   constructor(
     @Inject('AccountRepositoryImplement')
-    readonly accountRepository: AccountRepository,
-    readonly eventPublisher: EventPublisher,
-    readonly accountDomainService: AccountDomainService,
+    private readonly accountRepository: AccountRepository,
+    private readonly eventPublisher: EventPublisher,
+    private readonly accountDomainService: AccountDomainService,
   ) {}
 
   async execute(command: RemitCommand): Promise<void> {

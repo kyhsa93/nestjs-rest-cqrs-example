@@ -9,8 +9,8 @@ import AccountRepository from 'src/accounts/domain/repository';
 export class WithdrawHandler implements ICommandHandler<WithdrawCommand> {
   constructor(
     @Inject('AccountRepositoryImplement')
-    readonly accountRepository: AccountRepository,
-    readonly eventPublisher: EventPublisher,
+    private readonly accountRepository: AccountRepository,
+    private readonly eventPublisher: EventPublisher,
   ) {}
 
   async execute(command: WithdrawCommand): Promise<void> {

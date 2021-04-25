@@ -10,8 +10,8 @@ export class CloseAccountHandler
   implements ICommandHandler<CloseAccountCommand> {
   constructor(
     @Inject('AccountRepositoryImplement')
-    readonly accountRepository: AccountRepository,
-    readonly eventPublisher: EventPublisher,
+    private readonly accountRepository: AccountRepository,
+    private readonly eventPublisher: EventPublisher,
   ) {}
 
   async execute(command: CloseAccountCommand): Promise<any> {

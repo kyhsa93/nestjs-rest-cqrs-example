@@ -9,8 +9,8 @@ import AccountRepository from 'src/accounts/domain/repository';
 export class DepositHandler implements ICommandHandler<DepositCommand> {
   constructor(
     @Inject('AccountRepositoryImplement')
-    readonly accountRepository: AccountRepository,
-    readonly eventPublisher: EventPublisher,
+    private readonly accountRepository: AccountRepository,
+    private readonly eventPublisher: EventPublisher,
   ) {}
 
   async execute(command: DepositCommand): Promise<any> {

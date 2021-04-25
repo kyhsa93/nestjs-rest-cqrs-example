@@ -3,15 +3,15 @@ import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
 
 import { OpenAccountCommand } from 'src/accounts/application/commands/open-account.command';
 
-import Account from 'src/accounts/domain/account';
+import { Account } from 'src/accounts/domain/account';
 import AccountRepository from 'src/accounts/domain/repository';
 
 @CommandHandler(OpenAccountCommand)
 export class OpenAccountHandler implements ICommandHandler<OpenAccountCommand> {
   constructor(
     @Inject('AccountRepositoryImplement')
-    readonly accountRepository: AccountRepository,
-    readonly eventPublisher: EventPublisher,
+    private readonly accountRepository: AccountRepository,
+    private readonly eventPublisher: EventPublisher,
   ) {}
 
   async execute(command: OpenAccountCommand): Promise<any> {

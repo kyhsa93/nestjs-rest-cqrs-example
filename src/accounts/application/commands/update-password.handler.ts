@@ -1,6 +1,8 @@
 import { Inject, NotFoundException } from '@nestjs/common';
 import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
+
 import { UpdatePasswordCommand } from 'src/accounts/application/commands/update-password.command';
+
 import AccountRepository from 'src/accounts/domain/repository';
 
 @CommandHandler(UpdatePasswordCommand)
@@ -8,8 +10,8 @@ export class UpdatePasswordHandler
   implements ICommandHandler<UpdatePasswordCommand> {
   constructor(
     @Inject('AccountRepositoryImplement')
-    readonly accountRepository: AccountRepository,
-    readonly eventPublisher: EventPublisher,
+    private readonly accountRepository: AccountRepository,
+    private readonly eventPublisher: EventPublisher,
   ) {}
 
   async execute(command: UpdatePasswordCommand): Promise<void> {

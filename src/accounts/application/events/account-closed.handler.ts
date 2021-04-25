@@ -1,13 +1,15 @@
 import { Inject, Logger } from '@nestjs/common';
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
+
 import { Publisher } from 'src/accounts/application/events/integration';
+
 import { AccountClosedEvent } from 'src/accounts/domain/events/account-closed.event';
 
 @EventsHandler(AccountClosedEvent)
 export class AccountClosedHandler implements IEventHandler<AccountClosedEvent> {
   constructor(
-    readonly logger: Logger,
-    @Inject('IntegrationEventPublisher') readonly publisher: Publisher,
+    private readonly logger: Logger,
+    @Inject('IntegrationEventPublisher') private readonly publisher: Publisher,
   ) {}
 
   async handle(event: AccountClosedEvent): Promise<void> {
