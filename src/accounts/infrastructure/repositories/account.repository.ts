@@ -1,7 +1,7 @@
 import { getRepository } from 'typeorm';
 import uuid from 'uuid';
 
-import { Account as AccountEntity } from 'src/accounts/infrastructure/entity/account';
+import { AccountEntity } from 'src/accounts/infrastructure/entity/account.entity';
 
 import { AccountRepository } from 'src/accounts/domain/repository';
 import { Account } from 'src/accounts/domain/account';

@@ -2,7 +2,7 @@ import Redis from 'ioredis';
 
 import { AppService } from 'src/app.service';
 
-export class RedisAdapter {
+export class CacheAdapter {
   private readonly master: Redis.Redis;
 
   private readonly slave: Redis.Redis;

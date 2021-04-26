@@ -1,7 +1,7 @@
 import { getRepository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 
-import { Account as AccountEntity } from 'src/accounts/infrastructure/entity/account';
+import { AccountEntity } from 'src/accounts/infrastructure/entity/account.entity';
 
 import {
   Account,
