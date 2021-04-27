@@ -23,7 +23,7 @@ class RedisClusterConfig {
   readonly slave: RedisConfig;
 }
 
-class RabbitMQConfig {
+export class RabbitMQConfig {
   readonly exchange: string;
   readonly hostname: string;
   readonly username: string;
