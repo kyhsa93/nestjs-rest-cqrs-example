@@ -18,13 +18,15 @@ export class OpenAccountHandler implements ICommandHandler<OpenAccountCommand> {
     const data = new Account({
       id: await this.accountRepository.newId(),
       name: command.name,
-      password: command.password,
+      password: '',
       balance: 0,
       openedAt: new Date(),
       updatedAt: new Date(),
     });
 
     const account = this.eventPublisher.mergeObjectContext(data);
+
+    account.setPassword(command.password);
 
     account.open();
 

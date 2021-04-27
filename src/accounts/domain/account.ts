@@ -1,9 +1,10 @@
 import {
   UnprocessableEntityException,
   UnauthorizedException,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { AggregateRoot } from '@nestjs/cqrs';
-import bcrypt from 'bcrypt';
+import * as bcrypt from 'bcrypt';
 
 import { AccountClosedEvent } from 'src/accounts/domain/events/account-closed.event';
 import { AccountOpenedEvent } from 'src/accounts/domain/events/account-opened.event';
@@ -61,6 +62,14 @@ export class Account extends AggregateRoot {
 
   open(): void {
     this.apply(new AccountOpenedEvent(this.id));
+  }
+
+  setPassword(password: string): void {
+    if (this.password !== '')
+      throw new InternalServerErrorException('Can not set password');
+    const salt = bcrypt.genSaltSync();
+    this.password = bcrypt.hashSync(password, salt);
+    this.updatedAt = new Date();
   }
 
   updatePassword(password: string, data: string): void {
