@@ -7,12 +7,12 @@ import { PasswordUpdatedEvent } from 'src/accounts/domain/events/password-update
 export class PasswordUpdatedHandler
   implements IEventHandler<PasswordUpdatedEvent> {
   constructor(
-    readonly logger: Logger,
-    @Inject('IntegrationEventPublisher') readonly publisher: Publisher,
+    private readonly logger: Logger,
+    @Inject('IntegrationEventPublisher') private readonly publisher: Publisher,
   ) {}
 
   async handle(event: PasswordUpdatedEvent): Promise<void> {
-    this.logger.log(event);
+    this.logger.log(`account password updated: ${JSON.stringify(event)}`);
     await this.publisher.publish({
       subject: 'password.updated',
       data: { ...event },

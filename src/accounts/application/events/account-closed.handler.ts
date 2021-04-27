@@ -13,7 +13,7 @@ export class AccountClosedHandler implements IEventHandler<AccountClosedEvent> {
   ) {}
 
   async handle(event: AccountClosedEvent): Promise<void> {
-    this.logger.log(event);
+    this.logger.log(`account closed: ${JSON.stringify(event)}`);
     await this.publisher.publish({
       subject: 'account.closed',
       data: { ...event },

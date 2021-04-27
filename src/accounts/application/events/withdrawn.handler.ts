@@ -6,12 +6,12 @@ import { WithdrawnEvent } from 'src/accounts/domain/events/withdrawn.event';
 @EventsHandler(WithdrawnEvent)
 export class WithdrawnHandler implements IEventHandler<WithdrawnEvent> {
   constructor(
-    readonly logger: Logger,
-    @Inject('IntegrationEventPublisher') readonly publisher: Publisher,
+    private readonly logger: Logger,
+    @Inject('IntegrationEventPublisher') private readonly publisher: Publisher,
   ) {}
 
   async handle(event: WithdrawnEvent): Promise<void> {
-    this.logger.log(event);
+    this.logger.log(`account withdrawn: ${JSON.stringify(event)}`);
     await this.publisher.publish({
       subject: 'password.updated',
       data: { ...event },

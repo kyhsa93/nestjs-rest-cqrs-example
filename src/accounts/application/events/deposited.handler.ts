@@ -6,12 +6,12 @@ import { DepositedEvent } from 'src/accounts/domain/events/deposited.event';
 @EventsHandler(DepositedEvent)
 export class DepositedHandler implements IEventHandler<DepositedEvent> {
   constructor(
-    readonly logger: Logger,
-    @Inject('IntegrationEventPublisher') readonly publisher: Publisher,
+    private readonly logger: Logger,
+    @Inject('IntegrationEventPublisher') private readonly publisher: Publisher,
   ) {}
 
   async handle(event: DepositedEvent): Promise<void> {
-    this.logger.log(event);
+    this.logger.log(`account deposited: ${JSON.stringify(event)}`);
     await this.publisher.publish({ subject: 'deposited', data: { ...event } });
   }
 }
