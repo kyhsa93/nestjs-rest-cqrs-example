@@ -1,6 +1,6 @@
 import { getRepository } from 'typeorm';
 
-import { AccountEntity } from 'src/accounts/infrastructure/entity/account.entity';
+import { AccountEntity } from 'src/accounts/infrastructure/entities/account.entity';
 
 import { AccountRepository } from 'src/accounts/domain/repository';
 import { Account } from 'src/accounts/domain/account';
