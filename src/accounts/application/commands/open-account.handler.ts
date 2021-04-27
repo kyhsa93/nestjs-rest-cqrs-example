@@ -26,6 +26,8 @@ export class OpenAccountHandler implements ICommandHandler<OpenAccountCommand> {
 
     const account = this.eventPublisher.mergeObjectContext(data);
 
+    account.open();
+
     await this.accountRepository.save(account);
 
     account.commit();

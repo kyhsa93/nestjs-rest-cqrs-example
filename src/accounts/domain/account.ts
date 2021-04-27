@@ -6,6 +6,7 @@ import { AggregateRoot } from '@nestjs/cqrs';
 import bcrypt from 'bcrypt';
 
 import { AccountClosedEvent } from 'src/accounts/domain/events/account-closed.event';
+import { AccountOpenedEvent } from 'src/accounts/domain/events/account-opened.event';
 import { DepositedEvent } from 'src/accounts/domain/events/deposited.event';
 import { PasswordUpdatedEvent } from 'src/accounts/domain/events/password-updated.event';
 import { WithdrawnEvent } from 'src/accounts/domain/events/withdrawn.event';
@@ -56,6 +57,10 @@ export class Account extends AggregateRoot {
       updatedAt: this.updatedAt,
       closedAt: this.closedAt,
     };
+  }
+
+  open(): void {
+    this.apply(new AccountOpenedEvent(this.id));
   }
 
   updatePassword(password: string, data: string): void {
