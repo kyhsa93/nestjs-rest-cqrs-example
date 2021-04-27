@@ -27,6 +27,8 @@
     "@nestjs/platform-express": "^7.5.1",
     "amqplib": "^0.7.1",
     "bcrypt": "^5.0.1",
+    "class-transformer": "^0.4.0",
+    "class-validator": "^0.13.1",
     "ioredis": "^4.26.0",
     "mysql": "^2.18.1",
     "reflect-metadata": "^0.1.13",
