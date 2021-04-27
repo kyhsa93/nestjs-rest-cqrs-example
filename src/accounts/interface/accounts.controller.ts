@@ -15,6 +15,7 @@ import { FindAccountsDTO } from 'src/accounts/interface/dto/find-accounts.dto';
 import { OpenAccountDTO } from 'src/accounts/interface/dto/open-account.dto';
 import { UpdatePasswordDTO } from 'src/accounts/interface/dto/update-password.dto';
 import { WithdrawDTO } from 'src/accounts/interface/dto/withdraw.dto';
+import { RemitDTO } from 'src/accounts/interface/dto/remit.dto';
 
 import { CloseAccountCommand } from 'src/accounts/application/commands/close-account.command';
 import { DepositCommand } from 'src/accounts/application/commands/deposit.command';
@@ -25,6 +26,7 @@ import { FindAccountByIdQuery } from 'src/accounts/application/queries/find-acco
 import { FindAccountByIdResult } from 'src/accounts/application/queries/find-account-by-id.result';
 import { FindAccountsQuery } from 'src/accounts/application/queries/find-accounts.query';
 import { FindAccountsResult } from 'src/accounts/application/queries/find-accounts.result';
+import { RemitCommand } from 'src/accounts/application/commands/remit.command';
 
 @Controller('accounts')
 export class AccountsController {
@@ -51,6 +53,17 @@ export class AccountsController {
     @Body() dto: DepositDTO,
   ): Promise<void> {
     const command = new DepositCommand(id, dto.password, dto.amount);
+    await this.commandBus.execute(command);
+  }
+
+  @Post('/:id/remit')
+  async remit(@Param('id') id: string, @Body() dto: RemitDTO): Promise<void> {
+    const command = new RemitCommand(
+      id,
+      dto.receiverId,
+      dto.amount,
+      dto.password,
+    );
     await this.commandBus.execute(command);
   }
 
