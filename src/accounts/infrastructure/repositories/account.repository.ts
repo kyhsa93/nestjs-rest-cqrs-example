@@ -1,5 +1,4 @@
 import { getRepository } from 'typeorm';
-import uuid from 'uuid';
 
 import { AccountEntity } from 'src/accounts/infrastructure/entity/account.entity';
 
@@ -9,7 +8,8 @@ import { Account } from 'src/accounts/domain/account';
 export class AccountRepositoryImplement implements AccountRepository {
   async newId(): Promise<string> {
     const emptyEntity = new AccountEntity();
-    emptyEntity.name = uuid.v1();
+    emptyEntity.name = '';
+    emptyEntity.password = '';
     emptyEntity.balance = 0;
     emptyEntity.openedAt = new Date();
     emptyEntity.updatedAt = new Date();
