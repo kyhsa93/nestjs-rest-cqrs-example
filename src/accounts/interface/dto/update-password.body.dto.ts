@@ -1,6 +1,6 @@
-import { IsNotEmpty, IsString } from "class-validator";
+import { IsNotEmpty, IsString } from 'class-validator';
 
-export class UpdatePasswordDTO {
+export class UpdatePasswordBodyDTO {
   @IsString()
   @IsNotEmpty()
   readonly current: string;

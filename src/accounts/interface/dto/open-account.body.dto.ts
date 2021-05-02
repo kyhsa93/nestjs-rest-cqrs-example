@@ -1,6 +1,6 @@
-import { IsNotEmpty, IsString } from "class-validator";
+import { IsNotEmpty, IsString } from 'class-validator';
 
-export class OpenAccountDTO {
+export class OpenAccountBodyDTO {
   @IsString()
   @IsNotEmpty()
   readonly name: string;
