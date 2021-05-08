@@ -9,6 +9,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
+import { ApiTags } from '@nestjs/swagger';
 
 import { DepositBodyDTO } from 'src/accounts/interface/dto/deposit.body.dto';
 import { FindAccountsQueryDTO } from 'src/accounts/interface/dto/find-accounts.query.dto';
@@ -35,6 +36,7 @@ import { FindAccountsQuery } from 'src/accounts/application/queries/find-account
 import { FindAccountsResult } from 'src/accounts/application/queries/find-accounts.result';
 import { RemitCommand } from 'src/accounts/application/commands/remit.command';
 
+@ApiTags('Accounts')
 @Controller('accounts')
 export class AccountsController {
   constructor(readonly commandBus: CommandBus, readonly queryBus: QueryBus) {}
