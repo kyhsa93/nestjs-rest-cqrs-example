@@ -12,7 +12,7 @@ export class RemitHandler implements ICommandHandler<RemitCommand, void> {
     @Inject('AccountRepositoryImplement')
     private readonly accountRepository: AccountRepository,
     private readonly eventPublisher: EventPublisher,
-    private readonly AccountService: AccountService,
+    private readonly accountService: AccountService,
   ) {}
 
   async execute(command: RemitCommand): Promise<void> {
@@ -29,7 +29,7 @@ export class RemitHandler implements ICommandHandler<RemitCommand, void> {
     const receiver = this.eventPublisher.mergeObjectContext(receiverData);
 
     const { password, amount } = command;
-    this.AccountService.remit({ sender, receiver, password, amount });
+    this.accountService.remit({ sender, receiver, password, amount });
 
     await this.accountRepository.save([receiver, sender]);
 

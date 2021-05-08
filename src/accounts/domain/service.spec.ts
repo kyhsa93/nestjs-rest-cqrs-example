@@ -1,7 +1,7 @@
-import { Account } from "src/accounts/domain/account";
-import { DepositedEvent } from "src/accounts/domain/events/deposited.event";
-import { WithdrawnEvent } from "src/accounts/domain/events/withdrawn.event";
-import { AccountService, RemittanceOptions } from "src/accounts/domain/service";
+import { Account } from 'src/accounts/domain/account';
+import { DepositedEvent } from 'src/accounts/domain/events/deposited.event';
+import { WithdrawnEvent } from 'src/accounts/domain/events/withdrawn.event';
+import { AccountService, RemittanceOptions } from 'src/accounts/domain/service';
 
 describe('AccountService', () => {
   describe('remit', () => {
@@ -28,11 +28,20 @@ describe('AccountService', () => {
       });
       receiver.setPassword('receiverPassword');
 
-      const options: RemittanceOptions = { sender, receiver, password: 'senderPassword', amount: 1 }
+      const options: RemittanceOptions = {
+        sender,
+        receiver,
+        password: 'senderPassword',
+        amount: 1,
+      };
 
       expect(service.remit(options)).toEqual(undefined);
-      expect(sender.getUncommittedEvents()).toEqual([new WithdrawnEvent('senderId')]);
-      expect(receiver.getUncommittedEvents()).toEqual([new DepositedEvent('receiverId')]);
-    })
+      expect(sender.getUncommittedEvents()).toEqual([
+        new WithdrawnEvent('senderId'),
+      ]);
+      expect(receiver.getUncommittedEvents()).toEqual([
+        new DepositedEvent('receiverId'),
+      ]);
+    });
   });
 });
