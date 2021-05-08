@@ -13,7 +13,7 @@ export class WithdrawnHandler implements IEventHandler<WithdrawnEvent> {
   async handle(event: WithdrawnEvent): Promise<void> {
     this.logger.log(`account withdrawn: ${JSON.stringify(event)}`);
     await this.publisher.publish({
-      subject: 'password.updated',
+      subject: 'withdrawn',
       data: { ...event },
     });
   }
