@@ -93,8 +93,7 @@ export class Account extends AggregateRoot {
     this.apply(new WithdrawnEvent(this.id));
   }
 
-  deposit(amount: number, password: string): void {
-    if (!this.comparePassword(password)) throw new UnauthorizedException();
+  deposit(amount: number): void {
     if (amount < 1)
       throw new InternalServerErrorException('Can not deposit under 1');
     this.balance += amount;

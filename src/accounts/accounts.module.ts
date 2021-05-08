@@ -22,7 +22,7 @@ import { WithdrawnHandler } from 'src/accounts/application/events/withdrawn.hand
 import { FindAccountByIdHandler } from 'src/accounts/application/queries/find-account-by-id.handler';
 import { FindAccountsHandler } from 'src/accounts/application/queries/find-accounts.handler';
 
-import { AccountDomainService } from 'src/accounts/domain/service';
+import { AccountService } from 'src/accounts/domain/service';
 
 const infrastructure = [
   AccountRepositoryImplement,
@@ -47,7 +47,7 @@ const application = [
   FindAccountsHandler,
 ];
 
-const domain = [AccountDomainService];
+const domain = [AccountService];
 
 @Module({
   imports: [CqrsModule],

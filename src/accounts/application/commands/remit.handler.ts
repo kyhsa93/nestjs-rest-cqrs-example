@@ -4,7 +4,7 @@ import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
 import { RemitCommand } from 'src/accounts/application/commands/remit.command';
 
 import { AccountRepository } from 'src/accounts/domain/repository';
-import { AccountDomainService } from 'src/accounts/domain/service';
+import { AccountService } from 'src/accounts/domain/service';
 
 @CommandHandler(RemitCommand)
 export class RemitHandler implements ICommandHandler<RemitCommand, void> {
@@ -12,7 +12,7 @@ export class RemitHandler implements ICommandHandler<RemitCommand, void> {
     @Inject('AccountRepositoryImplement')
     private readonly accountRepository: AccountRepository,
     private readonly eventPublisher: EventPublisher,
-    private readonly accountDomainService: AccountDomainService,
+    private readonly AccountService: AccountService,
   ) {}
 
   async execute(command: RemitCommand): Promise<void> {
@@ -29,7 +29,7 @@ export class RemitHandler implements ICommandHandler<RemitCommand, void> {
     const receiver = this.eventPublisher.mergeObjectContext(receiverData);
 
     const { password, amount } = command;
-    this.accountDomainService.remit({ sender, receiver, password, amount });
+    this.AccountService.remit({ sender, receiver, password, amount });
 
     await this.accountRepository.save([receiver, sender]);
 

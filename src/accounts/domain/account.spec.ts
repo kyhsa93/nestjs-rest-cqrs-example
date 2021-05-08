@@ -236,24 +236,6 @@ describe('Account', () => {
   });
 
   describe('deposit', () => {
-    it('should throw UnauthorizedException when password is not matched', () => {
-      const properties: AccountProperties = {
-        id: 'accountId',
-        name: 'test',
-        password: '',
-        balance: 0,
-        openedAt: new Date(),
-        updatedAt: new Date(),
-      };
-
-      const account = new Account(properties);
-      account.setPassword('password');
-
-      expect(() => account.deposit(1, 'wrongPassword')).toThrowError(
-        UnauthorizedException,
-      );
-    });
-
     it('should throw InternalServerErrorException when given amount is under 1', () => {
       const properties: AccountProperties = {
         id: 'accountId',
@@ -267,7 +249,7 @@ describe('Account', () => {
       const account = new Account(properties);
       account.setPassword('password');
 
-      expect(() => account.deposit(0, 'password')).toThrowError(
+      expect(() => account.deposit(0)).toThrowError(
         InternalServerErrorException,
       );
     });
@@ -285,7 +267,7 @@ describe('Account', () => {
       const account = new Account(properties);
       account.setPassword('password');
 
-      account.deposit(1, 'password');
+      account.deposit(1);
 
       expect(account.getUncommittedEvents()).toEqual([
         new DepositedEvent('accountId'),

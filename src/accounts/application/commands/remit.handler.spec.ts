@@ -6,13 +6,13 @@ import { RemitCommand } from 'src/accounts/application/commands/remit.command';
 import { RemitHandler } from 'src/accounts/application/commands/remit.handler';
 
 import { AccountRepository } from 'src/accounts/domain/repository';
-import { AccountDomainService } from 'src/accounts/domain/service';
+import { AccountService } from 'src/accounts/domain/service';
 
 describe('RemitHandler', () => {
   let handler: RemitHandler;
   let repository: AccountRepository;
   let publisher: EventPublisher;
-  let domainService: AccountDomainService;
+  let domainService: AccountService;
 
   beforeEach(async () => {
     const repoProvider: Provider = {
@@ -24,7 +24,7 @@ describe('RemitHandler', () => {
       useValue: {},
     };
     const domainServiceProvider: Provider = {
-      provide: AccountDomainService,
+      provide: AccountService,
       useValue: {},
     };
     const providers: Provider[] = [
@@ -39,7 +39,7 @@ describe('RemitHandler', () => {
     handler = testModule.get(RemitHandler);
     repository = testModule.get('AccountRepositoryImplement');
     publisher = testModule.get(EventPublisher);
-    domainService = testModule.get(AccountDomainService);
+    domainService = testModule.get(AccountService);
   });
 
   describe('execute', () => {
