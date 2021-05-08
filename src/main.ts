@@ -1,16 +1,25 @@
+import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import { InternalServerErrorException, ValidationPipe } from '@nestjs/common';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
-import ApplicationModule from '@src/app.module';
-import { setUp } from '@src/app.service';
+import { AppService } from 'src/app.service';
+import { AppModule } from './app.module';
 
-function throwError(error: Error): never {
-  throw new InternalServerErrorException(error);
+function setupSwagger(app: INestApplication): void {
+  const documentBuilder = new DocumentBuilder()
+    .setTitle('Nest.js example')
+    .setDescription('This is example for nest.js')
+    .setVersion('1.0')
+    .build();
+
+  const document = SwaggerModule.createDocument(app, documentBuilder);
+  SwaggerModule.setup('api', app, document)
 }
 
-async function bootstrap(): Promise<void> {
-  const app = await NestFactory.create(ApplicationModule, { cors: true });
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe());
-  setUp(app).catch(throwError);
+  setupSwagger(app);
+  await app.listen(AppService.port());
 }
 bootstrap();

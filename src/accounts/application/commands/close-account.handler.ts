@@ -1,0 +1,29 @@
+import { Inject, NotFoundException } from '@nestjs/common';
+import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
+
+import { CloseAccountCommand } from 'src/accounts/application/commands/close-account.command';
+
+import { AccountRepository } from 'src/accounts/domain/repository';
+
+@CommandHandler(CloseAccountCommand)
+export class CloseAccountHandler
+  implements ICommandHandler<CloseAccountCommand> {
+  constructor(
+    @Inject('AccountRepositoryImplement')
+    private readonly accountRepository: AccountRepository,
+    private readonly eventPublisher: EventPublisher,
+  ) {}
+
+  async execute(command: CloseAccountCommand): Promise<any> {
+    const data = await this.accountRepository.findById(command.id);
+    if (!data) throw new NotFoundException();
+
+    const account = this.eventPublisher.mergeObjectContext(data);
+
+    account.close(command.password);
+
+    await this.accountRepository.save(account);
+
+    account.commit();
+  }
+}
