@@ -1,4 +1,8 @@
-import { InternalServerErrorException, UnauthorizedException, UnprocessableEntityException } from '@nestjs/common';
+import {
+  InternalServerErrorException,
+  UnauthorizedException,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 
 import { Account, AccountProperties } from 'src/accounts/domain/account';
 import { AccountClosedEvent } from 'src/accounts/domain/events/account-closed.event';
@@ -78,7 +82,9 @@ describe('Account', () => {
 
       const account = new Account(properties);
 
-      expect(() => account.setPassword('')).toThrowError(InternalServerErrorException);
+      expect(() => account.setPassword('')).toThrowError(
+        InternalServerErrorException,
+      );
     });
 
     it('should set password', () => {
@@ -95,10 +101,12 @@ describe('Account', () => {
 
       account.setPassword('password');
 
-      const result = new Account(Object.assign(properties, { updatedAt: expect.anything() }))
+      const result = new Account(
+        Object.assign(properties, { updatedAt: expect.anything() }),
+      );
 
       expect(account).not.toEqual(result);
-    })
+    });
   });
 
   describe('updatePassword', () => {
@@ -115,9 +123,10 @@ describe('Account', () => {
       const account = new Account(properties);
       account.setPassword('password');
 
-      expect(() => account.updatePassword('wrongPassword', 'newPassword'))
-        .toThrowError(UnauthorizedException);
-    })
+      expect(() =>
+        account.updatePassword('wrongPassword', 'newPassword'),
+      ).toThrowError(UnauthorizedException);
+    });
 
     it('should update password', () => {
       const properties: AccountProperties = {
@@ -134,13 +143,17 @@ describe('Account', () => {
 
       account.updatePassword('password', 'newPassword');
 
-      account.getUncommittedEvents()
+      account.getUncommittedEvents();
 
-      expect(() => account.setPassword('data')).toThrowError(InternalServerErrorException);
+      expect(() => account.setPassword('data')).toThrowError(
+        InternalServerErrorException,
+      );
       expect(account.getUncommittedEvents().length).toEqual(1);
-      expect(account.getUncommittedEvents()).toEqual([new PasswordUpdatedEvent('accountId')]);
+      expect(account.getUncommittedEvents()).toEqual([
+        new PasswordUpdatedEvent('accountId'),
+      ]);
       expect(account.updatePassword('newPassword', 'data')).toEqual(undefined);
-    })
+    });
   });
 
   describe('withdraw', () => {
@@ -157,8 +170,10 @@ describe('Account', () => {
       const account = new Account(properties);
       account.setPassword('password');
 
-      expect(() => account.withdraw(0, 'wrongPassword')).toThrowError(UnauthorizedException);
-    })
+      expect(() => account.withdraw(0, 'wrongPassword')).toThrowError(
+        UnauthorizedException,
+      );
+    });
 
     it('should throw InternalServerErrorException when given amount is under 1', () => {
       const properties: AccountProperties = {
@@ -173,8 +188,10 @@ describe('Account', () => {
       const account = new Account(properties);
       account.setPassword('password');
 
-      expect(() => account.withdraw(0, 'password')).toThrowError(InternalServerErrorException);
-    })
+      expect(() => account.withdraw(0, 'password')).toThrowError(
+        InternalServerErrorException,
+      );
+    });
 
     it('should throw UnprocessableEntityException when given amount is over account balance', () => {
       const properties: AccountProperties = {
@@ -189,8 +206,10 @@ describe('Account', () => {
       const account = new Account(properties);
       account.setPassword('password');
 
-      expect(() => account.withdraw(2, 'password')).toThrowError(UnprocessableEntityException);
-    })
+      expect(() => account.withdraw(2, 'password')).toThrowError(
+        UnprocessableEntityException,
+      );
+    });
 
     it('should withdraw from account', () => {
       const properties: AccountProperties = {
@@ -207,9 +226,13 @@ describe('Account', () => {
 
       account.withdraw(1, 'password');
 
-      expect(account.getUncommittedEvents()).toEqual([new WithdrawnEvent('accountId')]);
-      expect(() => account.withdraw(1, 'password')).toThrowError(UnprocessableEntityException);
-    })
+      expect(account.getUncommittedEvents()).toEqual([
+        new WithdrawnEvent('accountId'),
+      ]);
+      expect(() => account.withdraw(1, 'password')).toThrowError(
+        UnprocessableEntityException,
+      );
+    });
   });
 
   describe('deposit', () => {
@@ -226,8 +249,10 @@ describe('Account', () => {
       const account = new Account(properties);
       account.setPassword('password');
 
-      expect(() => account.deposit(1, 'wrongPassword')).toThrowError(UnauthorizedException);
-    })
+      expect(() => account.deposit(1, 'wrongPassword')).toThrowError(
+        UnauthorizedException,
+      );
+    });
 
     it('should throw InternalServerErrorException when given amount is under 1', () => {
       const properties: AccountProperties = {
@@ -242,8 +267,10 @@ describe('Account', () => {
       const account = new Account(properties);
       account.setPassword('password');
 
-      expect(() => account.deposit(0, 'password')).toThrowError(InternalServerErrorException);
-    })
+      expect(() => account.deposit(0, 'password')).toThrowError(
+        InternalServerErrorException,
+      );
+    });
 
     it('should deposit to account', () => {
       const properties: AccountProperties = {
@@ -259,10 +286,12 @@ describe('Account', () => {
       account.setPassword('password');
 
       account.deposit(1, 'password');
-      
-      expect(account.getUncommittedEvents()).toEqual([new DepositedEvent('accountId')]);
+
+      expect(account.getUncommittedEvents()).toEqual([
+        new DepositedEvent('accountId'),
+      ]);
       expect(account.withdraw(1, 'password')).toEqual(undefined);
-    })
+    });
   });
 
   describe('close', () => {
@@ -279,8 +308,10 @@ describe('Account', () => {
       const account = new Account(properties);
       account.setPassword('password');
 
-      expect(() => account.close('wrongPassword')).toThrowError(UnauthorizedException);
-    })
+      expect(() => account.close('wrongPassword')).toThrowError(
+        UnauthorizedException,
+      );
+    });
 
     it('should throw UnprocessableEntityException when account balance is over 0', () => {
       const properties: AccountProperties = {
@@ -295,8 +326,10 @@ describe('Account', () => {
       const account = new Account(properties);
       account.setPassword('password');
 
-      expect(() => account.close('password')).toThrowError(UnprocessableEntityException);
-    })
+      expect(() => account.close('password')).toThrowError(
+        UnprocessableEntityException,
+      );
+    });
 
     it('should close account', () => {
       const properties: AccountProperties = {
@@ -313,7 +346,9 @@ describe('Account', () => {
 
       account.close('password');
 
-      expect(account.getUncommittedEvents()).toEqual([new AccountClosedEvent('accountId')]);
-    })
+      expect(account.getUncommittedEvents()).toEqual([
+        new AccountClosedEvent('accountId'),
+      ]);
+    });
   });
 });

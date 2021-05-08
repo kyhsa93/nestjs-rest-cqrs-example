@@ -7,14 +7,14 @@ import { AccountRepository } from 'src/accounts/domain/repository';
 
 @CommandHandler(CloseAccountCommand)
 export class CloseAccountHandler
-  implements ICommandHandler<CloseAccountCommand> {
+  implements ICommandHandler<CloseAccountCommand, void> {
   constructor(
     @Inject('AccountRepositoryImplement')
     private readonly accountRepository: AccountRepository,
     private readonly eventPublisher: EventPublisher,
   ) {}
 
-  async execute(command: CloseAccountCommand): Promise<any> {
+  async execute(command: CloseAccountCommand): Promise<void> {
     const data = await this.accountRepository.findById(command.id);
     if (!data) throw new NotFoundException();
 

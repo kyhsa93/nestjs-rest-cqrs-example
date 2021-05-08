@@ -7,14 +7,15 @@ import { Account } from 'src/accounts/domain/account';
 import { AccountRepository } from 'src/accounts/domain/repository';
 
 @CommandHandler(OpenAccountCommand)
-export class OpenAccountHandler implements ICommandHandler<OpenAccountCommand> {
+export class OpenAccountHandler
+  implements ICommandHandler<OpenAccountCommand, void> {
   constructor(
     @Inject('AccountRepositoryImplement')
     private readonly accountRepository: AccountRepository,
     private readonly eventPublisher: EventPublisher,
   ) {}
 
-  async execute(command: OpenAccountCommand): Promise<any> {
+  async execute(command: OpenAccountCommand): Promise<void> {
     const data = new Account({
       id: await this.accountRepository.newId(),
       name: command.name,

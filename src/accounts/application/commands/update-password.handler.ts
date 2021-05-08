@@ -7,7 +7,7 @@ import { AccountRepository } from 'src/accounts/domain/repository';
 
 @CommandHandler(UpdatePasswordCommand)
 export class UpdatePasswordHandler
-  implements ICommandHandler<UpdatePasswordCommand> {
+  implements ICommandHandler<UpdatePasswordCommand, void> {
   constructor(
     @Inject('AccountRepositoryImplement')
     private readonly accountRepository: AccountRepository,

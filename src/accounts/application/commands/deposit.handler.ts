@@ -6,14 +6,14 @@ import { DepositCommand } from 'src/accounts/application/commands/deposit.comman
 import { AccountRepository } from 'src/accounts/domain/repository';
 
 @CommandHandler(DepositCommand)
-export class DepositHandler implements ICommandHandler<DepositCommand> {
+export class DepositHandler implements ICommandHandler<DepositCommand, void> {
   constructor(
     @Inject('AccountRepositoryImplement')
     private readonly accountRepository: AccountRepository,
     private readonly eventPublisher: EventPublisher,
   ) {}
 
-  async execute(command: DepositCommand): Promise<any> {
+  async execute(command: DepositCommand): Promise<void> {
     const data = await this.accountRepository.findById(command.id);
     if (!data) throw new NotFoundException();
 

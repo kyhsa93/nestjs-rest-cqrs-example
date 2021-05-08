@@ -7,7 +7,7 @@ import { AccountRepository } from 'src/accounts/domain/repository';
 import { AccountDomainService } from 'src/accounts/domain/service';
 
 @CommandHandler(RemitCommand)
-export class RemitHandler implements ICommandHandler<RemitCommand> {
+export class RemitHandler implements ICommandHandler<RemitCommand, void> {
   constructor(
     @Inject('AccountRepositoryImplement')
     private readonly accountRepository: AccountRepository,

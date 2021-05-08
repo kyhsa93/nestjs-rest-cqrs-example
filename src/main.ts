@@ -13,7 +13,7 @@ function setupSwagger(app: INestApplication): void {
     .build();
 
   const document = SwaggerModule.createDocument(app, documentBuilder);
-  SwaggerModule.setup('api', app, document)
+  SwaggerModule.setup('api', app, document);
 }
 
 async function bootstrap() {

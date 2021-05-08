@@ -6,7 +6,7 @@ import { WithdrawCommand } from 'src/accounts/application/commands/withdraw.comm
 import { AccountRepository } from 'src/accounts/domain/repository';
 
 @CommandHandler(WithdrawCommand)
-export class WithdrawHandler implements ICommandHandler<WithdrawCommand> {
+export class WithdrawHandler implements ICommandHandler<WithdrawCommand, void> {
   constructor(
     @Inject('AccountRepositoryImplement')
     private readonly accountRepository: AccountRepository,
