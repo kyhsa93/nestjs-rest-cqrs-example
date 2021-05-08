@@ -19,7 +19,7 @@ export class DepositHandler implements ICommandHandler<DepositCommand, void> {
 
     const account = this.eventPublisher.mergeObjectContext(data);
 
-    account.deposit(command.amount, command.password);
+    account.deposit(command.amount);
 
     await this.accountRepository.save(account);
 
