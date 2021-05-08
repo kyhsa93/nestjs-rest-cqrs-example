@@ -12,7 +12,7 @@ import { DepositedEvent } from 'src/accounts/domain/events/deposited.event';
 import { PasswordUpdatedEvent } from 'src/accounts/domain/events/password-updated.event';
 import { WithdrawnEvent } from 'src/accounts/domain/events/withdrawn.event';
 
-export interface AccountAttributes {
+export interface AccountProperties {
   readonly id: string;
   readonly name: string;
   readonly password: string;
@@ -37,18 +37,18 @@ export class Account extends AggregateRoot {
 
   private closedAt?: Date;
 
-  constructor(attributes: AccountAttributes) {
+  constructor(properties: AccountProperties) {
     super();
-    this.id = attributes.id;
-    this.name = attributes.name;
-    this.password = attributes.password;
-    this.balance = attributes.balance;
-    this.openedAt = attributes.openedAt;
-    this.updatedAt = attributes.updatedAt;
-    this.closedAt = attributes.closedAt;
+    this.id = properties.id;
+    this.name = properties.name;
+    this.password = properties.password;
+    this.balance = properties.balance;
+    this.openedAt = properties.openedAt;
+    this.updatedAt = properties.updatedAt;
+    this.closedAt = properties.closedAt;
   }
 
-  attributes(): AccountAttributes {
+  properties(): AccountProperties {
     return {
       id: this.id,
       name: this.name,
@@ -65,7 +65,7 @@ export class Account extends AggregateRoot {
   }
 
   setPassword(password: string): void {
-    if (this.password !== '')
+    if (this.password !== '' || password === '')
       throw new InternalServerErrorException('Can not set password');
     const salt = bcrypt.genSaltSync();
     this.password = bcrypt.hashSync(password, salt);
@@ -83,8 +83,8 @@ export class Account extends AggregateRoot {
 
   withdraw(amount: number, password: string): void {
     if (!this.comparePassword(password)) throw new UnauthorizedException();
-    if (amount < 0)
-      throw new UnprocessableEntityException('Can not withdraw under 0');
+    if (amount < 1)
+      throw new InternalServerErrorException('Can not withdraw under 1');
     if (this.balance < amount)
       throw new UnprocessableEntityException(
         'Requested amount exceeds your withdrawal limit',
@@ -95,8 +95,8 @@ export class Account extends AggregateRoot {
 
   deposit(amount: number, password: string): void {
     if (!this.comparePassword(password)) throw new UnauthorizedException();
-    if (amount < 0)
-      throw new UnprocessableEntityException('Can not deposit under 0');
+    if (amount < 1)
+      throw new InternalServerErrorException('Can not deposit under 1');
     this.balance += amount;
     this.apply(new DepositedEvent(this.id));
   }

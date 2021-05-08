@@ -34,8 +34,8 @@ export class AccountRepositoryImplement implements AccountRepository {
   }
 
   private modelToEntity(model: Account): AccountEntity {
-    const attributes = model.attributes();
-    return { ...attributes };
+    const properties = model.properties();
+    return { ...properties };
   }
 
   private entityToModel(entity: AccountEntity): Account {
