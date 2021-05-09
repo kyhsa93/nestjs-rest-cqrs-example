@@ -90,6 +90,7 @@ export class Account extends AggregateRoot {
         'Requested amount exceeds your withdrawal limit',
       );
     this.balance -= amount;
+    this.updatedAt = new Date();
     this.apply(Object.assign(new WithdrawnEvent(), this));
   }
 
@@ -97,6 +98,7 @@ export class Account extends AggregateRoot {
     if (amount < 1)
       throw new InternalServerErrorException('Can not deposit under 1');
     this.balance += amount;
+    this.updatedAt = new Date();
     this.apply(Object.assign(new DepositedEvent(), this));
   }
 
@@ -105,6 +107,7 @@ export class Account extends AggregateRoot {
     if (this.balance > 0)
       throw new UnprocessableEntityException('Account balance is remained');
     this.closedAt = new Date();
+    this.updatedAt = new Date();
     this.apply(Object.assign(new AccountClosedEvent(), this));
   }
 
