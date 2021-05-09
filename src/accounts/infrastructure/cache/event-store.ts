@@ -2,7 +2,9 @@ import Redis from 'ioredis';
 
 import { AppService } from 'src/app.service';
 
-export class CacheAdapter {
+import { Event, EventStore } from 'src/accounts/application/events/integration';
+
+export class EventStoreImplement implements EventStore {
   private readonly master: Redis.Redis;
 
   private readonly slave: Redis.Redis;
@@ -17,6 +19,9 @@ export class CacheAdapter {
       'error',
       this.failToConnectRedis,
     );
+  }
+  async save(event: Event): Promise<void> {
+    await this.master.set(event.data.id, JSON.stringify(event.data));
   }
 
   async set(key: string, value: string): Promise<void> {

@@ -61,7 +61,7 @@ export class Account extends AggregateRoot {
   }
 
   open(): void {
-    this.apply(new AccountOpenedEvent(this.id));
+    this.apply(Object.assign(new AccountOpenedEvent(), this));
   }
 
   setPassword(password: string): void {
@@ -78,7 +78,7 @@ export class Account extends AggregateRoot {
     this.updatedAt = new Date();
     const salt = bcrypt.genSaltSync();
     this.password = bcrypt.hashSync(data, salt);
-    this.apply(new PasswordUpdatedEvent(this.id));
+    this.apply(Object.assign(new PasswordUpdatedEvent(), this));
   }
 
   withdraw(amount: number, password: string): void {
@@ -90,14 +90,14 @@ export class Account extends AggregateRoot {
         'Requested amount exceeds your withdrawal limit',
       );
     this.balance -= amount;
-    this.apply(new WithdrawnEvent(this.id));
+    this.apply(Object.assign(new WithdrawnEvent(), this));
   }
 
   deposit(amount: number): void {
     if (amount < 1)
       throw new InternalServerErrorException('Can not deposit under 1');
     this.balance += amount;
-    this.apply(new DepositedEvent(this.id));
+    this.apply(Object.assign(new DepositedEvent(), this));
   }
 
   close(password: string): void {
@@ -105,7 +105,7 @@ export class Account extends AggregateRoot {
     if (this.balance > 0)
       throw new UnprocessableEntityException('Account balance is remained');
     this.closedAt = new Date();
-    this.apply(new AccountClosedEvent(this.id));
+    this.apply(Object.assign(new AccountClosedEvent(), this));
   }
 
   private comparePassword(password: string): boolean {

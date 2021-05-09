@@ -1,8 +1,8 @@
 import { Logger, Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 
-import { CacheAdapter } from 'src/accounts/infrastructure/cache/cache.adapter';
-import { IntegrationEventPublisher } from 'src/accounts/infrastructure/message/integration-event.publisher';
+import { EventStoreImplement } from 'src/accounts/infrastructure/cache/event-store';
+import { IntegrationEventPublisherImplement } from 'src/accounts/infrastructure/message/integration-event.publisher';
 import { AccountQueryImplement } from 'src/accounts/infrastructure/queries/account.query';
 import { AccountRepositoryImplement } from 'src/accounts/infrastructure/repositories/account.repository';
 
@@ -26,8 +26,8 @@ import { AccountService } from 'src/accounts/domain/service';
 
 const infrastructure = [
   AccountRepositoryImplement,
-  CacheAdapter,
-  IntegrationEventPublisher,
+  EventStoreImplement,
+  IntegrationEventPublisherImplement,
   AccountQueryImplement,
 ];
 

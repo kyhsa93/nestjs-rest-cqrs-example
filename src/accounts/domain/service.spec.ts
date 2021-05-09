@@ -37,10 +37,10 @@ describe('AccountService', () => {
 
       expect(service.remit(options)).toEqual(undefined);
       expect(sender.getUncommittedEvents()).toEqual([
-        new WithdrawnEvent('senderId'),
+        Object.assign(new WithdrawnEvent(), sender),
       ]);
       expect(receiver.getUncommittedEvents()).toEqual([
-        new DepositedEvent('receiverId'),
+        Object.assign(new DepositedEvent(), receiver),
       ]);
     });
   });

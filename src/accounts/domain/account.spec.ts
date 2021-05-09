@@ -48,7 +48,7 @@ describe('Account', () => {
 
       const result = account.getUncommittedEvents();
 
-      expect(result).toEqual([new AccountOpenedEvent('accountId')]);
+      expect(result).toEqual([Object.assign(new AccountOpenedEvent(), account)]);
     });
   });
 
@@ -150,7 +150,7 @@ describe('Account', () => {
       );
       expect(account.getUncommittedEvents().length).toEqual(1);
       expect(account.getUncommittedEvents()).toEqual([
-        new PasswordUpdatedEvent('accountId'),
+        Object.assign(new PasswordUpdatedEvent(), account),
       ]);
       expect(account.updatePassword('newPassword', 'data')).toEqual(undefined);
     });
@@ -227,7 +227,7 @@ describe('Account', () => {
       account.withdraw(1, 'password');
 
       expect(account.getUncommittedEvents()).toEqual([
-        new WithdrawnEvent('accountId'),
+        Object.assign(new WithdrawnEvent(), account),
       ]);
       expect(() => account.withdraw(1, 'password')).toThrowError(
         UnprocessableEntityException,
@@ -270,7 +270,7 @@ describe('Account', () => {
       account.deposit(1);
 
       expect(account.getUncommittedEvents()).toEqual([
-        new DepositedEvent('accountId'),
+        Object.assign(new DepositedEvent(), account),
       ]);
       expect(account.withdraw(1, 'password')).toEqual(undefined);
     });
@@ -329,7 +329,7 @@ describe('Account', () => {
       account.close('password');
 
       expect(account.getUncommittedEvents()).toEqual([
-        new AccountClosedEvent('accountId'),
+        Object.assign(new AccountClosedEvent(), account),
       ]);
     });
   });
