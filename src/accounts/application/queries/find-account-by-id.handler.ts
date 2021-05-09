@@ -1,4 +1,4 @@
-import { Inject, InternalServerErrorException } from '@nestjs/common';
+import { Inject, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 
 import { AccountQuery } from 'src/accounts/application/queries/account.query';
@@ -7,13 +7,14 @@ import { FindAccountByIdResult } from 'src/accounts/application/queries/find-acc
 
 @QueryHandler(FindAccountByIdQuery)
 export class FindAccountByIdHandler
-  implements IQueryHandler<FindAccountByIdQuery> {
+  implements IQueryHandler<FindAccountByIdQuery, FindAccountByIdResult> {
   constructor(
     @Inject('AccountQueryImplement') readonly accountQuery: AccountQuery,
   ) {}
 
   async execute(query: FindAccountByIdQuery): Promise<FindAccountByIdResult> {
     const data = await this.accountQuery.findById(query.id);
+    if(!data) throw new NotFoundException();
     const dataKeys = Object.keys(data);
     const resultKeys = Object.keys(new FindAccountByIdResult());
 
