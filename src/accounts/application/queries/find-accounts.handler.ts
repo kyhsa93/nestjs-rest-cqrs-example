@@ -12,7 +12,8 @@ import {
 } from 'src/accounts/application/queries/find-accounts.result';
 
 @QueryHandler(FindAccountsQuery)
-export class FindAccountsHandler implements IQueryHandler<FindAccountsQuery, FindAccountsResult> {
+export class FindAccountsHandler
+  implements IQueryHandler<FindAccountsQuery, FindAccountsResult> {
   constructor(
     @Inject('AccountQueryImplement') readonly accountQuery: AccountQuery,
   ) {}
