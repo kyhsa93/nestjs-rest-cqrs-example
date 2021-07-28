@@ -4,6 +4,7 @@ import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
 import { CloseAccountCommand } from 'src/accounts/application/commands/close-account.command';
 import { InjectionToken } from 'src/accounts/application/injection.token';
 
+import { ErrorMessage } from 'src/accounts/domain/error';
 import { AccountRepository } from 'src/accounts/domain/repository';
 
 @CommandHandler(CloseAccountCommand)
@@ -18,7 +19,7 @@ export class CloseAccountHandler
 
   async execute(command: CloseAccountCommand): Promise<void> {
     const data = await this.accountRepository.findById(command.id);
-    if (!data) throw new NotFoundException();
+    if (!data) throw new NotFoundException(ErrorMessage.ACCOUNT_IS_NOT_FOUND);
 
     const account = this.eventPublisher.mergeObjectContext(data);
 

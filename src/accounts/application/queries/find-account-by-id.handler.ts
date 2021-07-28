@@ -9,6 +9,8 @@ import { AccountQuery } from 'src/accounts/application/queries/account.query';
 import { FindAccountByIdQuery } from 'src/accounts/application/queries/find-account-by-id.query';
 import { FindAccountByIdResult } from 'src/accounts/application/queries/find-account-by-id.result';
 
+import { ErrorMessage } from 'src/accounts/domain/error';
+
 @QueryHandler(FindAccountByIdQuery)
 export class FindAccountByIdHandler
   implements IQueryHandler<FindAccountByIdQuery, FindAccountByIdResult>
@@ -19,7 +21,7 @@ export class FindAccountByIdHandler
 
   async execute(query: FindAccountByIdQuery): Promise<FindAccountByIdResult> {
     const data = await this.accountQuery.findById(query.id);
-    if (!data) throw new NotFoundException();
+    if (!data) throw new NotFoundException(ErrorMessage.ACCOUNT_IS_NOT_FOUND);
     const dataKeys = Object.keys(data);
     const resultKeys = Object.keys(new FindAccountByIdResult());
 
