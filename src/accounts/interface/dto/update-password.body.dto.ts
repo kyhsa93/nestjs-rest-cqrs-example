@@ -1,14 +1,16 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsString, MaxLength, MinLength } from 'class-validator';
 
 export class UpdatePasswordBodyDTO {
   @IsString()
-  @IsNotEmpty()
-  @ApiProperty()
+  @MinLength(8)
+  @MaxLength(20)
+  @ApiProperty({ minLength: 8, maxLength: 20 })
   readonly current: string;
 
   @IsString()
-  @IsNotEmpty()
-  @ApiProperty()
+  @MinLength(8)
+  @MaxLength(20)
+  @ApiProperty({ minLength: 8, maxLength: 20 })
   readonly data: string;
 }

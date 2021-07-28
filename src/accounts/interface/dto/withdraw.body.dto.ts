@@ -1,16 +1,17 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsInt, IsNotEmpty, IsString, Min } from 'class-validator';
+import { IsInt, IsString, MaxLength, Min, MinLength } from 'class-validator';
 
 export class WithdrawBodyDTO {
   @IsString()
-  @IsNotEmpty()
-  @ApiProperty()
+  @MinLength(8)
+  @MaxLength(20)
+  @ApiProperty({ minLength: 8, maxLength: 20 })
   readonly password: string;
 
   @Type(() => Number)
   @IsInt()
   @Min(1)
-  @ApiProperty()
+  @ApiProperty({ minimum: 1 })
   readonly amount: number;
 }

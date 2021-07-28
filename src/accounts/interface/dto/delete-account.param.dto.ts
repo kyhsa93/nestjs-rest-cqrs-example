@@ -1,9 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsUUID } from 'class-validator';
 
 export class DeleteAccountParamDTO {
-  @IsString()
-  @IsNotEmpty()
-  @ApiProperty()
+  @IsUUID()
+  @ApiProperty({ format: 'uuid' })
   readonly id: string;
 }
