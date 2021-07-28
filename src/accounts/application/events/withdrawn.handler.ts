@@ -4,6 +4,7 @@ import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 import {
   EventStore,
   IntegrationEventPublisher,
+  IntegrationEventSubject,
 } from 'src/accounts/application/events/integration';
 
 import { WithdrawnEvent } from 'src/accounts/domain/events/withdrawn.event';
@@ -18,11 +19,16 @@ export class WithdrawnHandler implements IEventHandler<WithdrawnEvent> {
   ) {}
 
   async handle(event: WithdrawnEvent): Promise<void> {
-    this.logger.log(`account withdrawn: ${JSON.stringify(event)}`);
+    this.logger.log(
+      `${IntegrationEventSubject.WITHDRAWN}: ${JSON.stringify(event)}`,
+    );
     await this.publisher.publish({
-      subject: 'withdrawn',
+      subject: IntegrationEventSubject.WITHDRAWN,
       data: { id: event.id },
     });
-    await this.eventStore.save({ subject: 'account withdrawn', data: event });
+    await this.eventStore.save({
+      subject: IntegrationEventSubject.WITHDRAWN,
+      data: event,
+    });
   }
 }

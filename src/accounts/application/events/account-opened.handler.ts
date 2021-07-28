@@ -4,6 +4,7 @@ import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 import {
   EventStore,
   IntegrationEventPublisher,
+  IntegrationEventSubject,
 } from 'src/accounts/application/events/integration';
 
 import { AccountOpenedEvent } from 'src/accounts/domain/events/account-opened.event';
@@ -18,11 +19,16 @@ export class AccountOpenedHandler implements IEventHandler<AccountOpenedEvent> {
   ) {}
 
   async handle(event: AccountOpenedEvent): Promise<void> {
-    this.logger.log(`account opened: ${JSON.stringify(event)}`);
+    this.logger.log(
+      `${IntegrationEventSubject.OPENED}: ${JSON.stringify(event)}`,
+    );
     await this.publisher.publish({
-      subject: 'account.opened',
+      subject: IntegrationEventSubject.OPENED,
       data: { id: event.id },
     });
-    await this.eventStore.save({ subject: 'account.opened', data: event });
+    await this.eventStore.save({
+      subject: IntegrationEventSubject.OPENED,
+      data: event,
+    });
   }
 }

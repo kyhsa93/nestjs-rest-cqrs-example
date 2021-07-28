@@ -4,6 +4,7 @@ import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 import {
   EventStore,
   IntegrationEventPublisher,
+  IntegrationEventSubject,
 } from 'src/accounts/application/events/integration';
 
 import { DepositedEvent } from 'src/accounts/domain/events/deposited.event';
@@ -18,11 +19,16 @@ export class DepositedHandler implements IEventHandler<DepositedEvent> {
   ) {}
 
   async handle(event: DepositedEvent): Promise<void> {
-    this.logger.log(`account deposited: ${JSON.stringify(event)}`);
+    this.logger.log(
+      `${IntegrationEventSubject.DEPOSITED}: ${JSON.stringify(event)}`,
+    );
     await this.publisher.publish({
-      subject: 'deposited',
+      subject: IntegrationEventSubject.DEPOSITED,
       data: { id: event.id },
     });
-    await this.eventStore.save({ subject: 'deposited', data: event });
+    await this.eventStore.save({
+      subject: IntegrationEventSubject.DEPOSITED,
+      data: event,
+    });
   }
 }

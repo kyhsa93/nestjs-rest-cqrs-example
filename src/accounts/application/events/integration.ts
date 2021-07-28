@@ -17,3 +17,11 @@ export interface IntegrationEventPublisher {
 export interface EventStore {
   save: (event: Event) => Promise<void>;
 }
+
+export enum IntegrationEventSubject {
+  OPENED = 'account.opened',
+  CLOSED = 'account.closed',
+  DEPOSITED = 'account.deposited',
+  WITHDRAWN = 'account.withdrawn',
+  PASSWORD_UPDATED = 'account.password.updated',
+}
