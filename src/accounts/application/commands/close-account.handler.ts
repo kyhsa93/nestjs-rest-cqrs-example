@@ -7,7 +7,8 @@ import { AccountRepository } from 'src/accounts/domain/repository';
 
 @CommandHandler(CloseAccountCommand)
 export class CloseAccountHandler
-  implements ICommandHandler<CloseAccountCommand, void> {
+  implements ICommandHandler<CloseAccountCommand, void>
+{
   constructor(
     @Inject('AccountRepositoryImplement')
     private readonly accountRepository: AccountRepository,

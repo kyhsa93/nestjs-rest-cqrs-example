@@ -10,7 +10,8 @@ import {
 
 @Injectable()
 export class IntegrationEventPublisherImplement
-  implements IntegrationEventPublisher {
+  implements IntegrationEventPublisher
+{
   private static exchange: string;
 
   private readonly promisedChannel: Promise<Channel>;

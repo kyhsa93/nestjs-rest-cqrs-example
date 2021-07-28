@@ -85,10 +85,12 @@ export class Account extends AggregateRoot {
   withdraw(amount: number, password: string): void {
     if (!this.comparePassword(password)) throw new UnauthorizedException();
     if (amount < 1)
-      throw new InternalServerErrorException(ErrorMessage.CAN_NOT_WITHDRAW_UNDER_1);
+      throw new InternalServerErrorException(
+        ErrorMessage.CAN_NOT_WITHDRAW_UNDER_1,
+      );
     if (this.balance < amount)
       throw new UnprocessableEntityException(
-        ErrorMessage.REQUESTED_AMOUNT_EXCEEDS_YOUR_WITHDRAWAL_LIMIT
+        ErrorMessage.REQUESTED_AMOUNT_EXCEEDS_YOUR_WITHDRAWAL_LIMIT,
       );
     this.balance -= amount;
     this.updatedAt = new Date();
@@ -97,7 +99,9 @@ export class Account extends AggregateRoot {
 
   deposit(amount: number): void {
     if (amount < 1)
-      throw new InternalServerErrorException(ErrorMessage.CAN_NOT_DEPOSIT_UNDER_1);
+      throw new InternalServerErrorException(
+        ErrorMessage.CAN_NOT_DEPOSIT_UNDER_1,
+      );
     this.balance += amount;
     this.updatedAt = new Date();
     this.apply(Object.assign(new DepositedEvent(), this));
@@ -106,7 +110,9 @@ export class Account extends AggregateRoot {
   close(password: string): void {
     if (!this.comparePassword(password)) throw new UnauthorizedException();
     if (this.balance > 0)
-      throw new UnprocessableEntityException(ErrorMessage.ACCOUNT_BALANCE_IS_REMAINED);
+      throw new UnprocessableEntityException(
+        ErrorMessage.ACCOUNT_BALANCE_IS_REMAINED,
+      );
     this.closedAt = new Date();
     this.updatedAt = new Date();
     this.apply(Object.assign(new AccountClosedEvent(), this));

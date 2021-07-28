@@ -1,4 +1,8 @@
-import { Inject, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
+import {
+  Inject,
+  NotFoundException,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
 
 import { RemitCommand } from 'src/accounts/application/commands/remit.command';
@@ -25,7 +29,10 @@ export class RemitHandler implements ICommandHandler<RemitCommand, void> {
     const receiverData = await this.accountRepository.findById(
       command.receiverId,
     );
-    if (!receiverData) throw new UnprocessableEntityException(ErrorMessage.RECEIVER_ACCOUNT_IS_NOT_FOUND);
+    if (!receiverData)
+      throw new UnprocessableEntityException(
+        ErrorMessage.RECEIVER_ACCOUNT_IS_NOT_FOUND,
+      );
 
     const receiver = this.eventPublisher.mergeObjectContext(receiverData);
 

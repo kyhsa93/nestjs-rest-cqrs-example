@@ -48,7 +48,9 @@ describe('Account', () => {
 
       const result = account.getUncommittedEvents();
 
-      expect(result).toEqual([Object.assign(new AccountOpenedEvent(), account)]);
+      expect(result).toEqual([
+        Object.assign(new AccountOpenedEvent(), account),
+      ]);
     });
   });
 

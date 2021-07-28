@@ -8,7 +8,8 @@ import { AccountRepository } from 'src/accounts/domain/repository';
 
 @CommandHandler(OpenAccountCommand)
 export class OpenAccountHandler
-  implements ICommandHandler<OpenAccountCommand, void> {
+  implements ICommandHandler<OpenAccountCommand, void>
+{
   constructor(
     @Inject('AccountRepositoryImplement')
     private readonly accountRepository: AccountRepository,

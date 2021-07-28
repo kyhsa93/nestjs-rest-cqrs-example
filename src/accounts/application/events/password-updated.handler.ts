@@ -1,13 +1,17 @@
 import { Inject, Logger } from '@nestjs/common';
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 
-import { EventStore, IntegrationEventPublisher } from 'src/accounts/application/events/integration';
+import {
+  EventStore,
+  IntegrationEventPublisher,
+} from 'src/accounts/application/events/integration';
 
 import { PasswordUpdatedEvent } from 'src/accounts/domain/events/password-updated.event';
 
 @EventsHandler(PasswordUpdatedEvent)
 export class PasswordUpdatedHandler
-  implements IEventHandler<PasswordUpdatedEvent> {
+  implements IEventHandler<PasswordUpdatedEvent>
+{
   constructor(
     private readonly logger: Logger,
     @Inject('IntegrationEventPublisherImplement')

@@ -1,7 +1,10 @@
 import { Inject, Logger } from '@nestjs/common';
 import { EventsHandler, IEventHandler } from '@nestjs/cqrs';
 
-import { EventStore, IntegrationEventPublisher } from 'src/accounts/application/events/integration';
+import {
+  EventStore,
+  IntegrationEventPublisher,
+} from 'src/accounts/application/events/integration';
 
 import { AccountOpenedEvent } from 'src/accounts/domain/events/account-opened.event';
 

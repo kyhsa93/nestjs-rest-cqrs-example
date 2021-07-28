@@ -13,7 +13,8 @@ import {
 
 @QueryHandler(FindAccountsQuery)
 export class FindAccountsHandler
-  implements IQueryHandler<FindAccountsQuery, FindAccountsResult> {
+  implements IQueryHandler<FindAccountsQuery, FindAccountsResult>
+{
   constructor(
     @Inject('AccountQueryImplement') readonly accountQuery: AccountQuery,
   ) {}
