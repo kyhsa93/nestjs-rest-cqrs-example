@@ -6,6 +6,7 @@ import {
   IntegrationEventPublisher,
   IntegrationEventSubject,
 } from 'src/accounts/application/events/integration';
+import { InjectionToken } from 'src/accounts/application/injection.token';
 
 import { AccountOpenedEvent } from 'src/accounts/domain/events/account-opened.event';
 
@@ -13,9 +14,9 @@ import { AccountOpenedEvent } from 'src/accounts/domain/events/account-opened.ev
 export class AccountOpenedHandler implements IEventHandler<AccountOpenedEvent> {
   constructor(
     private readonly logger: Logger,
-    @Inject('IntegrationEventPublisherImplement')
+    @Inject(InjectionToken.INTEGRATION_EVENT_PUBLISHER)
     private readonly publisher: IntegrationEventPublisher,
-    @Inject('EventStoreImplement') private readonly eventStore: EventStore,
+    @Inject(InjectionToken.EVENT_STORE) private readonly eventStore: EventStore,
   ) {}
 
   async handle(event: AccountOpenedEvent): Promise<void> {

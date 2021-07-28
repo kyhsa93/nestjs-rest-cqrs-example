@@ -2,13 +2,14 @@ import { Inject, NotFoundException } from '@nestjs/common';
 import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
 
 import { WithdrawCommand } from 'src/accounts/application/commands/withdraw.command';
+import { InjectionToken } from 'src/accounts/application/injection.token';
 
 import { AccountRepository } from 'src/accounts/domain/repository';
 
 @CommandHandler(WithdrawCommand)
 export class WithdrawHandler implements ICommandHandler<WithdrawCommand, void> {
   constructor(
-    @Inject('AccountRepositoryImplement')
+    @Inject(InjectionToken.ACCOUNT_REPOSITORY)
     private readonly accountRepository: AccountRepository,
     private readonly eventPublisher: EventPublisher,
   ) {}

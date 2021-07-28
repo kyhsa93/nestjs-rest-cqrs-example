@@ -6,6 +6,7 @@ import {
 import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
 
 import { RemitCommand } from 'src/accounts/application/commands/remit.command';
+import { InjectionToken } from 'src/accounts/application/injection.token';
 
 import { ErrorMessage } from 'src/accounts/domain/error';
 import { AccountRepository } from 'src/accounts/domain/repository';
@@ -14,7 +15,7 @@ import { AccountService } from 'src/accounts/domain/service';
 @CommandHandler(RemitCommand)
 export class RemitHandler implements ICommandHandler<RemitCommand, void> {
   constructor(
-    @Inject('AccountRepositoryImplement')
+    @Inject(InjectionToken.ACCOUNT_REPOSITORY)
     private readonly accountRepository: AccountRepository,
     private readonly eventPublisher: EventPublisher,
     private readonly accountService: AccountService,
