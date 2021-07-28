@@ -3,6 +3,7 @@ import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
 
 import { RemitCommand } from 'src/accounts/application/commands/remit.command';
 
+import { ErrorMessage } from 'src/accounts/domain/error';
 import { AccountRepository } from 'src/accounts/domain/repository';
 import { AccountService } from 'src/accounts/domain/service';
 
@@ -24,7 +25,7 @@ export class RemitHandler implements ICommandHandler<RemitCommand, void> {
     const receiverData = await this.accountRepository.findById(
       command.receiverId,
     );
-    if (!receiverData) throw new UnprocessableEntityException('Receiver account is not found');
+    if (!receiverData) throw new UnprocessableEntityException(ErrorMessage.RECEIVER_ACCOUNT_IS_NOT_FOUND);
 
     const receiver = this.eventPublisher.mergeObjectContext(receiverData);
 
