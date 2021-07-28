@@ -1,4 +1,4 @@
-import { ApiResponseProperty } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 
 import {
   FindAccountsResult,
@@ -6,17 +6,17 @@ import {
 } from 'src/accounts/application/queries/find-accounts.result';
 
 class FindAccountsItem extends ItemInFindAccountsResult {
-  @ApiResponseProperty()
+  @ApiProperty({ format: 'uuid' })
   readonly id: string;
 
-  @ApiResponseProperty()
+  @ApiProperty({ example: 'young' })
   readonly name: string;
 
-  @ApiResponseProperty()
+  @ApiProperty({ example: 100 })
   readonly balance: number;
 }
 
 export class FindAccountsResponseDTO {
-  @ApiResponseProperty({ type: [FindAccountsItem] })
+  @ApiProperty({ type: [FindAccountsItem] })
   readonly accounts: FindAccountsResult;
 }

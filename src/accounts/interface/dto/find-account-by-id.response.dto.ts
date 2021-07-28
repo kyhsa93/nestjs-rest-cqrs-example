@@ -1,23 +1,23 @@
-import { ApiResponseProperty } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 
 import { FindAccountByIdResult } from 'src/accounts/application/queries/find-account-by-id.result';
 
 export class FindAccountByIdResponseDTO extends FindAccountByIdResult {
-  @ApiResponseProperty()
+  @ApiProperty({ format: 'uuid' })
   readonly id: string;
 
-  @ApiResponseProperty()
+  @ApiProperty({ example: 'young' })
   readonly name: string;
 
-  @ApiResponseProperty()
+  @ApiProperty({ example: 100 })
   readonly balance: number;
 
-  @ApiResponseProperty()
+  @ApiProperty()
   readonly openedAt: Date;
 
-  @ApiResponseProperty()
+  @ApiProperty()
   readonly updatedAt: Date;
 
-  @ApiResponseProperty()
-  readonly closedAt?: Date;
+  @ApiProperty({ nullable: true, required: false, example: null })
+  readonly closedAt: Date | null;
 }

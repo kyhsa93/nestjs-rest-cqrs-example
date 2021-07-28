@@ -23,7 +23,8 @@ export class RemitHandler implements ICommandHandler<RemitCommand, void> {
 
   async execute(command: RemitCommand): Promise<void> {
     const senderData = await this.accountRepository.findById(command.senderId);
-    if (!senderData) throw new NotFoundException(ErrorMessage.ACCOUNT_IS_NOT_FOUND);
+    if (!senderData)
+      throw new NotFoundException(ErrorMessage.ACCOUNT_IS_NOT_FOUND);
 
     const sender = this.eventPublisher.mergeObjectContext(senderData);
 
