@@ -22,9 +22,11 @@ export class RemitHandler implements ICommandHandler<RemitCommand, void> {
   ) {}
 
   async execute(command: RemitCommand): Promise<void> {
-    if (command.id === command.receiverId) 
-      throw new UnprocessableEntityException(ErrorMessage.WITHDRAWAL_AND_DEPOSIT_ACCOUNTS_CANNOT_BE_THE_SAME)
-      
+    if (command.id === command.receiverId)
+      throw new UnprocessableEntityException(
+        ErrorMessage.WITHDRAWAL_AND_DEPOSIT_ACCOUNTS_CANNOT_BE_THE_SAME,
+      );
+
     const senderData = await this.accountRepository.findById(command.id);
     if (!senderData)
       throw new NotFoundException(ErrorMessage.ACCOUNT_IS_NOT_FOUND);

@@ -38,7 +38,11 @@ describe('WithdrawHandler', () => {
     it('should throw NotFoundException when account not found', async () => {
       repository.findById = jest.fn().mockResolvedValue(undefined);
 
-      const command = new WithdrawCommand({ id: 'accountId', password: 'password', amount: 1 });
+      const command = new WithdrawCommand({
+        id: 'accountId',
+        password: 'password',
+        amount: 1,
+      });
 
       await expect(handler.execute(command)).rejects.toThrowError(
         NotFoundException,
@@ -54,7 +58,11 @@ describe('WithdrawHandler', () => {
       repository.save = jest.fn().mockResolvedValue(undefined);
       publisher.mergeObjectContext = jest.fn().mockReturnValue(account);
 
-      const command = new WithdrawCommand({ id: 'accountId', password: 'password', amount: 1 });
+      const command = new WithdrawCommand({
+        id: 'accountId',
+        password: 'password',
+        amount: 1,
+      });
 
       await expect(handler.execute(command)).resolves.toEqual(undefined);
       expect(repository.findById).toBeCalledTimes(1);

@@ -1,4 +1,9 @@
-import { ModuleMetadata, NotFoundException, Provider, UnprocessableEntityException } from '@nestjs/common';
+import {
+  ModuleMetadata,
+  NotFoundException,
+  Provider,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { EventPublisher } from '@nestjs/cqrs';
 import { Test } from '@nestjs/testing';
 
@@ -44,15 +49,27 @@ describe('RemitHandler', () => {
 
   describe('execute', () => {
     it('should throw UnprocessableEntityException when id and receiverId is same', async () => {
-      const command = new RemitCommand({ id: 'senderId', receiverId: 'senderId', amount: 1, password: 'password'});
+      const command = new RemitCommand({
+        id: 'senderId',
+        receiverId: 'senderId',
+        amount: 1,
+        password: 'password',
+      });
 
-      await expect(handler.execute(command)).rejects.toThrowError(UnprocessableEntityException);
+      await expect(handler.execute(command)).rejects.toThrowError(
+        UnprocessableEntityException,
+      );
     });
 
     it('should throw NotFoundException when account not found', async () => {
       repository.findById = jest.fn().mockResolvedValue(undefined);
 
-      const command = new RemitCommand({ id: 'senderId', receiverId: 'receiverId', amount: 1, password: 'password'});
+      const command = new RemitCommand({
+        id: 'senderId',
+        receiverId: 'receiverId',
+        amount: 1,
+        password: 'password',
+      });
 
       await expect(handler.execute(command)).rejects.toThrowError(
         NotFoundException,
@@ -64,33 +81,54 @@ describe('RemitHandler', () => {
     it('should throw UnprocessableEntityException receiver data is not found', async () => {
       const account = { commit: jest.fn() };
 
-      repository.findById = jest.fn().mockResolvedValueOnce({}).mockResolvedValueOnce(undefined);
+      repository.findById = jest
+        .fn()
+        .mockResolvedValueOnce({})
+        .mockResolvedValueOnce(undefined);
       publisher.mergeObjectContext = jest.fn().mockReturnValue(account);
       domainService.remit = jest.fn();
       repository.save = jest.fn().mockResolvedValue(undefined);
 
-      const command = new RemitCommand({ id: 'senderId', receiverId: 'receiverId', amount: 1, password: 'password'});
+      const command = new RemitCommand({
+        id: 'senderId',
+        receiverId: 'receiverId',
+        amount: 1,
+        password: 'password',
+      });
 
-      await expect(handler.execute(command)).rejects.toThrowError(UnprocessableEntityException)
+      await expect(handler.execute(command)).rejects.toThrowError(
+        UnprocessableEntityException,
+      );
       expect(repository.findById).toBeCalledTimes(2);
       expect(repository.findById).toBeCalledWith(command.id);
       expect(repository.findById).toBeCalledWith(command.receiverId);
       expect(publisher.mergeObjectContext).toBeCalledTimes(1);
       expect(publisher.mergeObjectContext).toBeCalledWith({});
-    })
+    });
 
     it('should execute RemitCommand', async () => {
       const accountData = {};
       const account = { commit: jest.fn() };
       const receiverData = {};
       const receiver = { commit: jest.fn() };
-    
-      repository.findById = jest.fn().mockResolvedValueOnce(accountData).mockResolvedValueOnce(receiverData);
+
+      repository.findById = jest
+        .fn()
+        .mockResolvedValueOnce(accountData)
+        .mockResolvedValueOnce(receiverData);
       repository.save = jest.fn().mockResolvedValue(undefined);
       domainService.remit = jest.fn().mockReturnValue(undefined);
-      publisher.mergeObjectContext = jest.fn().mockReturnValueOnce(account).mockReturnValueOnce(receiver);
+      publisher.mergeObjectContext = jest
+        .fn()
+        .mockReturnValueOnce(account)
+        .mockReturnValueOnce(receiver);
 
-      const command = new RemitCommand({ id: 'senderId', receiverId: 'receiverId', amount: 1, password: 'password'});
+      const command = new RemitCommand({
+        id: 'senderId',
+        receiverId: 'receiverId',
+        amount: 1,
+        password: 'password',
+      });
 
       await expect(handler.execute(command)).resolves.toEqual(undefined);
       expect(repository.findById).toBeCalledTimes(2);
@@ -100,8 +138,11 @@ describe('RemitHandler', () => {
       expect(publisher.mergeObjectContext).toBeCalledWith(accountData);
       expect(publisher.mergeObjectContext).toBeCalledWith(receiverData);
       expect(domainService.remit).toBeCalledTimes(1);
-      expect(domainService.remit).toBeCalledWith({ 
-        sender: account, receiver, password: command.password, amount: command.amount,
+      expect(domainService.remit).toBeCalledWith({
+        sender: account,
+        receiver,
+        password: command.password,
+        amount: command.amount,
       });
       expect(repository.save).toBeCalledTimes(1);
       expect(repository.save).toBeCalledWith([account, receiver]);

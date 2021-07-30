@@ -36,7 +36,11 @@ describe('OpenAccountHandler', () => {
 
   describe('execute', () => {
     it('should execute OpenAccountCommand', async () => {
-      const account = { open: jest.fn(), commit: jest.fn(), setPassword: jest.fn() };
+      const account = {
+        open: jest.fn(),
+        commit: jest.fn(),
+        setPassword: jest.fn(),
+      };
 
       repository.newId = jest.fn().mockResolvedValue('accountId');
       repository.save = jest.fn().mockResolvedValue(undefined);

@@ -53,7 +53,7 @@ describe('UpdatePasswordHandler', () => {
 
     it('should execute UpdatePasswordCommand', async () => {
       const account = { updatePassword: jest.fn(), commit: jest.fn() };
-      
+
       repository.findById = jest.fn().mockResolvedValue({});
       repository.save = jest.fn().mockResolvedValue(undefined);
       publisher.mergeObjectContext = jest.fn().mockReturnValue(account);
@@ -70,7 +70,10 @@ describe('UpdatePasswordHandler', () => {
       expect(publisher.mergeObjectContext).toBeCalledTimes(1);
       expect(publisher.mergeObjectContext).toBeCalledWith({});
       expect(account.updatePassword).toBeCalledTimes(1);
-      expect(account.updatePassword).toBeCalledWith(command.password, command.newPassword);
+      expect(account.updatePassword).toBeCalledWith(
+        command.password,
+        command.newPassword,
+      );
       expect(repository.save).toBeCalledTimes(1);
       expect(repository.save).toBeCalledWith(account);
       expect(account.commit).toBeCalledTimes(1);
