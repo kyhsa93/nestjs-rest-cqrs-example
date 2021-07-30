@@ -43,19 +43,29 @@ describe('WithdrawHandler', () => {
       await expect(handler.execute(command)).rejects.toThrowError(
         NotFoundException,
       );
+      expect(repository.findById).toBeCalledTimes(1);
+      expect(repository.findById).toBeCalledWith(command.id);
     });
 
     it('should execute WithdrawCommand', async () => {
+      const account = { withdraw: jest.fn(), commit: jest.fn() };
+
       repository.findById = jest.fn().mockResolvedValue({});
       repository.save = jest.fn().mockResolvedValue(undefined);
-      publisher.mergeObjectContext = jest.fn().mockReturnValue({
-        withdraw: () => undefined,
-        commit: () => undefined,
-      });
+      publisher.mergeObjectContext = jest.fn().mockReturnValue(account);
 
       const command = new WithdrawCommand({ id: 'accountId', password: 'password', amount: 1 });
 
       await expect(handler.execute(command)).resolves.toEqual(undefined);
+      expect(repository.findById).toBeCalledTimes(1);
+      expect(repository.findById).toBeCalledWith(command.id);
+      expect(publisher.mergeObjectContext).toBeCalledTimes(1);
+      expect(publisher.mergeObjectContext).toBeCalledWith({});
+      expect(account.withdraw).toBeCalledTimes(1);
+      expect(account.withdraw).toBeCalledWith(command.amount, command.password);
+      expect(repository.save).toBeCalledTimes(1);
+      expect(repository.save).toBeCalledWith(account);
+      expect(account.commit).toBeCalledTimes(1);
     });
   });
 });

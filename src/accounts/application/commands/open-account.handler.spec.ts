@@ -36,17 +36,23 @@ describe('OpenAccountHandler', () => {
 
   describe('execute', () => {
     it('should execute OpenAccountCommand', async () => {
+      const account = { open: jest.fn(), commit: jest.fn(), setPassword: jest.fn() };
+
       repository.newId = jest.fn().mockResolvedValue('accountId');
       repository.save = jest.fn().mockResolvedValue(undefined);
-      publisher.mergeObjectContext = jest.fn().mockReturnValue({
-        open: () => undefined,
-        commit: () => undefined,
-        setPassword: () => undefined,
-      });
+      publisher.mergeObjectContext = jest.fn().mockReturnValue(account);
 
       const command = new OpenAccountCommand('accountId', 'password');
 
       await expect(handler.execute(command)).resolves.toEqual(undefined);
+      expect(repository.newId).toBeCalledTimes(1);
+      expect(publisher.mergeObjectContext).toBeCalledTimes(1);
+      expect(account.setPassword).toBeCalledTimes(1);
+      expect(account.setPassword).toBeCalledWith(command.password);
+      expect(account.open).toBeCalledTimes(1);
+      expect(repository.save).toBeCalledTimes(1);
+      expect(repository.save).toBeCalledWith(account);
+      expect(account.commit).toBeCalledTimes(1);
     });
   });
 });

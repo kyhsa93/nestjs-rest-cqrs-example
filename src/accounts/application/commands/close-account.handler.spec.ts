@@ -43,19 +43,28 @@ describe('CloseAccountHandler', () => {
       await expect(handler.execute(command)).rejects.toThrowError(
         NotFoundException,
       );
+      expect(repository.findById).toBeCalledTimes(1);
+      expect(repository.findById).toBeCalledWith(command.id);
     });
 
     it('should execute CloseAccountCommand', async () => {
+      const account = { close: jest.fn(), commit: jest.fn() };
+
       repository.findById = jest.fn().mockResolvedValue({});
       repository.save = jest.fn().mockResolvedValue(undefined);
-      publisher.mergeObjectContext = jest.fn().mockReturnValue({
-        close: () => undefined,
-        commit: () => undefined,
-      });
+      publisher.mergeObjectContext = jest.fn().mockReturnValue(account);
 
       const command = new CloseAccountCommand('accountId', 'password');
 
       await expect(handler.execute(command)).resolves.toEqual(undefined);
+      expect(repository.findById).toBeCalledTimes(1);
+      expect(repository.findById).toBeCalledWith(command.id);
+      expect(publisher.mergeObjectContext).toBeCalledTimes(1);
+      expect(publisher.mergeObjectContext).toBeCalledWith({});
+      expect(account.close).toBeCalledTimes(1);
+      expect(repository.save).toBeCalledTimes(1);
+      expect(repository.save).toBeCalledWith(account);
+      expect(account.commit).toBeCalledTimes(1);
     });
   });
 });

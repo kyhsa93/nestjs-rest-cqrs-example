@@ -47,15 +47,16 @@ describe('UpdatePasswordHandler', () => {
       await expect(handler.execute(command)).rejects.toThrowError(
         NotFoundException,
       );
+      expect(repository.findById).toBeCalledTimes(1);
+      expect(repository.findById).toBeCalledWith(command.id);
     });
 
     it('should execute UpdatePasswordCommand', async () => {
+      const account = { updatePassword: jest.fn(), commit: jest.fn() };
+      
       repository.findById = jest.fn().mockResolvedValue({});
       repository.save = jest.fn().mockResolvedValue(undefined);
-      publisher.mergeObjectContext = jest.fn().mockReturnValue({
-        updatePassword: () => undefined,
-        commit: () => undefined,
-      });
+      publisher.mergeObjectContext = jest.fn().mockReturnValue(account);
 
       const command = new UpdatePasswordCommand({
         id: 'accountId',
@@ -64,6 +65,15 @@ describe('UpdatePasswordHandler', () => {
       });
 
       await expect(handler.execute(command)).resolves.toEqual(undefined);
+      expect(repository.findById).toBeCalledTimes(1);
+      expect(repository.findById).toBeCalledWith(command.id);
+      expect(publisher.mergeObjectContext).toBeCalledTimes(1);
+      expect(publisher.mergeObjectContext).toBeCalledWith({});
+      expect(account.updatePassword).toBeCalledTimes(1);
+      expect(account.updatePassword).toBeCalledWith(command.password, command.newPassword);
+      expect(repository.save).toBeCalledTimes(1);
+      expect(repository.save).toBeCalledWith(account);
+      expect(account.commit).toBeCalledTimes(1);
     });
   });
 });

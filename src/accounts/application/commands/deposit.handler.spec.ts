@@ -43,19 +43,29 @@ describe('DepositHandler', () => {
       await expect(handler.execute(command)).rejects.toThrowError(
         NotFoundException,
       );
+      expect(repository.findById).toBeCalledTimes(1);
+      expect(repository.findById).toBeCalledWith(command.id);
     });
 
     it('should execute DepositCommand', async () => {
+      const account = { deposit: jest.fn(), commit: jest.fn() };
+      
       repository.findById = jest.fn().mockResolvedValue({});
       repository.save = jest.fn().mockResolvedValue(undefined);
-      publisher.mergeObjectContext = jest.fn().mockReturnValue({
-        deposit: () => undefined,
-        commit: () => undefined,
-      });
+      publisher.mergeObjectContext = jest.fn().mockReturnValue(account);
 
       const command = new DepositCommand({ id: 'accountId', password: 'password', amount: 1});
 
       await expect(handler.execute(command)).resolves.toEqual(undefined);
+      expect(repository.findById).toBeCalledTimes(1);
+      expect(repository.findById).toBeCalledWith(command.id);
+      expect(publisher.mergeObjectContext).toBeCalledTimes(1);
+      expect(publisher.mergeObjectContext).toBeCalledWith({});
+      expect(account.deposit).toBeCalledTimes(1);
+      expect(account.deposit).toBeCalledWith(command.amount);
+      expect(repository.save).toBeCalledTimes(1)
+      expect(repository.save).toBeCalledWith(account);
+      expect(account.commit).toBeCalledTimes(1);
     });
   });
 });

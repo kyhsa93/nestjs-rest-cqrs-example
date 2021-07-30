@@ -44,9 +44,9 @@ export class RemitHandler implements ICommandHandler<RemitCommand, void> {
     const { password, amount } = command;
     this.accountService.remit({ sender, receiver, password, amount });
 
-    await this.accountRepository.save([receiver, sender]);
+    await this.accountRepository.save([sender, receiver]);
 
-    receiver.commit();
     sender.commit();
+    receiver.commit();
   }
 }
