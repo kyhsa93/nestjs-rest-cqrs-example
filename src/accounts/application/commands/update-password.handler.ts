@@ -23,7 +23,7 @@ export class UpdatePasswordHandler
 
     const account = this.eventPublisher.mergeObjectContext(data);
 
-    account.updatePassword(command.current, command.data);
+    account.updatePassword(command.password, command.newPassword);
 
     await this.accountRepository.save(account);
 

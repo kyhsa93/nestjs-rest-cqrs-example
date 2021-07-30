@@ -76,7 +76,7 @@ export class AccountsController {
     @Param() param: WithdrawParamDTO,
     @Body() body: WithdrawBodyDTO,
   ): Promise<void> {
-    const command = new WithdrawCommand(param.id, body.password, body.amount);
+    const command = new WithdrawCommand({ ...param, ...body });
     await this.commandBus.execute(command);
   }
 
@@ -91,7 +91,7 @@ export class AccountsController {
     @Param() param: DepositParamDTO,
     @Body() body: DepositBodyDTO,
   ): Promise<void> {
-    const command = new DepositCommand(param.id, body.password, body.amount);
+    const command = new DepositCommand({ ...param, ...body })
     await this.commandBus.execute(command);
   }
 
@@ -110,12 +110,7 @@ export class AccountsController {
     @Param() param: RemitParamDTO,
     @Body() body: RemitBodyDTO,
   ): Promise<void> {
-    const command = new RemitCommand(
-      param.id,
-      body.receiverId,
-      body.amount,
-      body.password,
-    );
+    const command = new RemitCommand({ ...param, ...body })
     await this.commandBus.execute(command);
   }
 
@@ -131,11 +126,7 @@ export class AccountsController {
     @Param() param: UpdatePasswordParamDTO,
     @Body() body: UpdatePasswordBodyDTO,
   ): Promise<void> {
-    const command = new UpdatePasswordCommand(
-      param.id,
-      body.current,
-      body.data,
-    );
+    const command = new UpdatePasswordCommand({ ...param, ...body })
     await this.commandBus.execute(command);
   }
 
