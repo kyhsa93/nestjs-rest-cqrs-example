@@ -50,6 +50,8 @@ describe('FindAccountsHandler', () => {
       ];
 
       await expect(handler.execute(query)).resolves.toEqual(result);
+      expect(accountQuery.find).toBeCalledTimes(1);
+      expect(accountQuery.find).toBeCalledWith(query.offset, query.limit);
     });
   });
 });

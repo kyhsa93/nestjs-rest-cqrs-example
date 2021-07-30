@@ -34,6 +34,8 @@ describe('FindAccountByIdHandler', () => {
       await expect(handler.execute(query)).rejects.toThrowError(
         NotFoundException,
       );
+      expect(accountQuery.findById).toBeCalledTimes(1);
+      expect(accountQuery.findById).toBeCalledWith(query.id);
     });
 
     it('should return FindAccountByIdResult when execute FindAccountByIdQuery', async () => {
@@ -60,6 +62,8 @@ describe('FindAccountByIdHandler', () => {
       };
 
       await expect(handler.execute(query)).resolves.toEqual(result);
+      expect(accountQuery.findById).toBeCalledTimes(1);
+      expect(accountQuery.findById).toBeCalledWith(query.id);
     });
   });
 });

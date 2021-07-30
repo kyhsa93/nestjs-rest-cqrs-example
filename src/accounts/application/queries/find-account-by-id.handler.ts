@@ -22,6 +22,7 @@ export class FindAccountByIdHandler
   async execute(query: FindAccountByIdQuery): Promise<FindAccountByIdResult> {
     const data = await this.accountQuery.findById(query.id);
     if (!data) throw new NotFoundException(ErrorMessage.ACCOUNT_IS_NOT_FOUND);
+
     const dataKeys = Object.keys(data);
     const resultKeys = Object.keys(new FindAccountByIdResult());
 
