@@ -14,7 +14,7 @@ import { WithdrawnEvent } from 'src/accounts/domain/events/withdrawn.event';
 describe('Account', () => {
   describe('properties', () => {
     it('should return AccountProperties', () => {
-      const accountProperties: AccountProperties = {
+      const properties: AccountProperties = {
         id: 'accountId',
         name: 'tester',
         password: 'password',
@@ -23,11 +23,11 @@ describe('Account', () => {
         updatedAt: new Date(),
       };
 
-      const account = new Account(accountProperties);
+      const account = new Account(properties);
 
       const result = account.properties();
 
-      expect(result).toEqual(accountProperties);
+      expect(result).toEqual(properties);
     });
   });
 
@@ -103,11 +103,8 @@ describe('Account', () => {
 
       account.setPassword('password');
 
-      const result = new Account(
-        Object.assign(properties, { updatedAt: expect.anything() }),
-      );
-
-      expect(account).not.toEqual(result);
+      expect(account.properties().password).not.toEqual('');
+      expect(account.properties().password).not.toEqual('password');
     });
   });
 
@@ -147,6 +144,8 @@ describe('Account', () => {
 
       account.getUncommittedEvents();
 
+      expect(account.properties().password).not.toEqual('');
+      expect(account.properties().password).not.toEqual('password');
       expect(() => account.setPassword('data')).toThrowError(
         InternalServerErrorException,
       );

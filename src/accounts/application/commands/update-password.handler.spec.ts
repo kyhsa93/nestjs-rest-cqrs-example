@@ -38,11 +38,11 @@ describe('UpdatePasswordHandler', () => {
     it('should throw NotFoundException when account not found', async () => {
       repository.findById = jest.fn().mockResolvedValue(undefined);
 
-      const command = new UpdatePasswordCommand(
-        'accountId',
-        'password',
-        'newPassword',
-      );
+      const command = new UpdatePasswordCommand({
+        id: 'accountId',
+        password: 'password',
+        newPassword: 'newPassword',
+      });
 
       await expect(handler.execute(command)).rejects.toThrowError(
         NotFoundException,
@@ -57,11 +57,11 @@ describe('UpdatePasswordHandler', () => {
         commit: () => undefined,
       });
 
-      const command = new UpdatePasswordCommand(
-        'accountId',
-        'password',
-        'newPassword',
-      );
+      const command = new UpdatePasswordCommand({
+        id: 'accountId',
+        password: 'password',
+        newPassword: 'newPassword',
+      });
 
       await expect(handler.execute(command)).resolves.toEqual(undefined);
     });

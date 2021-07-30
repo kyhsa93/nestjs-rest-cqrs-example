@@ -68,6 +68,7 @@ export class Account extends AggregateRoot {
   setPassword(password: string): void {
     if (this.password !== '' || password === '')
       throw new InternalServerErrorException(ErrorMessage.CAN_NOT_SET_PASSWORD);
+
     const salt = bcrypt.genSaltSync();
     this.password = bcrypt.hashSync(password, salt);
     this.updatedAt = new Date();

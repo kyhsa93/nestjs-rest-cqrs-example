@@ -38,7 +38,7 @@ describe('WithdrawHandler', () => {
     it('should throw NotFoundException when account not found', async () => {
       repository.findById = jest.fn().mockResolvedValue(undefined);
 
-      const command = new WithdrawCommand('accountId', 'password', 1);
+      const command = new WithdrawCommand({ id: 'accountId', password: 'password', amount: 1 });
 
       await expect(handler.execute(command)).rejects.toThrowError(
         NotFoundException,
@@ -53,7 +53,7 @@ describe('WithdrawHandler', () => {
         commit: () => undefined,
       });
 
-      const command = new WithdrawCommand('accountId', 'password', 1);
+      const command = new WithdrawCommand({ id: 'accountId', password: 'password', amount: 1 });
 
       await expect(handler.execute(command)).resolves.toEqual(undefined);
     });

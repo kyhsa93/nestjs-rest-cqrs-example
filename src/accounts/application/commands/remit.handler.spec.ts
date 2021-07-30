@@ -46,7 +46,7 @@ describe('RemitHandler', () => {
     it('should throw NotFoundException when account not found', async () => {
       repository.findById = jest.fn().mockResolvedValue(undefined);
 
-      const command = new RemitCommand('senderId', 'receiverId', 1, 'password');
+      const command = new RemitCommand({ id: 'senderId', receiverId: 'receiverId', amount: 1, password: 'password'});
 
       await expect(handler.execute(command)).rejects.toThrowError(
         NotFoundException,
@@ -61,7 +61,7 @@ describe('RemitHandler', () => {
         commit: () => undefined,
       });
 
-      const command = new RemitCommand('senderId', 'receiverId', 1, 'password');
+      const command = new RemitCommand({ id: 'senderId', receiverId: 'receiverId', amount: 1, password: 'password'});
 
       await expect(handler.execute(command)).resolves.toEqual(undefined);
     });
