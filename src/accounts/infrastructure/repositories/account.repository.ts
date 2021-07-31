@@ -8,11 +8,6 @@ import { Account } from 'src/accounts/domain/account';
 export class AccountRepositoryImplement implements AccountRepository {
   async newId(): Promise<string> {
     const emptyEntity = new AccountEntity();
-    emptyEntity.name = '';
-    emptyEntity.password = '';
-    emptyEntity.balance = 0;
-    emptyEntity.openedAt = new Date();
-    emptyEntity.updatedAt = new Date();
     const entity = await getRepository(AccountEntity).save(emptyEntity);
     return entity.id;
   }
@@ -35,10 +30,10 @@ export class AccountRepositoryImplement implements AccountRepository {
 
   private modelToEntity(model: Account): AccountEntity {
     const properties = model.properties();
-    return { ...properties };
+    return { ...properties, createdAt: properties.openedAt, deletedAt: properties.closedAt };
   }
 
   private entityToModel(entity: AccountEntity): Account {
-    return new Account(entity);
+    return new Account({ ...entity, openedAt: entity.createdAt, closedAt: entity.deletedAt });
   }
 }

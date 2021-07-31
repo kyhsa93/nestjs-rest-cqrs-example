@@ -35,6 +35,7 @@ describe('FindAccountsHandler', () => {
           balance: 0,
           openedAt: new Date(),
           updatedAt: new Date(),
+          closedAt: null,
         },
       ];
       accountQuery.find = jest.fn().mockResolvedValue(accounts);

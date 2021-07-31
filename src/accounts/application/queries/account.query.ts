@@ -5,7 +5,7 @@ export class Account {
   readonly balance: number;
   readonly openedAt: Date;
   readonly updatedAt: Date;
-  readonly closedAt?: Date;
+  readonly closedAt: Date | null;
 }
 
 export class ItemInAccounts {
@@ -15,7 +15,7 @@ export class ItemInAccounts {
   readonly balance: number;
   readonly openedAt: Date;
   readonly updatedAt: Date;
-  readonly closedAt?: Date;
+  readonly closedAt: Date | null;
 }
 
 export class Accounts extends Array<ItemInAccounts> {}

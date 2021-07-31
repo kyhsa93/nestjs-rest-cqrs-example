@@ -9,5 +9,6 @@ export class AccountOpenedEvent implements IEvent, AccountProperties {
   readonly balance: number;
   readonly openedAt: Date;
   readonly updatedAt: Date;
-  readonly closedAt?: Date;
+  readonly closedAt: Date | null;
+  readonly version: number;
 }

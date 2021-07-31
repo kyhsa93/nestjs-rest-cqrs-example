@@ -14,16 +14,18 @@ import { WithdrawnEvent } from 'src/accounts/domain/events/withdrawn.event';
 describe('Account', () => {
   describe('properties', () => {
     it('should return AccountProperties', () => {
-      const properties: AccountProperties = {
-        id: 'accountId',
-        name: 'tester',
-        password: 'password',
+      const properties = {
+        id: 'id',
+        name: 'name',
+        password: '',
         balance: 0,
         openedAt: new Date(),
         updatedAt: new Date(),
+        closedAt: null,
+        version: 0,
       };
 
-      const account = new Account(properties);
+      const account = new Account({ id: 'id', name: 'name' });
 
       const result = account.properties();
 
@@ -33,16 +35,7 @@ describe('Account', () => {
 
   describe('open', () => {
     it('should apply AccountOpenedEvent', () => {
-      const properties: AccountProperties = {
-        id: 'accountId',
-        name: 'tester',
-        password: 'password',
-        balance: 0,
-        openedAt: new Date(),
-        updatedAt: new Date(),
-      };
-
-      const account = new Account(properties);
+      const account = new Account({ id: 'id', name: 'name' });
 
       account.open();
 
@@ -56,16 +49,7 @@ describe('Account', () => {
 
   describe('setPassword', () => {
     it('should throw InternalServerErrorException when password that account already have is not empty string', () => {
-      const properties: AccountProperties = {
-        id: 'accountId',
-        name: 'tester',
-        password: 'password',
-        balance: 0,
-        openedAt: new Date(),
-        updatedAt: new Date(),
-      };
-
-      const account = new Account(properties);
+      const account = new Account({ id: 'id', name: 'name', password: 'password' });
 
       expect(() => account.setPassword('password')).toThrowError(
         InternalServerErrorException,
@@ -73,16 +57,7 @@ describe('Account', () => {
     });
 
     it('should throw InternalServerErrorException when given password is empty string', () => {
-      const properties: AccountProperties = {
-        id: 'accountId',
-        name: 'tester',
-        password: '',
-        balance: 0,
-        openedAt: new Date(),
-        updatedAt: new Date(),
-      };
-
-      const account = new Account(properties);
+      const account = new Account({ id: 'id', name: 'name' });
 
       expect(() => account.setPassword('')).toThrowError(
         InternalServerErrorException,
@@ -90,16 +65,7 @@ describe('Account', () => {
     });
 
     it('should set password', () => {
-      const properties: AccountProperties = {
-        id: 'accountId',
-        name: 'tester',
-        password: '',
-        balance: 0,
-        openedAt: new Date(),
-        updatedAt: new Date(),
-      };
-
-      const account = new Account(properties);
+      const account = new Account({ id: 'id', name: 'name' });
 
       account.setPassword('password');
 
@@ -110,16 +76,7 @@ describe('Account', () => {
 
   describe('updatePassword', () => {
     it('should throw UnauthorizedException when password is not matched', () => {
-      const properties: AccountProperties = {
-        id: 'accountId',
-        name: 'test',
-        password: '',
-        balance: 0,
-        openedAt: new Date(),
-        updatedAt: new Date(),
-      };
-
-      const account = new Account(properties);
+      const account = new Account({ id: 'id', name: 'name' });
       account.setPassword('password');
 
       expect(() =>
@@ -128,16 +85,7 @@ describe('Account', () => {
     });
 
     it('should update password', () => {
-      const properties: AccountProperties = {
-        id: 'accountId',
-        name: 'test',
-        password: '',
-        balance: 0,
-        openedAt: new Date(),
-        updatedAt: new Date(),
-      };
-
-      const account = new Account(properties);
+      const account = new Account({ id: 'id', name: 'name' });
       account.setPassword('password');
 
       account.updatePassword('password', 'newPassword');
@@ -159,16 +107,7 @@ describe('Account', () => {
 
   describe('withdraw', () => {
     it('should throw UnauthorizedException when password is not matched', () => {
-      const properties: AccountProperties = {
-        id: 'accountId',
-        name: 'test',
-        password: '',
-        balance: 0,
-        openedAt: new Date(),
-        updatedAt: new Date(),
-      };
-
-      const account = new Account(properties);
+      const account = new Account({ id: 'id', name: 'name' });
       account.setPassword('password');
 
       expect(() => account.withdraw(0, 'wrongPassword')).toThrowError(
@@ -177,16 +116,7 @@ describe('Account', () => {
     });
 
     it('should throw InternalServerErrorException when given amount is under 1', () => {
-      const properties: AccountProperties = {
-        id: 'accountId',
-        name: 'test',
-        password: '',
-        balance: 0,
-        openedAt: new Date(),
-        updatedAt: new Date(),
-      };
-
-      const account = new Account(properties);
+      const account = new Account({ id: 'id', name: 'name' });
       account.setPassword('password');
 
       expect(() => account.withdraw(0, 'password')).toThrowError(
@@ -195,34 +125,16 @@ describe('Account', () => {
     });
 
     it('should throw UnprocessableEntityException when given amount is over account balance', () => {
-      const properties: AccountProperties = {
-        id: 'accountId',
-        name: 'test',
-        password: '',
-        balance: 1,
-        openedAt: new Date(),
-        updatedAt: new Date(),
-      };
-
-      const account = new Account(properties);
+      const account = new Account({ id: 'id', name: 'name', balance: 0 });
       account.setPassword('password');
 
-      expect(() => account.withdraw(2, 'password')).toThrowError(
+      expect(() => account.withdraw(1, 'password')).toThrowError(
         UnprocessableEntityException,
       );
     });
 
     it('should withdraw from account', () => {
-      const properties: AccountProperties = {
-        id: 'accountId',
-        name: 'test',
-        password: '',
-        balance: 1,
-        openedAt: new Date(),
-        updatedAt: new Date(),
-      };
-
-      const account = new Account(properties);
+      const account = new Account({ id: 'id', name: 'name', balance: 1 });
       account.setPassword('password');
 
       account.withdraw(1, 'password');
@@ -238,16 +150,7 @@ describe('Account', () => {
 
   describe('deposit', () => {
     it('should throw InternalServerErrorException when given amount is under 1', () => {
-      const properties: AccountProperties = {
-        id: 'accountId',
-        name: 'test',
-        password: '',
-        balance: 0,
-        openedAt: new Date(),
-        updatedAt: new Date(),
-      };
-
-      const account = new Account(properties);
+      const account = new Account({ id: 'id', name: 'name' });
       account.setPassword('password');
 
       expect(() => account.deposit(0)).toThrowError(
@@ -256,16 +159,7 @@ describe('Account', () => {
     });
 
     it('should deposit to account', () => {
-      const properties: AccountProperties = {
-        id: 'accountId',
-        name: 'test',
-        password: '',
-        balance: 0,
-        openedAt: new Date(),
-        updatedAt: new Date(),
-      };
-
-      const account = new Account(properties);
+      const account = new Account({ id: 'id', name: 'name' });
       account.setPassword('password');
 
       account.deposit(1);
@@ -279,16 +173,7 @@ describe('Account', () => {
 
   describe('close', () => {
     it('should throw UnauthorizedException when password is not matched', () => {
-      const properties: AccountProperties = {
-        id: 'accountId',
-        name: 'test',
-        password: '',
-        balance: 0,
-        openedAt: new Date(),
-        updatedAt: new Date(),
-      };
-
-      const account = new Account(properties);
+      const account = new Account({ id: 'id', name: 'name' });
       account.setPassword('password');
 
       expect(() => account.close('wrongPassword')).toThrowError(
@@ -297,16 +182,7 @@ describe('Account', () => {
     });
 
     it('should throw UnprocessableEntityException when account balance is over 0', () => {
-      const properties: AccountProperties = {
-        id: 'accountId',
-        name: 'test',
-        password: '',
-        balance: 1,
-        openedAt: new Date(),
-        updatedAt: new Date(),
-      };
-
-      const account = new Account(properties);
+      const account = new Account({ id: 'id', name: 'name', balance: 1 });
       account.setPassword('password');
 
       expect(() => account.close('password')).toThrowError(
@@ -315,20 +191,11 @@ describe('Account', () => {
     });
 
     it('should close account', () => {
-      const properties: AccountProperties = {
-        id: 'accountId',
-        name: 'test',
-        password: '',
-        balance: 0,
-        openedAt: new Date(),
-        updatedAt: new Date(),
-      };
+      const account = new Account({ id: 'id', name: 'name' });
 
-      const account = new Account(properties);
       account.setPassword('password');
 
       account.close('password');
-
       expect(account.getUncommittedEvents()).toEqual([
         Object.assign(new AccountClosedEvent(), account),
       ]);

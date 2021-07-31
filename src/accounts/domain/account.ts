@@ -13,40 +13,35 @@ import { DepositedEvent } from 'src/accounts/domain/events/deposited.event';
 import { PasswordUpdatedEvent } from 'src/accounts/domain/events/password-updated.event';
 import { WithdrawnEvent } from 'src/accounts/domain/events/withdrawn.event';
 
-export interface AccountProperties {
+export type AccountEssentialProperties = Required<{
   readonly id: string;
   readonly name: string;
+}>
+
+export type AccountOptionalProperties = Partial<{
   readonly password: string;
   readonly balance: number;
   readonly openedAt: Date;
   readonly updatedAt: Date;
-  readonly closedAt?: Date;
-}
+  readonly closedAt: Date | null;
+  readonly version: number;
+}>
+
+export type AccountProperties = AccountEssentialProperties & Required<AccountOptionalProperties>;
 
 export class Account extends AggregateRoot {
   private readonly id: string;
-
   private readonly name: string;
+  private password: string = '';
+  private balance: number = 0;
+  private readonly openedAt: Date = new Date();
+  private updatedAt: Date = new Date();
+  private closedAt: Date | null = null;
+  private version: number = 0;
 
-  private password: string;
-
-  private balance: number;
-
-  private readonly openedAt: Date;
-
-  private updatedAt: Date;
-
-  private closedAt?: Date;
-
-  constructor(properties: AccountProperties) {
+  constructor(properties: AccountEssentialProperties & AccountOptionalProperties) {
     super();
-    this.id = properties.id;
-    this.name = properties.name;
-    this.password = properties.password;
-    this.balance = properties.balance;
-    this.openedAt = properties.openedAt;
-    this.updatedAt = properties.updatedAt;
-    this.closedAt = properties.closedAt;
+    Object.assign(this, properties);
   }
 
   properties(): AccountProperties {
@@ -58,6 +53,7 @@ export class Account extends AggregateRoot {
       openedAt: this.openedAt,
       updatedAt: this.updatedAt,
       closedAt: this.closedAt,
+      version: this.version,
     };
   }
 
@@ -68,7 +64,6 @@ export class Account extends AggregateRoot {
   setPassword(password: string): void {
     if (this.password !== '' || password === '')
       throw new InternalServerErrorException(ErrorMessage.CAN_NOT_SET_PASSWORD);
-
     const salt = bcrypt.genSaltSync();
     this.password = bcrypt.hashSync(password, salt);
     this.updatedAt = new Date();

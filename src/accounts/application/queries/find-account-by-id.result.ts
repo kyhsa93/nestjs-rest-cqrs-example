@@ -6,5 +6,5 @@ export class FindAccountByIdResult implements IQueryResult {
   readonly balance: number = 0;
   readonly openedAt: Date = new Date();
   readonly updatedAt: Date = new Date();
-  readonly closedAt?: Date = null;
+  readonly closedAt: Date | null= null;
 }

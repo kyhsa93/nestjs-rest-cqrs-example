@@ -1,25 +1,18 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
+import { BaseEntity } from 'src/accounts/infrastructure/entities/base.entity';
+
 @Entity()
-export class AccountEntity {
+export class AccountEntity extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
   @Column()
-  name!: string;
+  name: string = '';
 
   @Column()
-  password!: string;
+  password: string = '';
 
   @Column()
-  balance!: number;
-
-  @Column({ type: 'datetime' })
-  openedAt!: Date;
-
-  @Column({ type: 'timestamp' })
-  updatedAt!: Date;
-
-  @Column({ type: 'datetime', default: null, nullable: true })
-  closedAt?: Date;
+  balance: number = 0;
 }
