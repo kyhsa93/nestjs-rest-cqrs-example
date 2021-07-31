@@ -16,7 +16,7 @@ import { WithdrawnEvent } from 'src/accounts/domain/events/withdrawn.event';
 export type AccountEssentialProperties = Required<{
   readonly id: string;
   readonly name: string;
-}>
+}>;
 
 export type AccountOptionalProperties = Partial<{
   readonly password: string;
@@ -25,21 +25,24 @@ export type AccountOptionalProperties = Partial<{
   readonly updatedAt: Date;
   readonly closedAt: Date | null;
   readonly version: number;
-}>
+}>;
 
-export type AccountProperties = AccountEssentialProperties & Required<AccountOptionalProperties>;
+export type AccountProperties = AccountEssentialProperties &
+  Required<AccountOptionalProperties>;
 
 export class Account extends AggregateRoot {
   private readonly id: string;
   private readonly name: string;
-  private password: string = '';
-  private balance: number = 0;
+  private password = '';
+  private balance = 0;
   private readonly openedAt: Date = new Date();
   private updatedAt: Date = new Date();
   private closedAt: Date | null = null;
-  private version: number = 0;
+  private version = 0;
 
-  constructor(properties: AccountEssentialProperties & AccountOptionalProperties) {
+  constructor(
+    properties: AccountEssentialProperties & AccountOptionalProperties,
+  ) {
     super();
     Object.assign(this, properties);
   }

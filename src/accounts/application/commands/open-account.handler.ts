@@ -18,7 +18,10 @@ export class OpenAccountHandler
   ) {}
 
   async execute(command: OpenAccountCommand): Promise<void> {
-    const data = new Account({ id: await this.accountRepository.newId(), name: command.name });
+    const data = new Account({
+      id: await this.accountRepository.newId(),
+      name: command.name,
+    });
 
     const account = this.eventPublisher.mergeObjectContext(data);
 

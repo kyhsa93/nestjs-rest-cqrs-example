@@ -1,11 +1,15 @@
-import { Logger, ModuleMetadata, Provider } from "@nestjs/common";
-import { Test } from "@nestjs/testing";
+import { Logger, ModuleMetadata, Provider } from '@nestjs/common';
+import { Test } from '@nestjs/testing';
 
-import { PasswordUpdatedHandler } from "src/accounts/application/events/password-updated.handler";
-import { EventStore, IntegrationEventPublisher, IntegrationEventSubject } from "src/accounts/application/events/integration";
-import { InjectionToken } from "src/accounts/application/injection.token";
+import { PasswordUpdatedHandler } from 'src/accounts/application/events/password-updated.handler';
+import {
+  EventStore,
+  IntegrationEventPublisher,
+  IntegrationEventSubject,
+} from 'src/accounts/application/events/integration';
+import { InjectionToken } from 'src/accounts/application/injection.token';
 
-import { PasswordUpdatedEvent } from "src/accounts/domain/events/password-updated.event";
+import { PasswordUpdatedEvent } from 'src/accounts/domain/events/password-updated.event';
 
 describe('PasswordUpdatedHandler', () => {
   let handler: PasswordUpdatedHandler;
@@ -51,7 +55,9 @@ describe('PasswordUpdatedHandler', () => {
 
       await expect(handler.handle(event)).resolves.toEqual(undefined);
       expect(logger.log).toBeCalledTimes(1);
-      expect(logger.log).toBeCalledWith(`${IntegrationEventSubject.PASSWORD_UPDATED}: ${JSON.stringify(event)}`);
+      expect(logger.log).toBeCalledWith(
+        `${IntegrationEventSubject.PASSWORD_UPDATED}: ${JSON.stringify(event)}`,
+      );
       expect(publisher.publish).toBeCalledTimes(1);
       expect(publisher.publish).toBeCalledWith({
         subject: IntegrationEventSubject.PASSWORD_UPDATED,
@@ -61,7 +67,7 @@ describe('PasswordUpdatedHandler', () => {
       expect(store.save).toBeCalledWith({
         subject: IntegrationEventSubject.PASSWORD_UPDATED,
         data: event,
-      })
-    })
-  })
+      });
+    });
+  });
 });

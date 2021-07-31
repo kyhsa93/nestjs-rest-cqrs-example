@@ -26,10 +26,16 @@ export class AccountQueryImplement implements AccountQuery {
   private convertAccountFromEntity(
     entity?: AccountEntity,
   ): undefined | Account {
-    return entity ? { ...entity, openedAt: entity.createdAt, closedAt: entity.deletedAt } : undefined;
+    return entity
+      ? { ...entity, openedAt: entity.createdAt, closedAt: entity.deletedAt }
+      : undefined;
   }
 
   private convertAccountsFromEntities(entities: AccountEntity[]): Accounts {
-    return entities.map((entity) => ({ ...entity, openedAt: entity.createdAt, closedAt: entity.deletedAt }));
+    return entities.map((entity) => ({
+      ...entity,
+      openedAt: entity.createdAt,
+      closedAt: entity.deletedAt,
+    }));
   }
 }

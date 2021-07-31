@@ -1,11 +1,15 @@
-import { Logger, ModuleMetadata, Provider } from "@nestjs/common";
-import { Test } from "@nestjs/testing";
+import { Logger, ModuleMetadata, Provider } from '@nestjs/common';
+import { Test } from '@nestjs/testing';
 
-import { WithdrawnHandler } from "src/accounts/application/events/withdrawn.handler";
-import { EventStore, IntegrationEventPublisher, IntegrationEventSubject } from "src/accounts/application/events/integration";
-import { InjectionToken } from "src/accounts/application/injection.token";
+import { WithdrawnHandler } from 'src/accounts/application/events/withdrawn.handler';
+import {
+  EventStore,
+  IntegrationEventPublisher,
+  IntegrationEventSubject,
+} from 'src/accounts/application/events/integration';
+import { InjectionToken } from 'src/accounts/application/injection.token';
 
-import { WithdrawnEvent } from "src/accounts/domain/events/withdrawn.event";
+import { WithdrawnEvent } from 'src/accounts/domain/events/withdrawn.event';
 
 describe('WithdrawnHandler', () => {
   let handler: WithdrawnHandler;
@@ -51,7 +55,9 @@ describe('WithdrawnHandler', () => {
 
       await expect(handler.handle(event)).resolves.toEqual(undefined);
       expect(logger.log).toBeCalledTimes(1);
-      expect(logger.log).toBeCalledWith(`${IntegrationEventSubject.WITHDRAWN}: ${JSON.stringify(event)}`);
+      expect(logger.log).toBeCalledWith(
+        `${IntegrationEventSubject.WITHDRAWN}: ${JSON.stringify(event)}`,
+      );
       expect(publisher.publish).toBeCalledTimes(1);
       expect(publisher.publish).toBeCalledWith({
         subject: IntegrationEventSubject.WITHDRAWN,
@@ -61,7 +67,7 @@ describe('WithdrawnHandler', () => {
       expect(store.save).toBeCalledWith({
         subject: IntegrationEventSubject.WITHDRAWN,
         data: event,
-      })
-    })
-  })
+      });
+    });
+  });
 });

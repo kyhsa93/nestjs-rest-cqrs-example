@@ -1,11 +1,15 @@
-import { Logger, ModuleMetadata, Provider } from "@nestjs/common";
-import { Test } from "@nestjs/testing";
+import { Logger, ModuleMetadata, Provider } from '@nestjs/common';
+import { Test } from '@nestjs/testing';
 
-import { DepositedHandler } from "src/accounts/application/events/deposited.handler";
-import { EventStore, IntegrationEventPublisher, IntegrationEventSubject } from "src/accounts/application/events/integration";
-import { InjectionToken } from "src/accounts/application/injection.token";
+import { DepositedHandler } from 'src/accounts/application/events/deposited.handler';
+import {
+  EventStore,
+  IntegrationEventPublisher,
+  IntegrationEventSubject,
+} from 'src/accounts/application/events/integration';
+import { InjectionToken } from 'src/accounts/application/injection.token';
 
-import { DepositedEvent } from "src/accounts/domain/events/deposited.event";
+import { DepositedEvent } from 'src/accounts/domain/events/deposited.event';
 
 describe('DepositedHandler', () => {
   let handler: DepositedHandler;
@@ -51,7 +55,9 @@ describe('DepositedHandler', () => {
 
       await expect(handler.handle(event)).resolves.toEqual(undefined);
       expect(logger.log).toBeCalledTimes(1);
-      expect(logger.log).toBeCalledWith(`${IntegrationEventSubject.DEPOSITED}: ${JSON.stringify(event)}`);
+      expect(logger.log).toBeCalledWith(
+        `${IntegrationEventSubject.DEPOSITED}: ${JSON.stringify(event)}`,
+      );
       expect(publisher.publish).toBeCalledTimes(1);
       expect(publisher.publish).toBeCalledWith({
         subject: IntegrationEventSubject.DEPOSITED,
@@ -61,7 +67,7 @@ describe('DepositedHandler', () => {
       expect(store.save).toBeCalledWith({
         subject: IntegrationEventSubject.DEPOSITED,
         data: event,
-      })
-    })
-  })
+      });
+    });
+  });
 });

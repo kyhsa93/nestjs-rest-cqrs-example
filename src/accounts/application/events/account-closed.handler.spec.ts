@@ -1,11 +1,15 @@
-import { Logger, ModuleMetadata, Provider } from "@nestjs/common";
-import { Test } from "@nestjs/testing";
+import { Logger, ModuleMetadata, Provider } from '@nestjs/common';
+import { Test } from '@nestjs/testing';
 
-import { AccountClosedHandler } from "src/accounts/application/events/account-closed.handler";
-import { EventStore, IntegrationEventPublisher, IntegrationEventSubject } from "src/accounts/application/events/integration";
-import { InjectionToken } from "src/accounts/application/injection.token";
+import { AccountClosedHandler } from 'src/accounts/application/events/account-closed.handler';
+import {
+  EventStore,
+  IntegrationEventPublisher,
+  IntegrationEventSubject,
+} from 'src/accounts/application/events/integration';
+import { InjectionToken } from 'src/accounts/application/injection.token';
 
-import { AccountClosedEvent } from "src/accounts/domain/events/account-closed.event";
+import { AccountClosedEvent } from 'src/accounts/domain/events/account-closed.event';
 
 describe('AccountClosedHandler', () => {
   let handler: AccountClosedHandler;
@@ -51,7 +55,9 @@ describe('AccountClosedHandler', () => {
 
       await expect(handler.handle(event)).resolves.toEqual(undefined);
       expect(logger.log).toBeCalledTimes(1);
-      expect(logger.log).toBeCalledWith(`${IntegrationEventSubject.CLOSED}: ${JSON.stringify(event)}`);
+      expect(logger.log).toBeCalledWith(
+        `${IntegrationEventSubject.CLOSED}: ${JSON.stringify(event)}`,
+      );
       expect(publisher.publish).toBeCalledTimes(1);
       expect(publisher.publish).toBeCalledWith({
         subject: IntegrationEventSubject.CLOSED,
@@ -61,7 +67,7 @@ describe('AccountClosedHandler', () => {
       expect(store.save).toBeCalledWith({
         subject: IntegrationEventSubject.CLOSED,
         data: event,
-      })
-    })
-  })
+      });
+    });
+  });
 });

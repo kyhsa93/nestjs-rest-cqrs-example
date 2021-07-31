@@ -1,4 +1,10 @@
-import { CreateDateColumn, DeleteDateColumn, Entity, UpdateDateColumn, VersionColumn } from "typeorm";
+import {
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  UpdateDateColumn,
+  VersionColumn,
+} from 'typeorm';
 
 @Entity()
 export class BaseEntity {
@@ -12,5 +18,5 @@ export class BaseEntity {
   deletedAt: Date | null = null;
 
   @VersionColumn()
-  version: number = 0;
+  version = 0;
 }

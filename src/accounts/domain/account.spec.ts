@@ -4,7 +4,7 @@ import {
   UnprocessableEntityException,
 } from '@nestjs/common';
 
-import { Account, AccountProperties } from 'src/accounts/domain/account';
+import { Account } from 'src/accounts/domain/account';
 import { AccountClosedEvent } from 'src/accounts/domain/events/account-closed.event';
 import { AccountOpenedEvent } from 'src/accounts/domain/events/account-opened.event';
 import { DepositedEvent } from 'src/accounts/domain/events/deposited.event';
@@ -49,7 +49,11 @@ describe('Account', () => {
 
   describe('setPassword', () => {
     it('should throw InternalServerErrorException when password that account already have is not empty string', () => {
-      const account = new Account({ id: 'id', name: 'name', password: 'password' });
+      const account = new Account({
+        id: 'id',
+        name: 'name',
+        password: 'password',
+      });
 
       expect(() => account.setPassword('password')).toThrowError(
         InternalServerErrorException,

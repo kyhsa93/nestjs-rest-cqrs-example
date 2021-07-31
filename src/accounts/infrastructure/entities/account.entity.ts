@@ -8,11 +8,11 @@ export class AccountEntity extends BaseEntity {
   id!: string;
 
   @Column()
-  name: string = '';
+  name = '';
 
   @Column()
-  password: string = '';
+  password = '';
 
   @Column()
-  balance: number = 0;
+  balance = 0;
 }

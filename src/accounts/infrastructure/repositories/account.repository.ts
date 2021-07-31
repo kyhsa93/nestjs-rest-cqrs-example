@@ -30,10 +30,18 @@ export class AccountRepositoryImplement implements AccountRepository {
 
   private modelToEntity(model: Account): AccountEntity {
     const properties = model.properties();
-    return { ...properties, createdAt: properties.openedAt, deletedAt: properties.closedAt };
+    return {
+      ...properties,
+      createdAt: properties.openedAt,
+      deletedAt: properties.closedAt,
+    };
   }
 
   private entityToModel(entity: AccountEntity): Account {
-    return new Account({ ...entity, openedAt: entity.createdAt, closedAt: entity.deletedAt });
+    return new Account({
+      ...entity,
+      openedAt: entity.createdAt,
+      closedAt: entity.deletedAt,
+    });
   }
 }
