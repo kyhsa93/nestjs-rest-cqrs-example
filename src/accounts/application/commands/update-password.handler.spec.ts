@@ -16,10 +16,7 @@ describe('UpdatePasswordHandler', () => {
       provide: InjectionToken.ACCOUNT_REPOSITORY,
       useValue: {},
     };
-    const providers: Provider[] = [
-      UpdatePasswordHandler,
-      repoProvider,
-    ];
+    const providers: Provider[] = [UpdatePasswordHandler, repoProvider];
     const moduleMetadata: ModuleMetadata = { providers };
     const testModule = await Test.createTestingModule(moduleMetadata).compile();
 

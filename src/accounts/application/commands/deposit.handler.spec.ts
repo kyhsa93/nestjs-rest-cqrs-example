@@ -16,10 +16,7 @@ describe('DepositHandler', () => {
       provide: InjectionToken.ACCOUNT_REPOSITORY,
       useValue: {},
     };
-    const providers: Provider[] = [
-      DepositHandler,
-      repoProvider,
-    ];
+    const providers: Provider[] = [DepositHandler, repoProvider];
     const moduleMetadata: ModuleMetadata = { providers };
     const testModule = await Test.createTestingModule(moduleMetadata).compile();
 
@@ -45,7 +42,10 @@ describe('DepositHandler', () => {
     });
 
     it('should execute DepositCommand', async () => {
-      const account = { deposit: jest.fn().mockReturnValue(undefined), commit: jest.fn().mockReturnValue(undefined) };
+      const account = {
+        deposit: jest.fn().mockReturnValue(undefined),
+        commit: jest.fn().mockReturnValue(undefined),
+      };
 
       repository.findById = jest.fn().mockResolvedValue(account);
       repository.save = jest.fn().mockResolvedValue(undefined);

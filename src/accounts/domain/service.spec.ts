@@ -9,7 +9,6 @@ describe('AccountService', () => {
       const account = { withdraw: jest.fn() } as unknown as Account;
       const receiver = { deposit: jest.fn() } as unknown as Account;
 
-
       const options: RemittanceOptions = {
         account,
         receiver,

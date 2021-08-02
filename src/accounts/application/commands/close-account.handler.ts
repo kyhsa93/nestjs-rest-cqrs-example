@@ -18,7 +18,8 @@ export class CloseAccountHandler
 
   async execute(command: CloseAccountCommand): Promise<void> {
     const account = await this.accountRepository.findById(command.id);
-    if (!account) throw new NotFoundException(ErrorMessage.ACCOUNT_IS_NOT_FOUND);
+    if (!account)
+      throw new NotFoundException(ErrorMessage.ACCOUNT_IS_NOT_FOUND);
 
     account.close(command.password);
 

@@ -102,7 +102,11 @@ describe('Account', () => {
     });
 
     it('should throw UnprocessableEntityException when given amount is over account balance', () => {
-      const account = new AccountImplement({ id: 'id', name: 'name', balance: 0 });
+      const account = new AccountImplement({
+        id: 'id',
+        name: 'name',
+        balance: 0,
+      });
       account.open('password');
       account.uncommit();
 
@@ -112,7 +116,11 @@ describe('Account', () => {
     });
 
     it('should withdraw from account', () => {
-      const account = new AccountImplement({ id: 'id', name: 'name', balance: 1 });
+      const account = new AccountImplement({
+        id: 'id',
+        name: 'name',
+        balance: 1,
+      });
       account.open('password');
       account.uncommit();
 
@@ -161,7 +169,11 @@ describe('Account', () => {
     });
 
     it('should throw UnprocessableEntityException when account balance is over 0', () => {
-      const account = new AccountImplement({ id: 'id', name: 'name', balance: 1 });
+      const account = new AccountImplement({
+        id: 'id',
+        name: 'name',
+        balance: 1,
+      });
       account.open('password');
       account.uncommit();
 

@@ -16,10 +16,7 @@ describe('WithdrawHandler', () => {
       provide: InjectionToken.ACCOUNT_REPOSITORY,
       useValue: {},
     };
-    const providers: Provider[] = [
-      WithdrawHandler,
-      repoProvider,
-    ];
+    const providers: Provider[] = [WithdrawHandler, repoProvider];
     const moduleMetadata: ModuleMetadata = { providers };
     const testModule = await Test.createTestingModule(moduleMetadata).compile();
 

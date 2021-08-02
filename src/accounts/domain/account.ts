@@ -31,14 +31,14 @@ export type AccountProperties = AccountEssentialProperties &
   Required<AccountOptionalProperties>;
 
 export interface Account {
-  properties(): AccountProperties
-  compareId(id: string): boolean
-  open(password: string): void
-  updatePassword(password: string, data: string): void
-  withdraw(amount: number, password: string): void
-  deposit(amount: number): void
-  close(password: string): void
-  commit(): void
+  properties: () => AccountProperties;
+  compareId: (id: string) => boolean;
+  open: (password: string) => void;
+  updatePassword: (password: string, data: string) => void;
+  withdraw: (amount: number, password: string) => void;
+  deposit: (amount: number) => void;
+  close: (password: string) => void;
+  commit: () => void;
 }
 
 export class AccountImplement extends AggregateRoot implements Account {

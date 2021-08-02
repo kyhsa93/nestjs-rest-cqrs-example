@@ -7,7 +7,6 @@ import { Account } from 'src/accounts/domain/account';
 import { AccountFactory } from 'src/accounts/domain/factory';
 
 export class AccountRepositoryImplement implements AccountRepository {
-
   constructor(private readonly accountFactory: AccountFactory) {}
 
   async newId(): Promise<string> {
@@ -47,7 +46,10 @@ export class AccountRepositoryImplement implements AccountRepository {
   }
 
   private entityToModel(entity: AccountEntity): Account {
-    return this.accountFactory.reconstitute({ ...entity,openedAt: entity.createdAt,
-      closedAt: entity.deletedAt })
+    return this.accountFactory.reconstitute({
+      ...entity,
+      openedAt: entity.createdAt,
+      closedAt: entity.deletedAt,
+    });
   }
 }

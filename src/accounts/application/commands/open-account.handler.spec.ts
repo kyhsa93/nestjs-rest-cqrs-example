@@ -21,7 +21,7 @@ describe('OpenAccountHandler', () => {
     const factoryProvider: Provider = {
       provide: AccountFactory,
       useValue: {},
-    }
+    };
     const providers: Provider[] = [
       OpenAccountHandler,
       repoProvider,

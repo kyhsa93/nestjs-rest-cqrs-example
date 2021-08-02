@@ -26,16 +26,21 @@ export class RemitHandler implements ICommandHandler<RemitCommand, void> {
         ErrorMessage.WITHDRAWAL_AND_DEPOSIT_ACCOUNTS_CANNOT_BE_THE_SAME,
       );
 
-    const accounts = await this.accountRepository.findByIds([command.id, command.receiverId]);
+    const accounts = await this.accountRepository.findByIds([
+      command.id,
+      command.receiverId,
+    ]);
     if (accounts.length !== 2) {
       throw new NotFoundException(ErrorMessage.ACCOUNT_IS_NOT_FOUND);
     }
-    
-    const account = accounts.find(item => item.compareId(command.id));
+
+    const account = accounts.find((item) => item.compareId(command.id));
     if (!account)
       throw new NotFoundException(ErrorMessage.ACCOUNT_IS_NOT_FOUND);
 
-    const receiver = accounts.find(item => item.compareId(command.receiverId));
+    const receiver = accounts.find((item) =>
+      item.compareId(command.receiverId),
+    );
     if (!receiver)
       throw new UnprocessableEntityException(
         ErrorMessage.RECEIVER_ACCOUNT_IS_NOT_FOUND,

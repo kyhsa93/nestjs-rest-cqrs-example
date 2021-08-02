@@ -18,7 +18,10 @@ export class OpenAccountHandler
   ) {}
 
   async execute(command: OpenAccountCommand): Promise<void> {
-    const account = this.accountFactory.create(await this.accountRepository.newId(), command.name);
+    const account = this.accountFactory.create(
+      await this.accountRepository.newId(),
+      command.name,
+    );
 
     account.open(command.password);
 

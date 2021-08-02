@@ -18,7 +18,8 @@ export class UpdatePasswordHandler
 
   async execute(command: UpdatePasswordCommand): Promise<void> {
     const account = await this.accountRepository.findById(command.id);
-    if (!account) throw new NotFoundException(ErrorMessage.ACCOUNT_IS_NOT_FOUND);
+    if (!account)
+      throw new NotFoundException(ErrorMessage.ACCOUNT_IS_NOT_FOUND);
 
     account.updatePassword(command.password, command.newPassword);
 

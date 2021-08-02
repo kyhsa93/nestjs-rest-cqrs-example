@@ -16,10 +16,7 @@ describe('CloseAccountHandler', () => {
       provide: InjectionToken.ACCOUNT_REPOSITORY,
       useValue: {},
     };
-    const providers: Provider[] = [
-      CloseAccountHandler,
-      repoProvider,
-    ];
+    const providers: Provider[] = [CloseAccountHandler, repoProvider];
     const moduleMetadata: ModuleMetadata = { providers };
     const testModule = await Test.createTestingModule(moduleMetadata).compile();
 

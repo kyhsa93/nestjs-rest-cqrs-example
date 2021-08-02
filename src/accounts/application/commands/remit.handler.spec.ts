@@ -64,10 +64,15 @@ describe('RemitHandler', () => {
         password: 'password',
       });
 
-      await expect(handler.execute(command)).rejects.toThrowError(NotFoundException);
+      await expect(handler.execute(command)).rejects.toThrowError(
+        NotFoundException,
+      );
       expect(repository.findByIds).toBeCalledTimes(1);
-      expect(repository.findByIds).toBeCalledWith([command.id, command.receiverId]);
-    })
+      expect(repository.findByIds).toBeCalledWith([
+        command.id,
+        command.receiverId,
+      ]);
+    });
 
     it('should throw NotFoundException when repository found just single account', async () => {
       repository.findByIds = jest.fn().mockResolvedValue([{}]);
@@ -79,10 +84,15 @@ describe('RemitHandler', () => {
         password: 'password',
       });
 
-      await expect(handler.execute(command)).rejects.toThrowError(NotFoundException);
+      await expect(handler.execute(command)).rejects.toThrowError(
+        NotFoundException,
+      );
       expect(repository.findByIds).toBeCalledTimes(1);
-      expect(repository.findByIds).toBeCalledWith([command.id, command.receiverId]);
-    })
+      expect(repository.findByIds).toBeCalledWith([
+        command.id,
+        command.receiverId,
+      ]);
+    });
 
     it('should throw NotFoundException when account not found', async () => {
       const account = { compareId: (id: string) => id === 'wrongId' };
@@ -101,12 +111,15 @@ describe('RemitHandler', () => {
         NotFoundException,
       );
       expect(repository.findByIds).toBeCalledTimes(1);
-      expect(repository.findByIds).toBeCalledWith([command.id, command.receiverId]);
+      expect(repository.findByIds).toBeCalledWith([
+        command.id,
+        command.receiverId,
+      ]);
     });
 
     it('should throw UnprocessableEntityException receiver is not found', async () => {
       const account = { compareId: (id: string) => id === 'accountId' };
-      const receiver = { compareId: (id: string) => id === 'wrongId'};
+      const receiver = { compareId: (id: string) => id === 'wrongId' };
 
       repository.findByIds = jest.fn().mockResolvedValue([account, receiver]);
       domainService.remit = jest.fn();
@@ -123,12 +136,21 @@ describe('RemitHandler', () => {
         UnprocessableEntityException,
       );
       expect(repository.findByIds).toBeCalledTimes(1);
-      expect(repository.findByIds).toBeCalledWith([command.id, command.receiverId]);
+      expect(repository.findByIds).toBeCalledWith([
+        command.id,
+        command.receiverId,
+      ]);
     });
 
     it('should execute RemitCommand', async () => {
-      const account = { commit: jest.fn(), compareId: (id: string) => id === 'accountId' };
-      const receiver = { commit: jest.fn(), compareId: (id: string) => id === 'receiverId' };
+      const account = {
+        commit: jest.fn(),
+        compareId: (id: string) => id === 'accountId',
+      };
+      const receiver = {
+        commit: jest.fn(),
+        compareId: (id: string) => id === 'receiverId',
+      };
 
       repository.findByIds = jest.fn().mockResolvedValue([account, receiver]);
       repository.save = jest.fn().mockResolvedValue(undefined);
@@ -143,7 +165,10 @@ describe('RemitHandler', () => {
 
       await expect(handler.execute(command)).resolves.toEqual(undefined);
       expect(repository.findByIds).toBeCalledTimes(1);
-      expect(repository.findByIds).toBeCalledWith([command.id, command.receiverId]);
+      expect(repository.findByIds).toBeCalledWith([
+        command.id,
+        command.receiverId,
+      ]);
       expect(domainService.remit).toBeCalledTimes(1);
       expect(domainService.remit).toBeCalledWith({
         account,
