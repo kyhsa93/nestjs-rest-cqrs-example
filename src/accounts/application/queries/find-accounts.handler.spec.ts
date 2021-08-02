@@ -34,8 +34,8 @@ describe('FindAccountsHandler', () => {
           name: 'test',
           password: 'password',
           balance: 0,
-          openedAt: new Date(),
-          updatedAt: new Date(),
+          openedAt: expect.anything(),
+          updatedAt: expect.anything(),
           closedAt: null,
         },
       ];

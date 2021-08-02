@@ -19,8 +19,8 @@ describe('Account', () => {
         name: 'name',
         password: '',
         balance: 0,
-        openedAt: new Date(),
-        updatedAt: new Date(),
+        openedAt: expect.anything(),
+        updatedAt: expect.anything(),
         closedAt: null,
         version: 0,
       };
