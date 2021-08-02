@@ -1,4 +1,5 @@
 import { getRepository, In } from 'typeorm';
+import { Inject } from '@nestjs/common';
 
 import { AccountEntity } from 'src/accounts/infrastructure/entities/account.entity';
 
@@ -7,7 +8,9 @@ import { Account } from 'src/accounts/domain/account';
 import { AccountFactory } from 'src/accounts/domain/factory';
 
 export class AccountRepositoryImplement implements AccountRepository {
-  constructor(private readonly accountFactory: AccountFactory) {}
+  constructor(
+    @Inject(AccountFactory) private readonly accountFactory: AccountFactory,
+  ) {}
 
   async newId(): Promise<string> {
     const emptyEntity = new AccountEntity();

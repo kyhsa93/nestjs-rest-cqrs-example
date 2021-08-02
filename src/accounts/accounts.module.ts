@@ -23,6 +23,7 @@ import { FindAccountByIdHandler } from 'src/accounts/application/queries/find-ac
 import { FindAccountsHandler } from 'src/accounts/application/queries/find-accounts.handler';
 
 import { AccountService } from 'src/accounts/domain/service';
+import { AccountFactory } from 'src/accounts/domain/factory';
 
 const infrastructure = [
   AccountRepositoryImplement,
@@ -47,7 +48,7 @@ const application = [
   FindAccountsHandler,
 ];
 
-const domain = [AccountService];
+const domain = [AccountService, AccountFactory];
 
 @Module({
   imports: [CqrsModule],

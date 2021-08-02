@@ -1,3 +1,4 @@
+import { Inject } from '@nestjs/common';
 import { EventPublisher } from '@nestjs/cqrs';
 
 import {
@@ -7,7 +8,9 @@ import {
 } from 'src/accounts/domain/account';
 
 export class AccountFactory {
-  constructor(private readonly eventPublisher: EventPublisher) {}
+  constructor(
+    @Inject(EventPublisher) private readonly eventPublisher: EventPublisher,
+  ) {}
 
   create(id: string, name: string): Account {
     return this.eventPublisher.mergeObjectContext(

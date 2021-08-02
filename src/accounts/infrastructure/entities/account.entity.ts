@@ -7,12 +7,12 @@ export class AccountEntity extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
-  @Column()
+  @Column({ type: 'varchar' })
   name = '';
 
-  @Column()
+  @Column({ type: 'varchar' })
   password = '';
 
-  @Column()
+  @Column({ type: 'int' })
   balance = 0;
 }
