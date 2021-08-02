@@ -1,11 +1,15 @@
-import { getRepository } from 'typeorm';
+import { getRepository, In } from 'typeorm';
 
 import { AccountEntity } from 'src/accounts/infrastructure/entities/account.entity';
 
 import { AccountRepository } from 'src/accounts/domain/repository';
 import { Account } from 'src/accounts/domain/account';
+import { AccountFactory } from 'src/accounts/domain/factory';
 
 export class AccountRepositoryImplement implements AccountRepository {
+
+  constructor(private readonly accountFactory: AccountFactory) {}
+
   async newId(): Promise<string> {
     const emptyEntity = new AccountEntity();
     const entity = await getRepository(AccountEntity).save(emptyEntity);
@@ -18,9 +22,14 @@ export class AccountRepositoryImplement implements AccountRepository {
     await getRepository(AccountEntity).save(entities);
   }
 
-  async findById(id: string): Promise<Account | undefined> {
+  async findById(id: string): Promise<Account | null> {
     const entity = await getRepository(AccountEntity).findOne({ id });
-    return entity ? this.entityToModel(entity) : undefined;
+    return entity ? this.entityToModel(entity) : null;
+  }
+
+  async findByIds(ids: string[]): Promise<Account[]> {
+    const entities = await getRepository(AccountEntity).find({ id: In(ids) });
+    return entities.map((entity) => this.entityToModel(entity));
   }
 
   async findByName(name: string): Promise<Account[]> {
@@ -38,10 +47,7 @@ export class AccountRepositoryImplement implements AccountRepository {
   }
 
   private entityToModel(entity: AccountEntity): Account {
-    return new Account({
-      ...entity,
-      openedAt: entity.createdAt,
-      closedAt: entity.deletedAt,
-    });
+    return this.accountFactory.reconstitute({ ...entity,openedAt: entity.createdAt,
+      closedAt: entity.deletedAt })
   }
 }

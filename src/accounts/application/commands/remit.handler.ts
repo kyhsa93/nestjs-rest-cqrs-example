@@ -3,7 +3,7 @@ import {
   NotFoundException,
   UnprocessableEntityException,
 } from '@nestjs/common';
-import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
 import { RemitCommand } from 'src/accounts/application/commands/remit.command';
 import { InjectionToken } from 'src/accounts/application/injection.token';
@@ -17,7 +17,6 @@ export class RemitHandler implements ICommandHandler<RemitCommand, void> {
   constructor(
     @Inject(InjectionToken.ACCOUNT_REPOSITORY)
     private readonly accountRepository: AccountRepository,
-    private readonly eventPublisher: EventPublisher,
     private readonly accountService: AccountService,
   ) {}
 
@@ -27,28 +26,27 @@ export class RemitHandler implements ICommandHandler<RemitCommand, void> {
         ErrorMessage.WITHDRAWAL_AND_DEPOSIT_ACCOUNTS_CANNOT_BE_THE_SAME,
       );
 
-    const senderData = await this.accountRepository.findById(command.id);
-    if (!senderData)
+    const accounts = await this.accountRepository.findByIds([command.id, command.receiverId]);
+    if (accounts.length !== 2) {
+      throw new NotFoundException(ErrorMessage.ACCOUNT_IS_NOT_FOUND);
+    }
+    
+    const account = accounts.find(item => item.compareId(command.id));
+    if (!account)
       throw new NotFoundException(ErrorMessage.ACCOUNT_IS_NOT_FOUND);
 
-    const sender = this.eventPublisher.mergeObjectContext(senderData);
-
-    const receiverData = await this.accountRepository.findById(
-      command.receiverId,
-    );
-    if (!receiverData)
+    const receiver = accounts.find(item => item.compareId(command.receiverId));
+    if (!receiver)
       throw new UnprocessableEntityException(
         ErrorMessage.RECEIVER_ACCOUNT_IS_NOT_FOUND,
       );
 
-    const receiver = this.eventPublisher.mergeObjectContext(receiverData);
-
     const { password, amount } = command;
-    this.accountService.remit({ sender, receiver, password, amount });
+    this.accountService.remit({ account, receiver, password, amount });
 
-    await this.accountRepository.save([sender, receiver]);
+    await this.accountRepository.save([account, receiver]);
 
-    sender.commit();
+    account.commit();
     receiver.commit();
   }
 }

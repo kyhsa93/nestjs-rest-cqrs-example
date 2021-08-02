@@ -1,5 +1,6 @@
 import { ModuleMetadata, NotFoundException, Provider } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
+import { InjectionToken } from 'src/accounts/application/injection.token';
 
 import {
   Account,
@@ -15,13 +16,13 @@ describe('FindAccountByIdHandler', () => {
 
   beforeEach(async () => {
     const queryProvider: Provider = {
-      provide: 'AccountQueryImplement',
+      provide: InjectionToken.ACCOUNT_QUERY,
       useValue: {},
     };
     const providers: Provider[] = [queryProvider, FindAccountByIdHandler];
     const moduleMetadata: ModuleMetadata = { providers };
     const testModule = await Test.createTestingModule(moduleMetadata).compile();
-    accountQuery = testModule.get('AccountQueryImplement');
+    accountQuery = testModule.get(InjectionToken.ACCOUNT_QUERY);
     handler = testModule.get(FindAccountByIdHandler);
   });
 

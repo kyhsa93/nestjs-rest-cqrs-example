@@ -1,6 +1,7 @@
 import { Inject, InternalServerErrorException } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 
+import { InjectionToken } from 'src/accounts/application/injection.token';
 import {
   AccountQuery,
   ItemInAccounts,
@@ -16,7 +17,7 @@ export class FindAccountsHandler
   implements IQueryHandler<FindAccountsQuery, FindAccountsResult>
 {
   constructor(
-    @Inject('AccountQueryImplement') readonly accountQuery: AccountQuery,
+    @Inject(InjectionToken.ACCOUNT_QUERY) readonly accountQuery: AccountQuery,
   ) {}
 
   async execute(query: FindAccountsQuery): Promise<FindAccountsResult> {

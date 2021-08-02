@@ -30,7 +30,18 @@ export type AccountOptionalProperties = Partial<{
 export type AccountProperties = AccountEssentialProperties &
   Required<AccountOptionalProperties>;
 
-export class Account extends AggregateRoot {
+export interface Account {
+  properties(): AccountProperties
+  compareId(id: string): boolean
+  open(password: string): void
+  updatePassword(password: string, data: string): void
+  withdraw(amount: number, password: string): void
+  deposit(amount: number): void
+  close(password: string): void
+  commit(): void
+}
+
+export class AccountImplement extends AggregateRoot implements Account {
   private readonly id: string;
   private readonly name: string;
   private password = '';
@@ -60,11 +71,16 @@ export class Account extends AggregateRoot {
     };
   }
 
-  open(): void {
+  compareId(id: string): boolean {
+    return id === this.id;
+  }
+
+  open(password: string): void {
+    this.setPassword(password);
     this.apply(Object.assign(new AccountOpenedEvent(), this));
   }
 
-  setPassword(password: string): void {
+  private setPassword(password: string): void {
     if (this.password !== '' || password === '')
       throw new InternalServerErrorException(ErrorMessage.CAN_NOT_SET_PASSWORD);
     const salt = bcrypt.genSaltSync();

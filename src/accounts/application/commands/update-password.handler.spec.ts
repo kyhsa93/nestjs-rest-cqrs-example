@@ -1,42 +1,35 @@
 import { ModuleMetadata, NotFoundException, Provider } from '@nestjs/common';
-import { EventPublisher } from '@nestjs/cqrs';
 import { Test } from '@nestjs/testing';
 
 import { UpdatePasswordCommand } from 'src/accounts/application/commands/update-password.command';
 import { UpdatePasswordHandler } from 'src/accounts/application/commands/update-password.handler';
+import { InjectionToken } from 'src/accounts/application/injection.token';
 
 import { AccountRepository } from 'src/accounts/domain/repository';
 
 describe('UpdatePasswordHandler', () => {
   let handler: UpdatePasswordHandler;
   let repository: AccountRepository;
-  let publisher: EventPublisher;
 
   beforeEach(async () => {
     const repoProvider: Provider = {
-      provide: 'AccountRepositoryImplement',
-      useValue: {},
-    };
-    const publisherProvider: Provider = {
-      provide: EventPublisher,
+      provide: InjectionToken.ACCOUNT_REPOSITORY,
       useValue: {},
     };
     const providers: Provider[] = [
       UpdatePasswordHandler,
       repoProvider,
-      publisherProvider,
     ];
     const moduleMetadata: ModuleMetadata = { providers };
     const testModule = await Test.createTestingModule(moduleMetadata).compile();
 
     handler = testModule.get(UpdatePasswordHandler);
-    repository = testModule.get('AccountRepositoryImplement');
-    publisher = testModule.get(EventPublisher);
+    repository = testModule.get(InjectionToken.ACCOUNT_REPOSITORY);
   });
 
   describe('execute', () => {
     it('should throw NotFoundException when account not found', async () => {
-      repository.findById = jest.fn().mockResolvedValue(undefined);
+      repository.findById = jest.fn().mockResolvedValue(null);
 
       const command = new UpdatePasswordCommand({
         id: 'accountId',
@@ -54,9 +47,8 @@ describe('UpdatePasswordHandler', () => {
     it('should execute UpdatePasswordCommand', async () => {
       const account = { updatePassword: jest.fn(), commit: jest.fn() };
 
-      repository.findById = jest.fn().mockResolvedValue({});
+      repository.findById = jest.fn().mockResolvedValue(account);
       repository.save = jest.fn().mockResolvedValue(undefined);
-      publisher.mergeObjectContext = jest.fn().mockReturnValue(account);
 
       const command = new UpdatePasswordCommand({
         id: 'accountId',
@@ -67,8 +59,6 @@ describe('UpdatePasswordHandler', () => {
       await expect(handler.execute(command)).resolves.toEqual(undefined);
       expect(repository.findById).toBeCalledTimes(1);
       expect(repository.findById).toBeCalledWith(command.id);
-      expect(publisher.mergeObjectContext).toBeCalledTimes(1);
-      expect(publisher.mergeObjectContext).toBeCalledWith({});
       expect(account.updatePassword).toBeCalledTimes(1);
       expect(account.updatePassword).toBeCalledWith(
         command.password,

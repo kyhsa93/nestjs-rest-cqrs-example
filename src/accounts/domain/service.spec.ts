@@ -1,6 +1,4 @@
 import { Account } from 'src/accounts/domain/account';
-import { DepositedEvent } from 'src/accounts/domain/events/deposited.event';
-import { WithdrawnEvent } from 'src/accounts/domain/events/withdrawn.event';
 import { AccountService, RemittanceOptions } from 'src/accounts/domain/service';
 
 describe('AccountService', () => {
@@ -8,40 +6,22 @@ describe('AccountService', () => {
     it('should run remit', () => {
       const service = new AccountService();
 
-      const sender = new Account({
-        id: 'senderId',
-        name: 'sender',
-        balance: 1,
-        password: '',
-        openedAt: new Date(),
-        updatedAt: new Date(),
-      });
-      sender.setPassword('senderPassword');
+      const account = { withdraw: jest.fn() } as unknown as Account;
+      const receiver = { deposit: jest.fn() } as unknown as Account;
 
-      const receiver = new Account({
-        id: 'receiverId',
-        name: 'receiver',
-        balance: 0,
-        password: '',
-        openedAt: new Date(),
-        updatedAt: new Date(),
-      });
-      receiver.setPassword('receiverPassword');
 
       const options: RemittanceOptions = {
-        sender,
+        account,
         receiver,
-        password: 'senderPassword',
+        password: 'password',
         amount: 1,
       };
 
       expect(service.remit(options)).toEqual(undefined);
-      expect(sender.getUncommittedEvents()).toEqual([
-        Object.assign(new WithdrawnEvent(), sender),
-      ]);
-      expect(receiver.getUncommittedEvents()).toEqual([
-        Object.assign(new DepositedEvent(), receiver),
-      ]);
+      expect(account.withdraw).toBeCalledTimes(1);
+      expect(account.withdraw).toBeCalledWith(options.amount, options.password);
+      expect(receiver.deposit).toBeCalledTimes(1);
+      expect(receiver.deposit).toBeCalledWith(options.amount);
     });
   });
 });

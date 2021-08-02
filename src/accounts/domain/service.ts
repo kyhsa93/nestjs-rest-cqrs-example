@@ -2,14 +2,14 @@ import { Account } from 'src/accounts/domain/account';
 
 export class RemittanceOptions {
   readonly password: string;
-  readonly sender: Account;
+  readonly account: Account;
   readonly receiver: Account;
   readonly amount: number;
 }
 
 export class AccountService {
-  remit({ sender, receiver, password, amount }: RemittanceOptions): void {
-    sender.withdraw(amount, password);
+  remit({ account, receiver, password, amount }: RemittanceOptions): void {
+    account.withdraw(amount, password);
     receiver.deposit(amount);
   }
 }

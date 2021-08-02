@@ -1,6 +1,7 @@
 import { ModuleMetadata, Provider } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 
+import { InjectionToken } from 'src/accounts/application/injection.token';
 import {
   AccountQuery,
   Accounts,
@@ -15,14 +16,14 @@ describe('FindAccountsHandler', () => {
 
   beforeEach(async () => {
     const queryProvider: Provider = {
-      provide: 'AccountQueryImplement',
+      provide: InjectionToken.ACCOUNT_QUERY,
       useValue: {},
     };
     const providers: Provider[] = [queryProvider, FindAccountsHandler];
     const moduleMetadata: ModuleMetadata = { providers };
     const testModule = await Test.createTestingModule(moduleMetadata).compile();
     handler = testModule.get(FindAccountsHandler);
-    accountQuery = testModule.get('AccountQueryImplement');
+    accountQuery = testModule.get(InjectionToken.ACCOUNT_QUERY);
   });
 
   describe('execute', () => {

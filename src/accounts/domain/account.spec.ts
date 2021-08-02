@@ -4,7 +4,7 @@ import {
   UnprocessableEntityException,
 } from '@nestjs/common';
 
-import { Account } from 'src/accounts/domain/account';
+import { AccountImplement } from 'src/accounts/domain/account';
 import { AccountClosedEvent } from 'src/accounts/domain/events/account-closed.event';
 import { AccountOpenedEvent } from 'src/accounts/domain/events/account-opened.event';
 import { DepositedEvent } from 'src/accounts/domain/events/deposited.event';
@@ -25,7 +25,7 @@ describe('Account', () => {
         version: 0,
       };
 
-      const account = new Account({ id: 'id', name: 'name' });
+      const account = new AccountImplement({ id: 'id', name: 'name' });
 
       const result = account.properties();
 
@@ -35,9 +35,9 @@ describe('Account', () => {
 
   describe('open', () => {
     it('should apply AccountOpenedEvent', () => {
-      const account = new Account({ id: 'id', name: 'name' });
+      const account = new AccountImplement({ id: 'id', name: 'name' });
 
-      account.open();
+      account.open('password');
 
       const result = account.getUncommittedEvents();
 
@@ -47,41 +47,11 @@ describe('Account', () => {
     });
   });
 
-  describe('setPassword', () => {
-    it('should throw InternalServerErrorException when password that account already have is not empty string', () => {
-      const account = new Account({
-        id: 'id',
-        name: 'name',
-        password: 'password',
-      });
-
-      expect(() => account.setPassword('password')).toThrowError(
-        InternalServerErrorException,
-      );
-    });
-
-    it('should throw InternalServerErrorException when given password is empty string', () => {
-      const account = new Account({ id: 'id', name: 'name' });
-
-      expect(() => account.setPassword('')).toThrowError(
-        InternalServerErrorException,
-      );
-    });
-
-    it('should set password', () => {
-      const account = new Account({ id: 'id', name: 'name' });
-
-      account.setPassword('password');
-
-      expect(account.properties().password).not.toEqual('');
-      expect(account.properties().password).not.toEqual('password');
-    });
-  });
-
   describe('updatePassword', () => {
     it('should throw UnauthorizedException when password is not matched', () => {
-      const account = new Account({ id: 'id', name: 'name' });
-      account.setPassword('password');
+      const account = new AccountImplement({ id: 'id', name: 'name' });
+      account.open('password');
+      account.uncommit();
 
       expect(() =>
         account.updatePassword('wrongPassword', 'newPassword'),
@@ -89,8 +59,9 @@ describe('Account', () => {
     });
 
     it('should update password', () => {
-      const account = new Account({ id: 'id', name: 'name' });
-      account.setPassword('password');
+      const account = new AccountImplement({ id: 'id', name: 'name' });
+      account.open('password');
+      account.uncommit();
 
       account.updatePassword('password', 'newPassword');
 
@@ -98,7 +69,7 @@ describe('Account', () => {
 
       expect(account.properties().password).not.toEqual('');
       expect(account.properties().password).not.toEqual('password');
-      expect(() => account.setPassword('data')).toThrowError(
+      expect(() => account.open('data')).toThrowError(
         InternalServerErrorException,
       );
       expect(account.getUncommittedEvents().length).toEqual(1);
@@ -111,8 +82,9 @@ describe('Account', () => {
 
   describe('withdraw', () => {
     it('should throw UnauthorizedException when password is not matched', () => {
-      const account = new Account({ id: 'id', name: 'name' });
-      account.setPassword('password');
+      const account = new AccountImplement({ id: 'id', name: 'name' });
+      account.open('password');
+      account.uncommit();
 
       expect(() => account.withdraw(0, 'wrongPassword')).toThrowError(
         UnauthorizedException,
@@ -120,8 +92,9 @@ describe('Account', () => {
     });
 
     it('should throw InternalServerErrorException when given amount is under 1', () => {
-      const account = new Account({ id: 'id', name: 'name' });
-      account.setPassword('password');
+      const account = new AccountImplement({ id: 'id', name: 'name' });
+      account.open('password');
+      account.uncommit();
 
       expect(() => account.withdraw(0, 'password')).toThrowError(
         InternalServerErrorException,
@@ -129,8 +102,9 @@ describe('Account', () => {
     });
 
     it('should throw UnprocessableEntityException when given amount is over account balance', () => {
-      const account = new Account({ id: 'id', name: 'name', balance: 0 });
-      account.setPassword('password');
+      const account = new AccountImplement({ id: 'id', name: 'name', balance: 0 });
+      account.open('password');
+      account.uncommit();
 
       expect(() => account.withdraw(1, 'password')).toThrowError(
         UnprocessableEntityException,
@@ -138,24 +112,23 @@ describe('Account', () => {
     });
 
     it('should withdraw from account', () => {
-      const account = new Account({ id: 'id', name: 'name', balance: 1 });
-      account.setPassword('password');
+      const account = new AccountImplement({ id: 'id', name: 'name', balance: 1 });
+      account.open('password');
+      account.uncommit();
 
-      account.withdraw(1, 'password');
+      expect(account.withdraw(1, 'password')).toEqual(undefined);
 
       expect(account.getUncommittedEvents()).toEqual([
         Object.assign(new WithdrawnEvent(), account),
       ]);
-      expect(() => account.withdraw(1, 'password')).toThrowError(
-        UnprocessableEntityException,
-      );
     });
   });
 
   describe('deposit', () => {
     it('should throw InternalServerErrorException when given amount is under 1', () => {
-      const account = new Account({ id: 'id', name: 'name' });
-      account.setPassword('password');
+      const account = new AccountImplement({ id: 'id', name: 'name' });
+      account.open('password');
+      account.uncommit();
 
       expect(() => account.deposit(0)).toThrowError(
         InternalServerErrorException,
@@ -163,8 +136,9 @@ describe('Account', () => {
     });
 
     it('should deposit to account', () => {
-      const account = new Account({ id: 'id', name: 'name' });
-      account.setPassword('password');
+      const account = new AccountImplement({ id: 'id', name: 'name' });
+      account.open('password');
+      account.uncommit();
 
       account.deposit(1);
 
@@ -177,8 +151,9 @@ describe('Account', () => {
 
   describe('close', () => {
     it('should throw UnauthorizedException when password is not matched', () => {
-      const account = new Account({ id: 'id', name: 'name' });
-      account.setPassword('password');
+      const account = new AccountImplement({ id: 'id', name: 'name' });
+      account.open('password');
+      account.uncommit();
 
       expect(() => account.close('wrongPassword')).toThrowError(
         UnauthorizedException,
@@ -186,8 +161,9 @@ describe('Account', () => {
     });
 
     it('should throw UnprocessableEntityException when account balance is over 0', () => {
-      const account = new Account({ id: 'id', name: 'name', balance: 1 });
-      account.setPassword('password');
+      const account = new AccountImplement({ id: 'id', name: 'name', balance: 1 });
+      account.open('password');
+      account.uncommit();
 
       expect(() => account.close('password')).toThrowError(
         UnprocessableEntityException,
@@ -195,9 +171,10 @@ describe('Account', () => {
     });
 
     it('should close account', () => {
-      const account = new Account({ id: 'id', name: 'name' });
+      const account = new AccountImplement({ id: 'id', name: 'name' });
 
-      account.setPassword('password');
+      account.open('password');
+      account.uncommit();
 
       account.close('password');
       expect(account.getUncommittedEvents()).toEqual([

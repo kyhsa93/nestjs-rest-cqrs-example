@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 
+import { InjectionToken } from 'src/accounts/application/injection.token';
 import { AccountQuery } from 'src/accounts/application/queries/account.query';
 import { FindAccountByIdQuery } from 'src/accounts/application/queries/find-account-by-id.query';
 import { FindAccountByIdResult } from 'src/accounts/application/queries/find-account-by-id.result';
@@ -16,7 +17,7 @@ export class FindAccountByIdHandler
   implements IQueryHandler<FindAccountByIdQuery, FindAccountByIdResult>
 {
   constructor(
-    @Inject('AccountQueryImplement') readonly accountQuery: AccountQuery,
+    @Inject(InjectionToken.ACCOUNT_QUERY) readonly accountQuery: AccountQuery,
   ) {}
 
   async execute(query: FindAccountByIdQuery): Promise<FindAccountByIdResult> {
