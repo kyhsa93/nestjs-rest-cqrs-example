@@ -1,6 +1,6 @@
 export enum InjectionToken {
-  ACCOUNT_REPOSITORY = 'AccountRepositoryImplement',
-  ACCOUNT_QUERY = 'AccountQueryImplement',
-  INTEGRATION_EVENT_PUBLISHER = 'IntegrationEventPublisherImplement',
-  EVENT_STORE = 'EventStoreImplement',
+  ACCOUNT_REPOSITORY = 'AccountRepository',
+  ACCOUNT_QUERY = 'AccountQuery',
+  INTEGRATION_EVENT_PUBLISHER = 'IntegrationEventPublisher',
+  EVENT_STORE = 'EventStore',
 }

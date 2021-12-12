@@ -1,4 +1,4 @@
-import { Logger, Module } from '@nestjs/common';
+import { Logger, Module, Provider } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 
 import { EventStoreImplement } from 'src/accounts/infrastructure/cache/event-store';
@@ -24,12 +24,25 @@ import { FindAccountsHandler } from 'src/accounts/application/queries/find-accou
 
 import { AccountService } from 'src/accounts/domain/service';
 import { AccountFactory } from 'src/accounts/domain/factory';
+import { InjectionToken } from './application/injection.token';
 
-const infrastructure = [
-  AccountRepositoryImplement,
-  EventStoreImplement,
-  IntegrationEventPublisherImplement,
-  AccountQueryImplement,
+const infrastructure: Provider[] = [
+  {
+    provide: InjectionToken.ACCOUNT_REPOSITORY,
+    useClass: AccountRepositoryImplement
+  },
+  {
+    provide: InjectionToken.INTEGRATION_EVENT_PUBLISHER,
+    useClass: IntegrationEventPublisherImplement,
+  },
+  {
+    provide: InjectionToken.EVENT_STORE,
+    useClass: EventStoreImplement,
+  },
+  {
+    provide: InjectionToken.ACCOUNT_QUERY,
+    useClass: AccountQueryImplement,
+  }
 ];
 
 const application = [
