@@ -1,7 +1,7 @@
 import { OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { Connection, createConnection } from 'typeorm';
 
-import { AccountEntity } from 'src/accounts/infrastructure/entities/account.entity';
+import { InvoiceEntity } from 'src/invoices/infrastructure/entities/invoice.entity';
 
 class DBConfig {
   readonly host: string;
@@ -66,7 +66,7 @@ export class AppService implements OnModuleInit, OnModuleDestroy {
   }
 
   async onModuleInit(): Promise<void> {
-    const entities = [AccountEntity];
+    const entities = [InvoiceEntity];
 
     this.databaseConnection = await createConnection({
       ...this.loadDBConfig(),
@@ -78,7 +78,7 @@ export class AppService implements OnModuleInit, OnModuleDestroy {
   private loadDBConfig(): DBConfig {
     return {
       host: process.env.DATABASE_HOST || 'localhost',
-      port: parseInt(process.env.DATABASE_PORT, 10) || 3306,
+      port: parseInt(process.env.DATABASE_PORT, 10) || 3307,
       database: process.env.DATABASE_NAME || 'nest',
       username: process.env.DATABASE_USER || 'root',
       password: process.env.DATABASE_PASSWORD || 'test',
