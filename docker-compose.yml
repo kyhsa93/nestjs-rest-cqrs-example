@@ -6,19 +6,24 @@ services:
     restart: always
     ports:
       - 80:80
-    links:
-      - nest
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
     command: [nginx-debug, '-g', 'daemon off;']
 
   nest:
-    image: kyhsa93/nestjs-rest-cqrs-example
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
     restart: always
-    env_file:
-      - .env
-    links:
-      - database
+    environment:
+      - DATABASE_HOST=database
+      - REDIS_MASTER_HOST=redis-master
+      - REDIS_MASTER_PORT=6379
+      - REDIS_SLAVE_HOST=redis-slave
+      - REDIS_SLAVE_PORT=6379
+    volumes:
+      - ./src:/app/src
+      - ./libs:/app/libs
 
   redis-master:
     image: kyhsa93/redis-master
@@ -29,14 +34,18 @@ services:
     restart: always
 
   database:
-    image: mysql:5.7
+    image: mysql
     restart: always
     ports:
       - 3306:3306
-    env_file:
-      - .env
+    environment:
+      - MYSQL_DATABASE=nest
+      - MYSQL_ROOT_PASSWORD=test
+    command: mysqld --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    cap_add:
+      - SYS_NICE
     volumes:
-      - ~/database/nest:/var/lib/mysql
+      - ./database/nest:/var/lib/mysql
 
   rabbitmq:
     image: rabbitmq:alpine
