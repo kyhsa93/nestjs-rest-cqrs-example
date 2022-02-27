@@ -29,7 +29,7 @@ import { InjectionToken } from './application/injection.token';
 const infrastructure: Provider[] = [
   {
     provide: InjectionToken.ACCOUNT_REPOSITORY,
-    useClass: AccountRepositoryImplement
+    useClass: AccountRepositoryImplement,
   },
   {
     provide: InjectionToken.INTEGRATION_EVENT_PUBLISHER,
@@ -42,7 +42,7 @@ const infrastructure: Provider[] = [
   {
     provide: InjectionToken.ACCOUNT_QUERY,
     useClass: AccountQueryImplement,
-  }
+  },
 ];
 
 const application = [
