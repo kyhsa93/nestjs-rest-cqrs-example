@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-import { FindAccountByIdResult } from 'src/account/application/queries/find-account-by-id.result';
+import { FindAccountByIdResult } from 'src/account/application/query/find-account-by-id.result';
 
 export class FindAccountByIdResponseDTO extends FindAccountByIdResult {
   @ApiProperty({ format: 'uuid' })

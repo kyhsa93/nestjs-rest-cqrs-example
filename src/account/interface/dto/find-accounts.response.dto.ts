@@ -3,7 +3,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import {
   FindAccountsResult,
   ItemInFindAccountsResult,
-} from 'src/account/application/queries/find-accounts.result';
+} from 'src/account/application/query/find-accounts.result';
 
 class FindAccountsItem extends ItemInFindAccountsResult {
   @ApiProperty({ format: 'uuid' })

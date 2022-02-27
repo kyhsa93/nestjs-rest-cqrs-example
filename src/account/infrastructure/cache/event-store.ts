@@ -2,7 +2,7 @@ import Redis from 'ioredis';
 
 import { AppService } from 'src/app.service';
 
-import { Event, EventStore } from 'src/account/application/events/integration';
+import { Event, EventStore } from 'src/account/application/event/integration';
 
 export class EventStoreImplement implements EventStore {
   private readonly master: Redis.Redis;

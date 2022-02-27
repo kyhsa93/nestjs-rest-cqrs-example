@@ -36,14 +36,14 @@ import { FindAccountByIdResponseDTO } from 'src/account/interface/dto/find-accou
 import { FindAccountsResponseDTO } from 'src/account/interface/dto/find-accounts.response.dto';
 import { ResponseDescription } from 'src/account/interface/response-description';
 
-import { CloseAccountCommand } from 'src/account/application/commands/close-account.command';
-import { DepositCommand } from 'src/account/application/commands/deposit.command';
-import { OpenAccountCommand } from 'src/account/application/commands/open-account.command';
-import { UpdatePasswordCommand } from 'src/account/application/commands/update-password.command';
-import { WithdrawCommand } from 'src/account/application/commands/withdraw.command';
-import { FindAccountByIdQuery } from 'src/account/application/queries/find-account-by-id.query';
-import { FindAccountsQuery } from 'src/account/application/queries/find-accounts.query';
-import { RemitCommand } from 'src/account/application/commands/remit.command';
+import { CloseAccountCommand } from 'src/account/application/command/close-account.command';
+import { DepositCommand } from 'src/account/application/command/deposit.command';
+import { OpenAccountCommand } from 'src/account/application/command/open-account.command';
+import { UpdatePasswordCommand } from 'src/account/application/command/update-password.command';
+import { WithdrawCommand } from 'src/account/application/command/withdraw.command';
+import { FindAccountByIdQuery } from 'src/account/application/query/find-account-by-id.query';
+import { FindAccountsQuery } from 'src/account/application/query/find-accounts.query';
+import { RemitCommand } from 'src/account/application/command/remit.command';
 
 @ApiTags('Accounts')
 @Controller('accounts')

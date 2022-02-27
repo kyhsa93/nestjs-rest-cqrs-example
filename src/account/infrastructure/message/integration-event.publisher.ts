@@ -6,7 +6,7 @@ import { AppService, RabbitMQConfig } from 'src/app.service';
 import {
   IntegrationEvent,
   IntegrationEventPublisher,
-} from 'src/account/application/events/integration';
+} from 'src/account/application/event/integration';
 
 @Injectable()
 export class IntegrationEventPublisherImplement

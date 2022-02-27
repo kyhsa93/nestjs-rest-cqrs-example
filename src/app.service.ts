@@ -1,7 +1,7 @@
 import { OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { Connection, createConnection } from 'typeorm';
 
-import { AccountEntity } from 'src/account/infrastructure/entities/account.entity';
+import { AccountEntity } from 'src/account/infrastructure/entity/account.entity';
 
 class DBConfig {
   readonly host: string;

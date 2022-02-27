@@ -5,11 +5,11 @@ import {
 } from '@nestjs/common';
 
 import { AccountImplement } from 'src/account/domain/account';
-import { AccountClosedEvent } from 'src/account/domain/events/account-closed.event';
-import { AccountOpenedEvent } from 'src/account/domain/events/account-opened.event';
-import { DepositedEvent } from 'src/account/domain/events/deposited.event';
-import { PasswordUpdatedEvent } from 'src/account/domain/events/password-updated.event';
-import { WithdrawnEvent } from 'src/account/domain/events/withdrawn.event';
+import { AccountClosedEvent } from 'src/account/domain/event/account-closed.event';
+import { AccountOpenedEvent } from 'src/account/domain/event/account-opened.event';
+import { DepositedEvent } from 'src/account/domain/event/deposited.event';
+import { PasswordUpdatedEvent } from 'src/account/domain/event/password-updated.event';
+import { WithdrawnEvent } from 'src/account/domain/event/withdrawn.event';
 
 describe('Account', () => {
   describe('properties', () => {
