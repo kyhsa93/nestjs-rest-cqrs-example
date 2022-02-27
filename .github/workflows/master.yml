@@ -12,7 +12,7 @@ jobs:
   node-version-test:
     strategy:
       matrix:
-        node-version: [10.x, 12.x, 14.x]
+        node-version: [12.x, 14.x, 16.x]
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Code
@@ -25,11 +25,11 @@ jobs:
       run: npm install
     - name: Test
       run: npm test
-  erbium-alpine-test:
+  gallium-alpine-test:
     needs: node-version-test
     runs-on: ubuntu-latest
     container:
-      image: node:erbium-alpine
+      image: node:gallium-alpine
     steps:
     - name: Checkout Code
       uses: actions/checkout@v2
@@ -38,7 +38,7 @@ jobs:
     - name: Test
       run: npm test
   build-image:
-    needs: erbium-alpine-test
+    needs: gallium-alpine-test
     runs-on: ubuntu-latest
     steps:
     - name: Checkout Code
