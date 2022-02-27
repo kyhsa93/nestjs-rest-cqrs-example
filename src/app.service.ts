@@ -78,7 +78,7 @@ export class AppService implements OnModuleInit, OnModuleDestroy {
   private loadDBConfig(): DBConfig {
     return {
       host: process.env.DATABASE_HOST || 'localhost',
-      port: parseInt(process.env.DATABASE_PORT, 10) || 3306,
+      port: parseInt(process.env.DATABASE_PORT ?? '3306', 10) || 3306,
       database: process.env.DATABASE_NAME || 'nest',
       username: process.env.DATABASE_USER || 'root',
       password: process.env.DATABASE_PASSWORD || 'test',
