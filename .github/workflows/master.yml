@@ -12,11 +12,20 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - name: Lint Code Base
-        uses: github/super-linter@v4
-        env:
-          DEFAULT_BRANCH: master
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'npm'
+      - run: npm ci
+      - uses: wearerequired/lint-action@v2
+        with:
+          eslint: true
+          prettier: true
+          auto_fix: true
+          commit_message: "style: code style issues with ${linter}"
+          eslint_extensions: ts
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
 
   test:
