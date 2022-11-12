@@ -17,7 +17,7 @@ export class HttpExceptionFilter
   catch(
     exception: HttpException | Error,
     host: ArgumentsHost,
-  ): Response<any, Record<string, any>> {
+  ): Response<string, Record<string, string>> {
     this.logger.error(exception.message, exception.stack);
     const request = host.switchToHttp().getRequest<Request>();
     const response = host.switchToHttp().getResponse<Response>();
