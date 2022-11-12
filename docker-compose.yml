@@ -16,22 +16,23 @@ services:
       dockerfile: Dockerfile.dev
     restart: always
     environment:
+      - AWS_REGION=ap-northeast-2
+      - AWS_ENDPOINT=http://localstack:4566
+      - AWS_ACCESS_KEY_ID=AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY=AWS_SECRET_ACCESS_KEY
+      - AWS_SQS_QUEUE_URL=http://localhost:4566/000000000000/example
+      - DATABASE_LOGGING=true
       - DATABASE_HOST=database
-      - REDIS_MASTER_HOST=redis-master
-      - REDIS_MASTER_PORT=6379
-      - REDIS_SLAVE_HOST=redis-slave
-      - REDIS_SLAVE_PORT=6379
+      - DATABASE_PORT=3306
+      - DATABASE_NAME=nest
+      - DATABASE_USER=root
+      - DATABASE_PASSWORD=test
+      - DATABASE_SYNC=true
+      - EMAIL=no-reply@example.com
+      - PORT=5000
     volumes:
-      - ./src:/app/src
-      - ./libs:/app/libs
-
-  redis-master:
-    image: kyhsa93/redis-master
-    restart: always
-
-  redis-slave:
-    image: kyhsa93/redis-slave
-    restart: always
+      - ./src:/app/src:ro
+      - ./libs:/app/libs:ro
 
   database:
     image: mysql
@@ -47,12 +48,12 @@ services:
     volumes:
       - ./database/nest:/var/lib/mysql
 
-  rabbitmq:
-    image: rabbitmq:alpine
-    restart: always
-    ports: 
-      - 5672:5672
-      - 15672:15672
-    environment: 
-      RABBITMQ_DEFAULT_USER: root
-      RABBITMQ_DEFAULT_PASS: test
+  localstack:
+    image: localstack/localstack
+    ports:
+      - 4566:4566
+    environment:
+      - SERVICES=ses,sqs,sns
+      - AWS_DEFAULT_REGION=ap-northeast-2
+    volumes:
+      - ./.aws:/docker-entrypoint-initaws.d:ro

@@ -9,46 +9,38 @@ on:
       - master
 
 jobs:
-  node-version-test:
-    strategy:
-      matrix:
-        node-version: [12.x, 14.x, 16.x]
+  lint:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout Code
-      uses: actions/checkout@v2
-    - name: Set up nodejs version ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - name: Install package
-      run: npm install
-    - name: Test
-      run: npm test
-  gallium-alpine-test:
-    needs: node-version-test
+      - name: Lint Code Base
+        uses: github/super-linter@v4
+        env:
+          DEFAULT_BRANCH: master
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
+  test:
+    needs: lint
     runs-on: ubuntu-latest
-    container:
-      image: node:gallium-alpine
     steps:
-    - name: Checkout Code
-      uses: actions/checkout@v2
-    - name: Install package
-      run: npm install
-    - name: Test
-      run: npm test
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: 'npm'
+      - run: npm ci
+      - run: npm test
+
   build-image:
-    needs: gallium-alpine-test
+    needs: test
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout Code
-      uses: actions/checkout@v2
-    - name: build container image
-      run: docker build -t kyhsa93/nestjs-rest-cqrs-example:${{ github.sha }} .
-    - name: Login to DockerHub
-      uses: docker/login-action@v1 
+    - uses: actions/checkout@v3
+    - uses: docker/login-action@v2
       with:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
-    - name: push container image
-      run: docker push kyhsa93/nestjs-rest-cqrs-example:${{ github.sha }}
+    - run: |
+        docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+        docker buildx create --driver docker-container --use
+        docker buildx build --platform linux/amd64,linux/arm64 -t kyhsa93/nestjs-rest-cqrs-example:${{ github.sha }} --push .

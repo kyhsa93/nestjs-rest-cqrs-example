@@ -1,5 +1,5 @@
 FROM node:gallium-alpine
 COPY . /app
 WORKDIR /app
-RUN npm install
+RUN npm ci
 ENTRYPOINT [ "npm", "run", "start:debug" ]

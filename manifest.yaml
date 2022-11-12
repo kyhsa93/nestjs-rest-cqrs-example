@@ -36,109 +36,41 @@ spec:
           ports:
             - containerPort: 5000
           env:
+            - name: AWS_REGION
+              value: "ap-northeast-2"
+            - name: AWS_ENDPOINT
+              value: "localstack"
+            - name: AWS_ACCESS_KEY_ID
+              value: "AWS_ACCESS_KEY_ID"
+            - name: AWS_SECRET_ACCESS_KEY
+              value: "AWS_SECRET_ACCESS_KEY"
+            - name: AWS_SQS_QUEUE_URL
+              value: "=http://localhost:4566/000000000000/example"
+            - name: DATABASE_LOGGING
+              value: "false"
             - name: DATABASE_HOST
               value: "database"
-            - name: REDIS_MASTER_HOST
-              value: "redis-master"
-            - name: REDIS_MASTER_PORT
-              value: "6379"
-            - name: REDIS_SLAVE_HOST
-              value: "redis-slave"
-            - name: REDIS_SLAVE_PORT
-              value: "6379"
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: redis-master
-  labels:
-    app: redis
-    role: master
-    tier: backend
-spec:
-  ports:
-  - port: 6379
-    targetPort: 6379
-  selector:
-    app: redis
-    role: master
-    tier: backend
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: redis-master
-  labels:
-    app: redis
-spec:
-  selector:
-    matchLabels:
-      app: redis
-      role: master
-      tier: backend
-  replicas: 1
-  template:
-    metadata:
-      labels:
-        app: redis
-        role: master
-        tier: backend
-    spec:
-      containers:
-      - name: master
-        image: kyhsa93/redis-master
-        resources:
-          requests:
-            cpu: 100m
-            memory: 100Mi
-        ports:
-        - containerPort: 6379
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: redis-slave
-  labels:
-    app: redis
-    role: slave
-    tier: backend
-spec:
-  ports:
-  - port: 6379
-  selector:
-    app: redis
-    role: slave
-    tier: backend
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: redis-slave
-  labels:
-    app: redis
-spec:
-  selector:
-    matchLabels:
-      app: redis
-      role: slave
-      tier: backend
-  replicas: 2
-  template:
-    metadata:
-      labels:
-        app: redis
-        role: slave
-        tier: backend
-    spec:
-      containers:
-      - name: slave
-        image: kyhsa93/redis-slave
-        resources:
-          requests:
-            cpu: 100m
-            memory: 100Mi
-        ports:
-        - containerPort: 6379
+            - name: DATABASE_PORT
+              value: "3306"
+            - name: DATABASE_NAME
+              value: "nest"
+            - name: DATABASE_USER
+              value: "root"
+            - name: DATABASE_PASSWORD
+              value: "test"
+            - name: DATABASE_SYNC
+              value: "true"
+            - name: EMAIL
+              value: "test@test.com"
+            - name: PORT
+              value: "5000"
+          resources:
+            requests:
+              memory: "1024M"
+              cpu: "500m"
+            limits:
+              memory: "1024M"
+              cpu: "500m"
 ---
 apiVersion: v1
 kind: Service
@@ -171,7 +103,7 @@ spec:
     spec:
       containers:
         - name: database
-          image: mysql:5.7
+          image: mysql
           ports:
             - containerPort: 3306
           env:
@@ -179,3 +111,10 @@ spec:
               value: nest
             - name: MYSQL_ROOT_PASSWORD
               value: test
+          resources:
+            requests:
+              memory: "1024M"
+              cpu: "500m"
+            limits:
+              memory: "1024M"
+              cpu: "500m"

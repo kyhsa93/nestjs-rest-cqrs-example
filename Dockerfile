@@ -4,7 +4,7 @@ COPY . /origin
 
 WORKDIR /origin
 
-RUN npm install && \
+RUN npm ci && \
     npm run build && \
     npm prune --production && \
     cp -r dist /app && \

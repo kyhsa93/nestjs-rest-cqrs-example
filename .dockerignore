@@ -1,9 +1,14 @@
 node_modules
 .vscode
-.gitignore
-Dockerfile
-docker-compose.yml
+.git*
+Dockerfile*
+*.yml
 dist
 *.yaml
 helm
 database
+*.md
+.env*
+.eslintrc.js
+*ignore
+.aws

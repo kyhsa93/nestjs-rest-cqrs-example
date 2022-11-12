@@ -14,5 +14,17 @@ module.exports = {
     node: true,
     jest: true,
   },
-  ignorePatterns: ['.eslintrc.js'],
+  ignorePatterns: [
+    '.eslintrc.js',
+    '.aws',
+    '.github',
+    'assets',
+    '*.md',
+    '*.yaml',
+    '*.yml',
+    'Dockerfile*',
+    'node_modules',
+    '*ignore',
+    '*.json',
+  ],
 };
