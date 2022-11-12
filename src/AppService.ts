@@ -1,18 +1,10 @@
-import { Logger, OnModuleInit } from '@nestjs/common';
+import { Logger } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 
 import { readConnection, writeConnection } from 'libs/DatabaseModule';
-import { Config } from 'src/Config';
 
-export class AppService implements OnModuleInit {
-  private readonly logger: Logger;
-
-  onModuleInit() {
-    // AWS.config.update({
-    //   credentials: new AWS.Credentials({ accessKeyId: '', secretAccessKey: '' }),
-    //   region: Config.AWS_REGION,
-    // })
-  }
+export class AppService {
+  private readonly logger = new Logger(AppService.name);
 
   @Cron(CronExpression.EVERY_5_SECONDS)
   async databaseHealthCheck(): Promise<void> {
