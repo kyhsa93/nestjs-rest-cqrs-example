@@ -234,7 +234,7 @@ Helm Charts help you define, install, and upgrade even the most complex Kubernet
 About helm: [https://helm.sh/](https://helm.sh/)
 
 ## Configuration
-All configuration is in [src/app.config.ts](https://github.com/kyhsa93/nestJS-sample/blob/master/src/app.config.ts)
+All configuration is in [src/app.config.ts](https://github.com/kyhsa93/nestJS-sample/blob/main/src/Config.ts)
 
 Most default configuration can use through you environment values.
 
