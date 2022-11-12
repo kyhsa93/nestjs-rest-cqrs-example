@@ -16,7 +16,7 @@ import { ErrorMessage } from 'src/account/domain/ErrorMessage';
 export class FindAccountByIdHandler
   implements IQueryHandler<FindAccountByIdQuery, FindAccountByIdResult>
 {
-  @Inject(InjectionToken.ACCOUNT_QUERY) readonly accountQuery: AccountQuery
+  @Inject(InjectionToken.ACCOUNT_QUERY) readonly accountQuery: AccountQuery;
 
   async execute(query: FindAccountByIdQuery): Promise<FindAccountByIdResult> {
     const data = await this.accountQuery.findById(query.id);

@@ -7,7 +7,9 @@ import { InjectionToken } from 'src/account/application/InjectionToken';
 
 import { AccountRepository } from 'src/account/domain/AccountRepository';
 
-jest.mock('libs/Transactional', () => ({ Transactional: () => () => undefined }))
+jest.mock('libs/Transactional', () => ({
+  Transactional: () => () => undefined,
+}));
 
 describe('WithdrawHandler', () => {
   let handler: WithdrawHandler;

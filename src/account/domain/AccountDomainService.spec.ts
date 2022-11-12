@@ -1,5 +1,8 @@
 import { Account } from 'src/account/domain/Account';
-import { AccountDomainService, RemittanceOptions } from 'src/account/domain/AccountDomainService';
+import {
+  AccountDomainService,
+  RemittanceOptions,
+} from 'src/account/domain/AccountDomainService';
 
 describe('AccountDomainService', () => {
   describe('remit', () => {

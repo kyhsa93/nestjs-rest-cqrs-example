@@ -1,5 +1,12 @@
-import { Logger } from "@nestjs/common";
-import { IsBoolean, IsEmail, IsInt, IsOptional, IsString, validateSync } from "class-validator";
+import { Logger } from '@nestjs/common';
+import {
+  IsBoolean,
+  IsEmail,
+  IsInt,
+  IsOptional,
+  IsString,
+  validateSync,
+} from 'class-validator';
 
 class Configuration {
   private readonly logger = new Logger(Configuration.name);
@@ -21,7 +28,7 @@ class Configuration {
   readonly AWS_SQS_QUEUE_URL = process.env.AWS_SQS_QUEUE_URL as string;
 
   @IsBoolean()
-  readonly DATABASE_LOGGING = process.env.DATABASE_LOGGING === "true";
+  readonly DATABASE_LOGGING = process.env.DATABASE_LOGGING === 'true';
 
   @IsString()
   readonly DATABASE_HOST = process.env.DATABASE_HOST as string;
@@ -39,13 +46,13 @@ class Configuration {
   readonly DATABASE_PASSWORD = process.env.DATABASE_PASSWORD as string;
 
   @IsBoolean()
-  readonly DATABASE_SYNC = process.env.DATABASE_SYNC === "true";
+  readonly DATABASE_SYNC = process.env.DATABASE_SYNC === 'true';
 
   @IsEmail()
   readonly EMAIL = process.env.EMAIL as string;
 
   @IsInt()
-  readonly PORT = Number(process.env.PORT)
+  readonly PORT = Number(process.env.PORT);
 
   constructor() {
     const error = validateSync(this);

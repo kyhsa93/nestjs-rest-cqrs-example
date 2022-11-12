@@ -10,7 +10,9 @@ import { AccountFactory } from 'src/account/domain/AccountFactory';
 
 import { AccountRepository } from 'src/account/domain/AccountRepository';
 
-jest.mock('libs/Transactional', () => ({ Transactional: () => () => undefined }))
+jest.mock('libs/Transactional', () => ({
+  Transactional: () => () => undefined,
+}));
 
 describe('OpenAccountHandler', () => {
   let handler: OpenAccountHandler;
@@ -29,13 +31,13 @@ describe('OpenAccountHandler', () => {
     };
     const passwordGeneratorProvider: Provider = {
       provide: PASSWORD_GENERATOR,
-      useValue:  {},
-    }
+      useValue: {},
+    };
     const providers: Provider[] = [
       OpenAccountHandler,
       repoProvider,
       factoryProvider,
-      passwordGeneratorProvider
+      passwordGeneratorProvider,
     ];
     const moduleMetadata: ModuleMetadata = { providers };
     const testModule = await Test.createTestingModule(moduleMetadata).compile();

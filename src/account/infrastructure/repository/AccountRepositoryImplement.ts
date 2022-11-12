@@ -1,7 +1,12 @@
 import { In } from 'typeorm';
 import { Inject } from '@nestjs/common';
 
-import { EntityId, EntityIdTransformer, ENTITY_ID_TRANSFORMER, writeConnection } from 'libs/DatabaseModule';
+import {
+  EntityId,
+  EntityIdTransformer,
+  ENTITY_ID_TRANSFORMER,
+  writeConnection,
+} from 'libs/DatabaseModule';
 
 import { AccountEntity } from 'src/account/infrastructure/entity/AccountEntity';
 
@@ -11,7 +16,8 @@ import { AccountFactory } from 'src/account/domain/AccountFactory';
 
 export class AccountRepositoryImplement implements AccountRepository {
   @Inject() private readonly accountFactory: AccountFactory;
-  @Inject(ENTITY_ID_TRANSFORMER) private readonly entityIdTransformer: EntityIdTransformer;
+  @Inject(ENTITY_ID_TRANSFORMER)
+  private readonly entityIdTransformer: EntityIdTransformer;
 
   async newId(): Promise<string> {
     return new EntityId().toString();
@@ -24,12 +30,16 @@ export class AccountRepositoryImplement implements AccountRepository {
   }
 
   async findById(id: string): Promise<Account | null> {
-    const entity = await writeConnection.manager.getRepository(AccountEntity).findOneBy({ id: this.entityIdTransformer.to(id) });
+    const entity = await writeConnection.manager
+      .getRepository(AccountEntity)
+      .findOneBy({ id: this.entityIdTransformer.to(id) });
     return entity ? this.entityToModel(entity) : null;
   }
 
   async findByName(name: string): Promise<Account[]> {
-    const entities = await writeConnection.manager.getRepository(AccountEntity).findBy({ name });
+    const entities = await writeConnection.manager
+      .getRepository(AccountEntity)
+      .findBy({ name });
     return entities.map((entity) => this.entityToModel(entity));
   }
 

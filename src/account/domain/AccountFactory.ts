@@ -12,14 +12,22 @@ type CreateAccountOptions = Readonly<{
   name: string;
   email: string;
   password: string;
-}>
+}>;
 
 export class AccountFactory {
-  @Inject(EventPublisher) private readonly eventPublisher: EventPublisher
+  @Inject(EventPublisher) private readonly eventPublisher: EventPublisher;
 
   create(options: CreateAccountOptions): Account {
     return this.eventPublisher.mergeObjectContext(
-      new AccountImplement({ ...options, balance: 0, lockedAt: null, createdAt: new Date(), updatedAt: new Date(), deletedAt: null, version: 0 }),
+      new AccountImplement({
+        ...options,
+        balance: 0,
+        lockedAt: null,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        deletedAt: null,
+        version: 0,
+      }),
     );
   }
 

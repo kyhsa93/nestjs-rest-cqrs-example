@@ -18,7 +18,7 @@ function setupSwagger(app: INestApplication): void {
 
   const document = SwaggerModule.createDocument(app, documentBuilder);
   SwaggerModule.setup('api', app, document, {
-    swaggerOptions: { defaultModelsExpandDepth: -1 }
+    swaggerOptions: { defaultModelsExpandDepth: -1 },
   });
 }
 

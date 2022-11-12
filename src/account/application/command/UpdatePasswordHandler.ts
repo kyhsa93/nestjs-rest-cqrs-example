@@ -16,7 +16,8 @@ export class UpdatePasswordHandler
 {
   @Inject(InjectionToken.ACCOUNT_REPOSITORY)
   private readonly accountRepository: AccountRepository;
-  @Inject(PASSWORD_GENERATOR) private readonly passwordGenerator: PasswordGenerator;
+  @Inject(PASSWORD_GENERATOR)
+  private readonly passwordGenerator: PasswordGenerator;
 
   @Transactional()
   async execute(command: UpdatePasswordCommand): Promise<void> {
@@ -24,7 +25,9 @@ export class UpdatePasswordHandler
     if (!account)
       throw new NotFoundException(ErrorMessage.ACCOUNT_IS_NOT_FOUND);
 
-    account.updatePassword(this.passwordGenerator.generateKey(command.password));
+    account.updatePassword(
+      this.passwordGenerator.generateKey(command.password),
+    );
 
     await this.accountRepository.save(account);
 

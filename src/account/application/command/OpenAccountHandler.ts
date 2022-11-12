@@ -25,7 +25,7 @@ export class OpenAccountHandler
     const account = this.accountFactory.create({
       ...command,
       id: await this.accountRepository.newId(),
-      password: this.passwordGenerator.generateKey(command.password)
+      password: this.passwordGenerator.generateKey(command.password),
     });
 
     account.open();

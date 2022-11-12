@@ -1,6 +1,6 @@
-import { ICommand } from "@nestjs/cqrs";
+import { ICommand } from '@nestjs/cqrs';
 
-import { CreateNotificationOptions } from "src/notification/domain/NotificationFactory";
+import { CreateNotificationOptions } from 'src/notification/domain/NotificationFactory';
 
 export class SendEmailCommand implements ICommand {
   readonly accountId: string;
@@ -8,7 +8,7 @@ export class SendEmailCommand implements ICommand {
   readonly subject: string;
   readonly content: string;
 
-  constructor(options: Omit<CreateNotificationOptions, "id">) {
-    Object.assign(this, options)
+  constructor(options: Omit<CreateNotificationOptions, 'id'>) {
+    Object.assign(this, options);
   }
 }

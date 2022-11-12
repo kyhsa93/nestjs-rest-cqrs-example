@@ -9,7 +9,9 @@ import { InjectionToken } from 'src/account/application/InjectionToken';
 
 import { AccountRepository } from 'src/account/domain/AccountRepository';
 
-jest.mock('libs/Transactional', () => ({ Transactional: () => () => undefined }))
+jest.mock('libs/Transactional', () => ({
+  Transactional: () => () => undefined,
+}));
 
 describe('UpdatePasswordHandler', () => {
   let handler: UpdatePasswordHandler;
@@ -25,7 +27,11 @@ describe('UpdatePasswordHandler', () => {
       provide: PASSWORD_GENERATOR,
       useValue: {},
     };
-    const providers: Provider[] = [UpdatePasswordHandler, repoProvider, passwordGeneratorProvider];
+    const providers: Provider[] = [
+      UpdatePasswordHandler,
+      repoProvider,
+      passwordGeneratorProvider,
+    ];
     const moduleMetadata: ModuleMetadata = { providers };
     const testModule = await Test.createTestingModule(moduleMetadata).compile();
 
@@ -60,9 +66,7 @@ describe('UpdatePasswordHandler', () => {
       expect(repository.findById).toBeCalledTimes(1);
       expect(repository.findById).toBeCalledWith(command.accountId);
       expect(account.updatePassword).toBeCalledTimes(1);
-      expect(account.updatePassword).toBeCalledWith(
-        command.password,
-      );
+      expect(account.updatePassword).toBeCalledWith(command.password);
       expect(repository.save).toBeCalledTimes(1);
       expect(repository.save).toBeCalledWith(account);
       expect(account.commit).toBeCalledTimes(1);

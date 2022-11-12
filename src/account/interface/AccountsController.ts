@@ -59,19 +59,29 @@ export class AccountsController {
   constructor(readonly commandBus: CommandBus, readonly queryBus: QueryBus) {}
 
   @Post('accounts')
-  @ApiResponse({ status: HttpStatus.CREATED, description: ResponseDescription.CREATED })
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: ResponseDescription.CREATED,
+  })
   @ApiBadRequestResponse({ description: ResponseDescription.BAD_REQUEST })
   @ApiInternalServerErrorResponse({
     description: ResponseDescription.INTERNAL_SERVER_ERROR,
   })
   async openAccount(@Body() body: OpenAccountRequestDTO): Promise<void> {
-    const command = new OpenAccountCommand(body.name, body.email, body.password);
+    const command = new OpenAccountCommand(
+      body.name,
+      body.email,
+      body.password,
+    );
     await this.commandBus.execute(command);
   }
 
   @Auth()
   @Post('accounts/:accountId/withdraw')
-  @ApiResponse({ status: HttpStatus.CREATED, description: ResponseDescription.CREATED })
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: ResponseDescription.CREATED,
+  })
   @ApiBadRequestResponse({ description: ResponseDescription.BAD_REQUEST })
   @ApiNotFoundResponse({ description: ResponseDescription.NOT_FOUND })
   @ApiUnauthorizedResponse({ description: ResponseDescription.UNAUTHORIZED })
@@ -89,13 +99,16 @@ export class AccountsController {
     if (header.accountId !== param.accountId)
       throw new NotFoundException(ErrorMessage.ACCOUNT_IS_NOT_FOUND);
     await this.commandBus.execute(
-      new WithdrawCommand(param.accountId, body.amount)
+      new WithdrawCommand(param.accountId, body.amount),
     );
   }
 
   @Auth()
   @Post('accounts/:accountId/deposit')
-  @ApiResponse({ status: HttpStatus.CREATED, description: ResponseDescription.CREATED })
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: ResponseDescription.CREATED,
+  })
   @ApiBadRequestResponse({ description: ResponseDescription.BAD_REQUEST })
   @ApiNotFoundResponse({ description: ResponseDescription.NOT_FOUND })
   @ApiInternalServerErrorResponse({
@@ -109,13 +122,16 @@ export class AccountsController {
     if (header.accountId !== param.accountId)
       throw new NotFoundException(ErrorMessage.ACCOUNT_IS_NOT_FOUND);
     await this.commandBus.execute(
-      new DepositCommand(param.accountId, body.amount)
+      new DepositCommand(param.accountId, body.amount),
     );
   }
 
   @Auth()
   @Post('accounts/:accountId/remit')
-  @ApiResponse({ status: HttpStatus.CREATED, description: ResponseDescription.CREATED })
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+    description: ResponseDescription.CREATED,
+  })
   @ApiBadRequestResponse({ description: ResponseDescription.BAD_REQUEST })
   @ApiNotFoundResponse({ description: ResponseDescription.NOT_FOUND })
   @ApiUnauthorizedResponse({ description: ResponseDescription.UNAUTHORIZED })
@@ -133,7 +149,7 @@ export class AccountsController {
     if (header.accountId !== param.accountId)
       throw new NotFoundException(ErrorMessage.ACCOUNT_IS_NOT_FOUND);
     await this.commandBus.execute(
-      new RemitCommand(param.accountId, body.receiverId, body.amount)
+      new RemitCommand(param.accountId, body.receiverId, body.amount),
     );
   }
 
@@ -154,7 +170,7 @@ export class AccountsController {
     if (header.accountId !== param.accountId)
       throw new NotFoundException(ErrorMessage.ACCOUNT_IS_NOT_FOUND);
     await this.commandBus.execute(
-      new UpdatePasswordCommand(param.accountId, body.password)
+      new UpdatePasswordCommand(param.accountId, body.password),
     );
   }
 
@@ -176,9 +192,7 @@ export class AccountsController {
   ): Promise<void> {
     if (header.accountId !== param.accountId)
       throw new NotFoundException(ErrorMessage.ACCOUNT_IS_NOT_FOUND);
-    await this.commandBus.execute(
-      new CloseAccountCommand(param.accountId)
-    );
+    await this.commandBus.execute(new CloseAccountCommand(param.accountId));
   }
 
   @Get('accounts')
@@ -218,8 +232,6 @@ export class AccountsController {
   ): Promise<FindAccountByIdResponseDTO> {
     if (header.accountId !== param.accountId)
       throw new NotFoundException(ErrorMessage.ACCOUNT_IS_NOT_FOUND);
-    return this.queryBus.execute(
-      new FindAccountByIdQuery(param.accountId)
-    );
+    return this.queryBus.execute(new FindAccountByIdQuery(param.accountId));
   }
 }

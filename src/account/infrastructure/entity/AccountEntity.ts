@@ -9,7 +9,7 @@ export class AccountEntity extends BaseEntity {
 
   @Column()
   name: string;
-  
+
   @Column()
   email: string;
 
@@ -19,6 +19,6 @@ export class AccountEntity extends BaseEntity {
   @Column()
   balance: number;
 
-  @Column({ type: "datetime", precision: 6, nullable: true })
+  @Column({ type: 'datetime', precision: 6, nullable: true })
   lockedAt: Date | null;
 }
