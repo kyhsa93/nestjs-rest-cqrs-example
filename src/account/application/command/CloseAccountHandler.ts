@@ -14,7 +14,7 @@ export class CloseAccountHandler
   implements ICommandHandler<CloseAccountCommand, void>
 {
   @Inject(InjectionToken.ACCOUNT_REPOSITORY)
-  private readonly accountRepository: AccountRepository
+  private readonly accountRepository: AccountRepository;
 
   @Transactional()
   async execute(command: CloseAccountCommand): Promise<void> {

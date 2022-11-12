@@ -5,7 +5,11 @@ import { Inject, Logger, Module, Provider } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 
 import { PasswordModule } from 'libs/PasswordModule';
-import { EntityIdTransformer, ENTITY_ID_TRANSFORMER, writeConnection } from 'libs/DatabaseModule';
+import {
+  EntityIdTransformer,
+  ENTITY_ID_TRANSFORMER,
+  writeConnection,
+} from 'libs/DatabaseModule';
 import { TaskPublisher, TASK_PUBLISHER } from 'libs/MessageModule';
 
 import { AccountQueryImplement } from 'src/account/infrastructure/query/AccountQueryImplement';
@@ -43,7 +47,7 @@ const infrastructure: Provider[] = [
   {
     provide: InjectionToken.ACCOUNT_QUERY,
     useClass: AccountQueryImplement,
-  }
+  },
 ];
 
 const application = [
@@ -72,17 +76,20 @@ const domain = [AccountDomainService, AccountFactory];
 })
 export class AccountsModule {
   @Inject(TASK_PUBLISHER) private readonly taskPublisher: TaskPublisher;
-  @Inject(ENTITY_ID_TRANSFORMER) private readonly entityIdTransformer: EntityIdTransformer;
+  @Inject(ENTITY_ID_TRANSFORMER)
+  private readonly entityIdTransformer: EntityIdTransformer;
 
   @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
   async lockUnusedAccount(): Promise<void> {
-    (await writeConnection
-      .manager
-      .getRepository(AccountEntity)
-      .findBy({ updatedAt: LessThan(addYears(new Date(), -1)) }))
-      .forEach(account => this.taskPublisher.publish(
+    (
+      await writeConnection.manager
+        .getRepository(AccountEntity)
+        .findBy({ updatedAt: LessThan(addYears(new Date(), -1)) })
+    ).forEach((account) =>
+      this.taskPublisher.publish(
         LockAccountCommand.name,
-        new LockAccountCommand(this.entityIdTransformer.from(account.id))
-      ))
+        new LockAccountCommand(this.entityIdTransformer.from(account.id)),
+      ),
+    );
   }
 }

@@ -1,4 +1,4 @@
-import { AggregateRoot } from "@nestjs/cqrs";
+import { AggregateRoot } from '@nestjs/cqrs';
 
 export type NotificationProperties = Readonly<{
   id: string;

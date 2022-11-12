@@ -11,21 +11,25 @@ import { DepositedEvent } from 'src/account/domain/event/DepositedEvent';
 import { PasswordUpdatedEvent } from 'src/account/domain/event/PasswordUpdatedEvent';
 import { WithdrawnEvent } from 'src/account/domain/event/WithdrawnEvent';
 
-export type AccountEssentialProperties = Readonly<Required<{
-  id: string;
-  name: string;
-  email: string;
-}>>;
+export type AccountEssentialProperties = Readonly<
+  Required<{
+    id: string;
+    name: string;
+    email: string;
+  }>
+>;
 
-export type AccountOptionalProperties = Readonly<Partial<{
-  password: string;
-  balance: number;
-  lockedAt: Date | null;
-  createdAt: Date;
-  updatedAt: Date;
-  deletedAt: Date | null;
-  version: number;
-}>>;
+export type AccountOptionalProperties = Readonly<
+  Partial<{
+    password: string;
+    balance: number;
+    lockedAt: Date | null;
+    createdAt: Date;
+    updatedAt: Date;
+    deletedAt: Date | null;
+    version: number;
+  }>
+>;
 
 export type AccountProperties = AccountEssentialProperties &
   Required<AccountOptionalProperties>;
@@ -107,7 +111,8 @@ export class AccountImplement extends AggregateRoot implements Account {
   }
 
   lock(): void {
-    if (this.lockedAt) throw new UnprocessableEntityException("Account is already locked");
+    if (this.lockedAt)
+      throw new UnprocessableEntityException('Account is already locked');
     this.lockedAt = new Date();
     this.updatedAt = new Date();
     this.version += 1;

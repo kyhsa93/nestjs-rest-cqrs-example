@@ -1,7 +1,7 @@
-import { InternalServerErrorException } from "@nestjs/common";
-import { AsyncLocalStorage } from "async_hooks";
+import { InternalServerErrorException } from '@nestjs/common';
+import { AsyncLocalStorage } from 'async_hooks';
 
-import { EntityId } from "libs/DatabaseModule";
+import { EntityId } from 'libs/DatabaseModule';
 
 class Storage {
   constructor(
@@ -32,7 +32,10 @@ class RequestStorageImplement implements RequestStorage {
 
   increaseTransactionDepth(): void {
     const storage = this.getStorage();
-    this.storage.enterWith({ ...storage, transactionDepth: storage.transactionDepth + 1 });
+    this.storage.enterWith({
+      ...storage,
+      transactionDepth: storage.transactionDepth + 1,
+    });
   }
 
   decreaseTransactionDepth(): void {
@@ -50,9 +53,10 @@ class RequestStorageImplement implements RequestStorage {
 
   getStorage(): Storage {
     const storage = this.storage.getStore();
-    if (!storage) throw new InternalServerErrorException("RequestStorage is not found");
+    if (!storage)
+      throw new InternalServerErrorException('RequestStorage is not found');
     return storage;
   }
 }
 
-export const RequestStorage = new RequestStorageImplement()
+export const RequestStorage = new RequestStorageImplement();

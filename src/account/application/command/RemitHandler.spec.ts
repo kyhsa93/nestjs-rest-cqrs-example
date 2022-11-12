@@ -13,7 +13,9 @@ import { InjectionToken } from 'src/account/application/InjectionToken';
 import { AccountRepository } from 'src/account/domain/AccountRepository';
 import { AccountDomainService } from 'src/account/domain/AccountDomainService';
 
-jest.mock('libs/Transactional', () => ({ Transactional: () => () => undefined }))
+jest.mock('libs/Transactional', () => ({
+  Transactional: () => () => undefined,
+}));
 
 describe('RemitHandler', () => {
   let handler: RemitHandler;
@@ -64,9 +66,9 @@ describe('RemitHandler', () => {
     });
 
     it('should throw UnprocessableEntityException receiver is not found', async () => {
-      repository.findById = jest.fn().mockImplementation(
-        (id: string) => id === 'accountId' ? {} : null
-      );
+      repository.findById = jest
+        .fn()
+        .mockImplementation((id: string) => (id === 'accountId' ? {} : null));
 
       const command = new RemitCommand('accountId', 'receiverId', 1);
 
@@ -88,9 +90,11 @@ describe('RemitHandler', () => {
         compareId: (id: string) => id === 'receiverId',
       };
 
-      repository.findById = jest.fn().mockImplementation(
-        (id: string) => id === 'accountId' ? account : id === 'receiverId' ? receiver : null
-      );
+      repository.findById = jest
+        .fn()
+        .mockImplementation((id: string) =>
+          id === 'accountId' ? account : id === 'receiverId' ? receiver : null,
+        );
       repository.save = jest.fn().mockResolvedValue(undefined);
       domainService.remit = jest.fn().mockReturnValue(undefined);
 

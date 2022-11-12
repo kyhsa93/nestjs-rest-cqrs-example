@@ -1,9 +1,9 @@
-import { Controller, Inject } from "@nestjs/common";
-import { CommandBus } from "@nestjs/cqrs";
+import { Controller, Inject } from '@nestjs/common';
+import { CommandBus } from '@nestjs/cqrs';
 
-import { MessageHandler } from "libs/MessageModule";
+import { MessageHandler } from 'libs/MessageModule';
 
-import { LockAccountCommand } from "src/account/application/command/LockAccountCommand";
+import { LockAccountCommand } from 'src/account/application/command/LockAccountCommand';
 
 @Controller()
 export class AccountTaskController {

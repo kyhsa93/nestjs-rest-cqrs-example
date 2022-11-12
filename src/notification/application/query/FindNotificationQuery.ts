@@ -1,4 +1,4 @@
-import { IQuery } from "@nestjs/cqrs";
+import { IQuery } from '@nestjs/cqrs';
 
 export class FindNotificationQuery implements IQuery {
   readonly skip: number;

@@ -1,5 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsAlphanumeric, IsEmail, IsString, MaxLength, MinLength } from 'class-validator';
+import {
+  IsAlphanumeric,
+  IsEmail,
+  IsString,
+  MaxLength,
+  MinLength,
+} from 'class-validator';
 
 export class OpenAccountRequestDTO {
   @IsString()

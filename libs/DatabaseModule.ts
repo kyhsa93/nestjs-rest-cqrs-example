@@ -1,19 +1,27 @@
-import { Global, Module, OnModuleDestroy, OnModuleInit } from "@nestjs/common";
-import { DataSource, EntityManager, EntityTarget, ObjectLiteral, QueryRunner, Repository, SelectQueryBuilder } from "typeorm";
+import { Global, Module, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
+import {
+  DataSource,
+  EntityManager,
+  EntityTarget,
+  ObjectLiteral,
+  QueryRunner,
+  Repository,
+  SelectQueryBuilder,
+} from 'typeorm';
 
-import { Config } from "src/Config";
+import { Config } from 'src/Config';
 
-import { AccountEntity } from "src/account/infrastructure/entity/AccountEntity";
-import { NotificationEntity } from "src/notification/infrastructure/entities/NotificationEntity";
-import { v4 } from "uuid";
+import { AccountEntity } from 'src/account/infrastructure/entity/AccountEntity';
+import { NotificationEntity } from 'src/notification/infrastructure/entities/NotificationEntity';
+import { v4 } from 'uuid';
 
 interface WriteConnection {
   readonly startTransaction: (
     level?:
-      | "READ UNCOMMITTED"
-      | "READ COMMITTED"
-      | "REPEATABLE READ"
-      | "SERIALIZABLE"
+      | 'READ UNCOMMITTED'
+      | 'READ COMMITTED'
+      | 'REPEATABLE READ'
+      | 'SERIALIZABLE',
   ) => Promise<void>;
   readonly commitTransaction: () => Promise<void>;
   readonly rollbackTransaction: () => Promise<void>;
@@ -23,13 +31,13 @@ interface WriteConnection {
 
 interface ReadConnection {
   readonly getRepository: <T extends ObjectLiteral>(
-    target: EntityTarget<T>
+    target: EntityTarget<T>,
   ) => Repository<T>;
   readonly query: (query: string) => Promise<void>;
   readonly createQueryBuilder: <Entity extends ObjectLiteral>(
     entityClass: EntityTarget<Entity>,
     alias: string,
-    queryRunner?: QueryRunner
+    queryRunner?: QueryRunner,
   ) => SelectQueryBuilder<Entity>;
 }
 
@@ -38,9 +46,9 @@ export let readConnection = {} as ReadConnection;
 
 class DatabaseService implements OnModuleInit, OnModuleDestroy {
   private readonly dataSource = new DataSource({
-    type: "mysql",
+    type: 'mysql',
     entities: [AccountEntity, NotificationEntity],
-    charset: "utf8mb4_unicode_ci",
+    charset: 'utf8mb4_unicode_ci',
     logging: Config.DATABASE_LOGGING,
     host: Config.DATABASE_HOST,
     port: Config.DATABASE_PORT,
@@ -48,18 +56,18 @@ class DatabaseService implements OnModuleInit, OnModuleDestroy {
     username: Config.DATABASE_USER,
     password: Config.DATABASE_PASSWORD,
     synchronize: Config.DATABASE_SYNC,
-  })
+  });
 
   async onModuleInit(): Promise<void> {
     await this.dataSource.initialize();
     if (!this.dataSource.isInitialized)
-      throw new Error("DataSource is not initialized");
+      throw new Error('DataSource is not initialized');
     writeConnection = this.dataSource.createQueryRunner();
     readConnection = this.dataSource.manager;
   }
 
   async onModuleDestroy(): Promise<void> {
-    await this.dataSource.destroy()
+    await this.dataSource.destroy();
   }
 }
 
@@ -93,8 +101,8 @@ class EntityIdTransformerImplement implements EntityIdTransformer {
     {
       provide: ENTITY_ID_TRANSFORMER,
       useClass: EntityIdTransformerImplement,
-    }
+    },
   ],
-  exports: [ENTITY_ID_TRANSFORMER]
+  exports: [ENTITY_ID_TRANSFORMER],
 })
 export class DatabaseModule {}

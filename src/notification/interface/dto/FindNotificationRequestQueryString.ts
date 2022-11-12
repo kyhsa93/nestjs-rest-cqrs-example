@@ -1,6 +1,6 @@
-import { ApiProperty } from "@nestjs/swagger";
-import { Type } from "class-transformer";
-import { IsEmail, IsInt, IsOptional, Max, Min } from "class-validator";
+import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
+import { IsEmail, IsInt, IsOptional, Max, Min } from 'class-validator';
 
 export class FindNotificationRequestQueryString {
   @ApiProperty({ example: 0, default: 0, required: false, minimum: 0 })
@@ -10,7 +10,13 @@ export class FindNotificationRequestQueryString {
   @Min(0)
   readonly skip: number = 0;
 
-  @ApiProperty({ example: 10, default: 10, required: false, minimum: 1, maximum: 20 })
+  @ApiProperty({
+    example: 10,
+    default: 10,
+    required: false,
+    minimum: 1,
+    maximum: 20,
+  })
   @IsOptional()
   @Type(() => Number)
   @IsInt()

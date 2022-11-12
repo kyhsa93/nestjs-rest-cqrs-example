@@ -17,5 +17,4 @@ export class FindAccountsRequestQueryString {
   @Max(20)
   @ApiProperty({ required: false, default: 10, minimum: 1, maximum: 20 })
   readonly take: number = 10;
-
 }

@@ -3,7 +3,10 @@ import {
   UnprocessableEntityException,
 } from '@nestjs/common';
 
-import { AccountImplement, AccountProperties } from 'src/account/domain/Account';
+import {
+  AccountImplement,
+  AccountProperties,
+} from 'src/account/domain/Account';
 import { AccountClosedEvent } from 'src/account/domain/event/AccountClosedEvent';
 import { AccountOpenedEvent } from 'src/account/domain/event/AccountOpenedEvent';
 import { DepositedEvent } from 'src/account/domain/event/DepositedEvent';
@@ -13,21 +16,25 @@ import { WithdrawnEvent } from 'src/account/domain/event/WithdrawnEvent';
 describe('Account', () => {
   describe('open', () => {
     it('should apply AccountOpenedEvent', () => {
-      const account = new AccountImplement({ id: 'id', email: 'email' } as AccountProperties);
+      const account = new AccountImplement({
+        id: 'id',
+        email: 'email',
+      } as AccountProperties);
 
       account.open();
 
       const appliedEvent = account.getUncommittedEvents();
 
-      expect(appliedEvent).toEqual([
-        new AccountOpenedEvent('id', 'email'),
-      ]);
+      expect(appliedEvent).toEqual([new AccountOpenedEvent('id', 'email')]);
     });
   });
 
   describe('updatePassword', () => {
     it('should update password', () => {
-      const account = new AccountImplement({ id: 'id', email: 'email' } as AccountProperties);
+      const account = new AccountImplement({
+        id: 'id',
+        email: 'email',
+      } as AccountProperties);
 
       account.updatePassword('password');
 
@@ -43,7 +50,7 @@ describe('Account', () => {
     it('should throw InternalServerErrorException when given amount is under 1', () => {
       const account = new AccountImplement({} as AccountProperties);
 
-      expect(() => account.withdraw(0,)).toThrowError(
+      expect(() => account.withdraw(0)).toThrowError(
         InternalServerErrorException,
       );
     });
@@ -65,7 +72,7 @@ describe('Account', () => {
         id: 'id',
         name: 'name',
         balance: 1,
-        email: 'email'
+        email: 'email',
       } as AccountProperties);
 
       expect(account.withdraw(1)).toEqual(undefined);
@@ -86,14 +93,21 @@ describe('Account', () => {
     });
 
     it('should deposit to account', () => {
-      const account = new AccountImplement({ id: 'id', name: 'name', balance: 0, email: 'email' } as AccountProperties);
-      
+      const account = new AccountImplement({
+        id: 'id',
+        name: 'name',
+        balance: 0,
+        email: 'email',
+      } as AccountProperties);
+
       account.deposit(1);
 
       expect(account.getUncommittedEvents()).toEqual([
-        new DepositedEvent('id', 'email')
+        new DepositedEvent('id', 'email'),
       ]);
-      expect((JSON.parse(JSON.stringify(account)) as AccountProperties).balance).toEqual(1)
+      expect(
+        (JSON.parse(JSON.stringify(account)) as AccountProperties).balance,
+      ).toEqual(1);
     });
   });
 
@@ -105,13 +119,15 @@ describe('Account', () => {
         balance: 1,
       } as AccountProperties);
 
-      expect(() => account.close()).toThrowError(
-        UnprocessableEntityException,
-      );
+      expect(() => account.close()).toThrowError(UnprocessableEntityException);
     });
 
     it('should close account', () => {
-      const account = new AccountImplement({ id: 'id', name: 'name', email: 'email' } as AccountProperties);
+      const account = new AccountImplement({
+        id: 'id',
+        name: 'name',
+        email: 'email',
+      } as AccountProperties);
 
       account.close();
 

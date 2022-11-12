@@ -1,11 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import {
-  IsAlphanumeric,
-  IsInt,
-  Length,
-  Min,
-} from 'class-validator';
+import { IsAlphanumeric, IsInt, Length, Min } from 'class-validator';
 
 import { EntityId } from 'libs/DatabaseModule';
 

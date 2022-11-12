@@ -6,14 +6,10 @@ export class AppController {
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse()
   @Get('health')
-  health(): void {
-
-  }
+  health(): void {}
 
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiNoContentResponse()
   @Get('favicon.io')
-  favicon(): void {
-
-  }
+  favicon(): void {}
 }

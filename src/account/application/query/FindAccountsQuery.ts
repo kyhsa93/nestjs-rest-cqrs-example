@@ -5,6 +5,6 @@ export class FindAccountsQuery implements IQuery {
   readonly take: number;
 
   constructor(options: FindAccountsQuery) {
-    Object.assign(this, options)
+    Object.assign(this, options);
   }
 }
