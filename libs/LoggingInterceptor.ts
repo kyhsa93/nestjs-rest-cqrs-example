@@ -14,8 +14,8 @@ export class LoggingInterceptor implements NestInterceptor {
 
   intercept(
     context: ExecutionContext,
-    next: CallHandler<any>,
-  ): Observable<any> | Promise<Observable<any>> {
+    next: CallHandler<Object>,
+  ): Observable<Object> | Promise<Observable<Object>> {
     const request = context.switchToHttp().getRequest<Request>();
     const response = context.switchToHttp().getResponse<Response>();
     return next.handle().pipe(
