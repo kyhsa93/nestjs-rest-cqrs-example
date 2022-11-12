@@ -2,11 +2,12 @@ name: nest rest cqrs example
 
 on: 
   push:
-    paths:
-      - src/**
-      - .github/workflows/**
     branches:
       - main
+  pull_request:
+    branches:
+      - main
+    types: [opened, synchronize, reopened, ready_for_review]
 
 jobs:
   lint:
