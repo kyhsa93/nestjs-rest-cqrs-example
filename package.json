@@ -39,7 +39,6 @@
     "class-validator": "^0.13.2",
     "compression": "^1.7.4",
     "date-fns": "^2.29.2",
-    "express-basic-auth": "^1.2.1",
     "helmet": "^6.0.0",
     "jsonwebtoken": "^8.5.1",
     "mysql": "^2.18.1",

@@ -28,7 +28,6 @@ jobs:
           eslint_extensions: ts
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
-
   test:
     needs: lint
     runs-on: ubuntu-latest
