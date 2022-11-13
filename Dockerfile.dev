@@ -1,4 +1,4 @@
-FROM node:gallium-alpine
+FROM node:hydrogen-alpine
 COPY . /app
 WORKDIR /app
 RUN npm ci

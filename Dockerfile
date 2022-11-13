@@ -1,20 +1,12 @@
-FROM node:gallium-alpine
-
-COPY . /origin
-
-WORKDIR /origin
-
-RUN npm ci && \
-    npm run build && \
-    npm prune --production && \
-    cp -r dist /app && \
-    cp -r node_modules /app/node_modules && \
-    rm -rf /origin
-
+FROM node:hydrogen-alpine AS builder
+COPY . /app
 WORKDIR /app
+RUN npm ci && npm run build
 
+FROM node:hydrogen-alpine
+COPY --from=builder /app/dist /app
+COPY package*.json /app/
+WORKDIR /app
+RUN npm ci --omit=dev
 EXPOSE 5000
-
-USER daemon
-
-CMD ["node", "main.js"]
+ENTRYPOINT ["node", "src/main.js"]
