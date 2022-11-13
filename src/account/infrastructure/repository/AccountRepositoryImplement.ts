@@ -10,7 +10,7 @@ import {
 import { AccountEntity } from 'src/account/infrastructure/entity/AccountEntity';
 
 import { AccountRepository } from 'src/account/domain/AccountRepository';
-import { Account, AccountProperties } from 'src/account/domain/account';
+import { Account, AccountProperties } from 'src/account/domain/Account';
 import { AccountFactory } from 'src/account/domain/AccountFactory';
 
 export class AccountRepositoryImplement implements AccountRepository {

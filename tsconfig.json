@@ -12,6 +12,7 @@
     "baseUrl": "./",
     "incremental": true,
     "strictNullChecks": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true
   }
 }

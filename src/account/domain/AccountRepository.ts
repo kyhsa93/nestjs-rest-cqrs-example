@@ -1,4 +1,4 @@
-import { Account } from 'src/account/domain/account';
+import { Account } from 'src/account/domain/Account';
 
 export interface AccountRepository {
   newId: () => Promise<string>;
