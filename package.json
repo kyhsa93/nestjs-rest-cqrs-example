@@ -26,7 +26,7 @@
     "@aws-sdk/s3-request-presigner": "^3.163.0",
     "@aws-sdk/util-endpoints": "^3.192.0",
     "@nestjs-plus/discovery": "^2.0.2",
-    "@nestjs/axios": "^1.0.0",
+    "@nestjs/axios": "^3.0.1",
     "@nestjs/common": "^9.0.11",
     "@nestjs/core": "^9.0.11",
     "@nestjs/cqrs": "^9.0.1",
