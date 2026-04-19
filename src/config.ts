@@ -38,10 +38,7 @@ class Configuration {
   readonly DATABASE_NAME = process.env.DATABASE_NAME as string;
 
   @IsString()
-  readonly DATABASE_USER = process.env.DATABASE_USER as string;
-
-  @IsString()
-  readonly DATABASE_PASSWORD = process.env.DATABASE_PASSWORD as string;
+  readonly DATABASE_SECRET_ID = process.env.DATABASE_SECRET_ID as string;
 
   @IsBoolean()
   readonly DATABASE_SYNC = process.env.DATABASE_SYNC === 'true';

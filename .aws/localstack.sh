@@ -1,4 +1,8 @@
 #!/bin/bash
+awslocal secretsmanager --region ap-northeast-2 create-secret \
+  --name nest/database \
+  --secret-string '{"username":"root","password":"test"}'
+
 awslocal ses verify-email-identity --email-address no-reply@example.com --region ap-northeast-2
 
 QUEUE_URL=$(awslocal sqs --region ap-northeast-2 create-queue --queue-name example --query 'QueueUrl' --output text)

@@ -50,10 +50,8 @@ spec:
               value: "3306"
             - name: DATABASE_NAME
               value: "nest"
-            - name: DATABASE_USER
-              value: "root"
-            - name: DATABASE_PASSWORD
-              value: "test"
+            - name: DATABASE_SECRET_ID
+              value: "nest/database"
             - name: DATABASE_SYNC
               value: "true"
             - name: EMAIL

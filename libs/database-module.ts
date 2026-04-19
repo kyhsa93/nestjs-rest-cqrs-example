@@ -9,6 +9,8 @@ import {
   SelectQueryBuilder,
 } from 'typeorm';
 
+import { getSecret } from 'libs/secret-manager';
+
 import { Config } from 'src/config';
 
 import { AccountEntity } from 'src/account/infrastructure/entity/account-entity';
@@ -45,21 +47,26 @@ interface ReadConnection {
 export let writeConnection = {} as WriteConnection;
 export let readConnection = {} as ReadConnection;
 
+type DatabaseCredentials = Readonly<{ username: string; password: string }>;
+
 class DatabaseService implements OnModuleInit, OnModuleDestroy {
-  private readonly dataSource = new DataSource({
-    type: 'mysql',
-    entities: [AccountEntity, NotificationEntity, OutboxEntity],
-    charset: 'utf8mb4_unicode_ci',
-    logging: Config.DATABASE_LOGGING,
-    host: Config.DATABASE_HOST,
-    port: Config.DATABASE_PORT,
-    database: Config.DATABASE_NAME,
-    username: Config.DATABASE_USER,
-    password: Config.DATABASE_PASSWORD,
-    synchronize: Config.DATABASE_SYNC,
-  });
+  private dataSource!: DataSource;
 
   async onModuleInit(): Promise<void> {
+    const { username, password } = await this.loadCredentials();
+    this.dataSource = new DataSource({
+      type: 'mysql',
+      entities: [AccountEntity, NotificationEntity, OutboxEntity],
+      charset: 'utf8mb4_unicode_ci',
+      logging: Config.DATABASE_LOGGING,
+      host: Config.DATABASE_HOST,
+      port: Config.DATABASE_PORT,
+      database: Config.DATABASE_NAME,
+      username,
+      password,
+      synchronize: Config.DATABASE_SYNC,
+    });
+
     await this.dataSource.initialize();
     if (!this.dataSource.isInitialized)
       throw new Error('DataSource is not initialized');
@@ -68,7 +75,17 @@ class DatabaseService implements OnModuleInit, OnModuleDestroy {
   }
 
   async onModuleDestroy(): Promise<void> {
-    await this.dataSource.destroy();
+    await this.dataSource?.destroy();
+  }
+
+  private async loadCredentials(): Promise<DatabaseCredentials> {
+    const raw = await getSecret(Config.DATABASE_SECRET_ID);
+    const parsed = JSON.parse(raw) as Partial<DatabaseCredentials>;
+    if (!parsed.username || !parsed.password)
+      throw new Error(
+        `Database secret ${Config.DATABASE_SECRET_ID} is missing username or password`,
+      );
+    return { username: parsed.username, password: parsed.password };
   }
 }
 
