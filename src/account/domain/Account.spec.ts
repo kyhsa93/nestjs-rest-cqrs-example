@@ -23,6 +23,22 @@ describe('Account', () => {
 
       expect(appliedEvent).toEqual([new AccountOpenedEvent('id', 'email')]);
     });
+
+    it('should record AccountOpenedEvent in domainEvents', () => {
+      const account = new AccountImplement({
+        id: 'id',
+        email: 'email',
+      } as AccountProperties);
+
+      account.open();
+
+      expect(account.domainEvents).toEqual([
+        new AccountOpenedEvent('id', 'email'),
+      ]);
+
+      account.clearEvents();
+      expect(account.domainEvents).toEqual([]);
+    });
   });
 
   describe('updatePassword', () => {

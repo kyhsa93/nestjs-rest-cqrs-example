@@ -41,6 +41,8 @@ export interface Account {
   close: () => void;
   lock: () => void;
   commit: () => void;
+  readonly domainEvents: ReadonlyArray<object>;
+  clearEvents: () => void;
 }
 
 export class AccountImplement extends AggregateRoot implements Account {
@@ -54,10 +56,24 @@ export class AccountImplement extends AggregateRoot implements Account {
   private updatedAt: Date;
   private deletedAt: Date | null;
   private version: number;
+  private readonly _events: object[] = [];
 
   constructor(properties: AccountProperties) {
     super();
     Object.assign(this, properties);
+  }
+
+  get domainEvents(): ReadonlyArray<object> {
+    return [...this._events];
+  }
+
+  clearEvents(): void {
+    this._events.length = 0;
+  }
+
+  private record(event: object): void {
+    this._events.push(event);
+    this.apply(event);
   }
 
   compareId(id: string): boolean {
@@ -65,13 +81,13 @@ export class AccountImplement extends AggregateRoot implements Account {
   }
 
   open(): void {
-    this.apply(new AccountOpenedEvent(this.id, this.email));
+    this.record(new AccountOpenedEvent(this.id, this.email));
   }
 
   updatePassword(password: string): void {
     this.password = password;
     this.updatedAt = new Date();
-    this.apply(new PasswordUpdatedEvent(this.id, this.email));
+    this.record(new PasswordUpdatedEvent(this.id, this.email));
   }
 
   withdraw(amount: number): void {
@@ -80,21 +96,21 @@ export class AccountImplement extends AggregateRoot implements Account {
       throwError(ErrorMessage.REQUESTED_AMOUNT_EXCEEDS_YOUR_WITHDRAWAL_LIMIT);
     this.balance -= amount;
     this.updatedAt = new Date();
-    this.apply(new WithdrawnEvent(this.id, this.email));
+    this.record(new WithdrawnEvent(this.id, this.email));
   }
 
   deposit(amount: number): void {
     if (amount < 1) throwError(ErrorMessage.CAN_NOT_DEPOSIT_UNDER_1);
     this.balance += amount;
     this.updatedAt = new Date();
-    this.apply(new DepositedEvent(this.id, this.email));
+    this.record(new DepositedEvent(this.id, this.email));
   }
 
   close(): void {
     if (this.balance > 0) throwError(ErrorMessage.ACCOUNT_BALANCE_IS_REMAINED);
     this.deletedAt = new Date();
     this.updatedAt = new Date();
-    this.apply(new AccountClosedEvent(this.id, this.email));
+    this.record(new AccountClosedEvent(this.id, this.email));
   }
 
   lock(): void {
