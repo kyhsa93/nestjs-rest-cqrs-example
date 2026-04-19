@@ -33,8 +33,5 @@ export class RemitHandler implements ICommandHandler<RemitCommand, void> {
     this.accountDomainService.remit({ ...command, account, receiver });
 
     await this.accountRepository.save([account, receiver]);
-
-    account.commit();
-    receiver.commit();
   }
 }

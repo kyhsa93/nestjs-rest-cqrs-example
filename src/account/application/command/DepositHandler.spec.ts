@@ -45,7 +45,6 @@ describe('DepositHandler', () => {
     it('should execute DepositCommand', async () => {
       const account = {
         deposit: jest.fn().mockReturnValue(undefined),
-        commit: jest.fn().mockReturnValue(undefined),
       };
 
       repository.findById = jest.fn().mockResolvedValue(account);
@@ -60,7 +59,6 @@ describe('DepositHandler', () => {
       expect(account.deposit).toHaveBeenCalledWith(command.amount);
       expect(repository.save).toHaveBeenCalledTimes(1);
       expect(repository.save).toHaveBeenCalledWith(account);
-      expect(account.commit).toHaveBeenCalledTimes(1);
     });
   });
 });

@@ -1,5 +1,3 @@
-import { AggregateRoot } from '@nestjs/cqrs';
-
 export type NotificationProperties = Readonly<{
   id: string;
   accountId: string;
@@ -9,16 +7,24 @@ export type NotificationProperties = Readonly<{
   createdAt: Date;
 }>;
 
-export class Notification extends AggregateRoot {
+export class Notification {
   private readonly id: string;
   private readonly accountId: string;
   private readonly to: string;
   private readonly subject: string;
   private readonly content: string;
   private readonly createdAt: Date;
+  private readonly _events: object[] = [];
 
   constructor(properties: NotificationProperties) {
-    super();
     Object.assign(this, properties);
+  }
+
+  get domainEvents(): ReadonlyArray<object> {
+    return [...this._events];
+  }
+
+  clearEvents(): void {
+    this._events.length = 0;
   }
 }

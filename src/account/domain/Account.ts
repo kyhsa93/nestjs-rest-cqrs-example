@@ -1,5 +1,3 @@
-import { AggregateRoot } from '@nestjs/cqrs';
-
 import { throwError } from 'libs/ThrowError';
 
 import { ErrorMessage } from 'src/account/domain/ErrorMessage';
@@ -40,12 +38,11 @@ export interface Account {
   deposit: (amount: number) => void;
   close: () => void;
   lock: () => void;
-  commit: () => void;
   readonly domainEvents: ReadonlyArray<object>;
   clearEvents: () => void;
 }
 
-export class AccountImplement extends AggregateRoot implements Account {
+export class AccountImplement implements Account {
   private readonly id: string;
   private readonly name: string;
   private readonly email: string;
@@ -59,7 +56,6 @@ export class AccountImplement extends AggregateRoot implements Account {
   private readonly _events: object[] = [];
 
   constructor(properties: AccountProperties) {
-    super();
     Object.assign(this, properties);
   }
 
@@ -71,23 +67,18 @@ export class AccountImplement extends AggregateRoot implements Account {
     this._events.length = 0;
   }
 
-  private record(event: object): void {
-    this._events.push(event);
-    this.apply(event);
-  }
-
   compareId(id: string): boolean {
     return id === this.id;
   }
 
   open(): void {
-    this.record(new AccountOpenedEvent(this.id, this.email));
+    this._events.push(new AccountOpenedEvent(this.id, this.email));
   }
 
   updatePassword(password: string): void {
     this.password = password;
     this.updatedAt = new Date();
-    this.record(new PasswordUpdatedEvent(this.id, this.email));
+    this._events.push(new PasswordUpdatedEvent(this.id, this.email));
   }
 
   withdraw(amount: number): void {
@@ -96,21 +87,21 @@ export class AccountImplement extends AggregateRoot implements Account {
       throwError(ErrorMessage.REQUESTED_AMOUNT_EXCEEDS_YOUR_WITHDRAWAL_LIMIT);
     this.balance -= amount;
     this.updatedAt = new Date();
-    this.record(new WithdrawnEvent(this.id, this.email));
+    this._events.push(new WithdrawnEvent(this.id, this.email));
   }
 
   deposit(amount: number): void {
     if (amount < 1) throwError(ErrorMessage.CAN_NOT_DEPOSIT_UNDER_1);
     this.balance += amount;
     this.updatedAt = new Date();
-    this.record(new DepositedEvent(this.id, this.email));
+    this._events.push(new DepositedEvent(this.id, this.email));
   }
 
   close(): void {
     if (this.balance > 0) throwError(ErrorMessage.ACCOUNT_BALANCE_IS_REMAINED);
     this.deletedAt = new Date();
     this.updatedAt = new Date();
-    this.record(new AccountClosedEvent(this.id, this.email));
+    this._events.push(new AccountClosedEvent(this.id, this.email));
   }
 
   lock(): void {

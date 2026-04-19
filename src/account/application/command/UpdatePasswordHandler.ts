@@ -31,7 +31,5 @@ export class UpdatePasswordHandler implements ICommandHandler<
     );
 
     await this.accountRepository.save(account);
-
-    account.commit();
   }
 }

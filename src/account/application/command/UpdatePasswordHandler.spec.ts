@@ -55,7 +55,7 @@ describe('UpdatePasswordHandler', () => {
     });
 
     it('should execute UpdatePasswordCommand', async () => {
-      const account = { updatePassword: jest.fn(), commit: jest.fn() };
+      const account = { updatePassword: jest.fn() };
 
       repository.findById = jest.fn().mockResolvedValue(account);
       repository.save = jest.fn().mockResolvedValue(undefined);
@@ -70,7 +70,6 @@ describe('UpdatePasswordHandler', () => {
       expect(account.updatePassword).toHaveBeenCalledWith(command.password);
       expect(repository.save).toHaveBeenCalledTimes(1);
       expect(repository.save).toHaveBeenCalledWith(account);
-      expect(account.commit).toHaveBeenCalledTimes(1);
     });
   });
 });

@@ -78,11 +78,9 @@ describe('RemitHandler', () => {
 
     it('should execute RemitCommand', async () => {
       const account = {
-        commit: jest.fn(),
         compareId: (id: string) => id === 'accountId',
       };
       const receiver = {
-        commit: jest.fn(),
         compareId: (id: string) => id === 'receiverId',
       };
 
@@ -108,8 +106,6 @@ describe('RemitHandler', () => {
       });
       expect(repository.save).toHaveBeenCalledTimes(1);
       expect(repository.save).toHaveBeenCalledWith([account, receiver]);
-      expect(account.commit).toHaveBeenCalledTimes(1);
-      expect(receiver.commit).toHaveBeenCalledTimes(1);
     });
   });
 });

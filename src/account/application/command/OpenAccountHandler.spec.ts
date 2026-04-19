@@ -50,7 +50,7 @@ describe('OpenAccountHandler', () => {
 
   describe('execute', () => {
     it('should execute OpenAccountCommand', async () => {
-      const account = { open: jest.fn(), commit: jest.fn() };
+      const account = { open: jest.fn() };
 
       factory.create = jest.fn().mockReturnValue(account);
       repository.newId = jest.fn().mockResolvedValue('accountId');
@@ -64,7 +64,6 @@ describe('OpenAccountHandler', () => {
       expect(account.open).toHaveBeenCalledTimes(1);
       expect(repository.save).toHaveBeenCalledTimes(1);
       expect(repository.save).toHaveBeenCalledWith(account);
-      expect(account.commit).toHaveBeenCalledTimes(1);
       expect(passwordGenerator.generateKey).toHaveBeenCalledWith(
         command.password,
       );

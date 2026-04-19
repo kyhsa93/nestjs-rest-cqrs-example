@@ -11,19 +11,6 @@ import { WithdrawnEvent } from 'src/account/domain/event/WithdrawnEvent';
 
 describe('Account', () => {
   describe('open', () => {
-    it('should apply AccountOpenedEvent', () => {
-      const account = new AccountImplement({
-        id: 'id',
-        email: 'email',
-      } as AccountProperties);
-
-      account.open();
-
-      const appliedEvent = account.getUncommittedEvents();
-
-      expect(appliedEvent).toEqual([new AccountOpenedEvent('id', 'email')]);
-    });
-
     it('should record AccountOpenedEvent in domainEvents', () => {
       const account = new AccountImplement({
         id: 'id',
@@ -50,8 +37,7 @@ describe('Account', () => {
 
       account.updatePassword('password');
 
-      expect(account.getUncommittedEvents().length).toEqual(1);
-      expect(account.getUncommittedEvents()).toEqual([
+      expect(account.domainEvents).toEqual([
         new PasswordUpdatedEvent('id', 'email'),
       ]);
       expect(account.updatePassword('password')).toEqual(undefined);
@@ -89,9 +75,7 @@ describe('Account', () => {
 
       expect(account.withdraw(1)).toEqual(undefined);
 
-      expect(account.getUncommittedEvents()).toEqual([
-        new WithdrawnEvent('id', 'email'),
-      ]);
+      expect(account.domainEvents).toEqual([new WithdrawnEvent('id', 'email')]);
     });
   });
 
@@ -114,9 +98,7 @@ describe('Account', () => {
 
       account.deposit(1);
 
-      expect(account.getUncommittedEvents()).toEqual([
-        new DepositedEvent('id', 'email'),
-      ]);
+      expect(account.domainEvents).toEqual([new DepositedEvent('id', 'email')]);
       expect(
         (JSON.parse(JSON.stringify(account)) as AccountProperties).balance,
       ).toEqual(1);
@@ -145,7 +127,7 @@ describe('Account', () => {
 
       account.close();
 
-      expect(account.getUncommittedEvents()).toEqual([
+      expect(account.domainEvents).toEqual([
         new AccountClosedEvent('id', 'email'),
       ]);
     });

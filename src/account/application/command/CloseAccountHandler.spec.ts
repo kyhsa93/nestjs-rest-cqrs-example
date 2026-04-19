@@ -43,7 +43,7 @@ describe('CloseAccountHandler', () => {
     });
 
     it('should execute CloseAccountCommand', async () => {
-      const account = { close: jest.fn(), commit: jest.fn() };
+      const account = { close: jest.fn() };
 
       repository.findById = jest.fn().mockResolvedValue(account);
       repository.save = jest.fn().mockResolvedValue(undefined);
@@ -56,7 +56,6 @@ describe('CloseAccountHandler', () => {
       expect(account.close).toHaveBeenCalledTimes(1);
       expect(repository.save).toHaveBeenCalledTimes(1);
       expect(repository.save).toHaveBeenCalledWith(account);
-      expect(account.commit).toHaveBeenCalledTimes(1);
     });
   });
 });

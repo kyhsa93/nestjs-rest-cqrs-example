@@ -43,7 +43,7 @@ describe('WithdrawHandler', () => {
     });
 
     it('should execute WithdrawCommand', async () => {
-      const account = { withdraw: jest.fn(), commit: jest.fn() };
+      const account = { withdraw: jest.fn() };
 
       repository.findById = jest.fn().mockResolvedValue(account);
       repository.save = jest.fn().mockResolvedValue(undefined);
@@ -57,7 +57,6 @@ describe('WithdrawHandler', () => {
       expect(account.withdraw).toHaveBeenCalledWith(command.amount);
       expect(repository.save).toHaveBeenCalledTimes(1);
       expect(repository.save).toHaveBeenCalledWith(account);
-      expect(account.commit).toHaveBeenCalledTimes(1);
     });
   });
 });

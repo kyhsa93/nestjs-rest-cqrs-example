@@ -8,6 +8,7 @@ import {
 } from 'libs/DatabaseModule';
 
 import { NotificationEntity } from 'src/notification/infrastructure/entities/NotificationEntity';
+import { OutboxWriter } from 'src/outbox/OutboxWriter';
 
 import {
   Notification,
@@ -18,6 +19,7 @@ import { NotificationRepository } from 'src/notification/domain/NotificationRepo
 export class NotificationRepositoryImplement implements NotificationRepository {
   @Inject(ENTITY_ID_TRANSFORMER)
   private readonly entityIdTransformer: EntityIdTransformer;
+  @Inject() private readonly outboxWriter: OutboxWriter;
 
   newId(): string {
     return new EntityId().toString();
@@ -27,6 +29,12 @@ export class NotificationRepositoryImplement implements NotificationRepository {
     await writeConnection.manager
       .getRepository(NotificationEntity)
       .save(this.modelToEntity(notification));
+
+    const events = [...notification.domainEvents];
+    if (events.length > 0) {
+      await this.outboxWriter.saveAll(events);
+      notification.clearEvents();
+    }
   }
 
   private modelToEntity(model: Notification): NotificationEntity {

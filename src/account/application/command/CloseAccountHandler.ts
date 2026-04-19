@@ -26,7 +26,5 @@ export class CloseAccountHandler implements ICommandHandler<
     account.close();
 
     await this.accountRepository.save(account);
-
-    account.commit();
   }
 }
