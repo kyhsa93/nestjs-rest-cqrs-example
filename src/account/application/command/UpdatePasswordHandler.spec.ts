@@ -6,7 +6,7 @@ import { PasswordGenerator, PASSWORD_GENERATOR } from 'libs/PasswordModule';
 import { UpdatePasswordCommand } from 'src/account/application/command/UpdatePasswordCommand';
 import { UpdatePasswordHandler } from 'src/account/application/command/UpdatePasswordHandler';
 
-import { AccountRepository } from 'src/account/domain/AccountRepository';
+import { AccountRepository } from 'src/account/domain/account-repository';
 import { ErrorMessage } from 'src/account/domain/ErrorMessage';
 
 jest.mock('libs/Transactional', () => ({

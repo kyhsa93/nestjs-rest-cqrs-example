@@ -7,7 +7,7 @@ import { Transactional } from 'libs/Transactional';
 import { OpenAccountCommand } from 'src/account/application/command/OpenAccountCommand';
 
 import { AccountFactory } from 'src/account/domain/AccountFactory';
-import { AccountRepository } from 'src/account/domain/AccountRepository';
+import { AccountRepository } from 'src/account/domain/account-repository';
 
 @CommandHandler(OpenAccountCommand)
 export class OpenAccountHandler implements ICommandHandler<

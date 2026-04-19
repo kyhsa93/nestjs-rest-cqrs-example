@@ -8,7 +8,7 @@ import { OpenAccountHandler } from 'src/account/application/command/OpenAccountH
 
 import { AccountFactory } from 'src/account/domain/AccountFactory';
 
-import { AccountRepository } from 'src/account/domain/AccountRepository';
+import { AccountRepository } from 'src/account/domain/account-repository';
 
 jest.mock('libs/Transactional', () => ({
   Transactional: () => () => undefined,

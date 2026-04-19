@@ -4,7 +4,7 @@ import { Test } from '@nestjs/testing';
 import { RemitCommand } from 'src/account/application/command/RemitCommand';
 import { RemitHandler } from 'src/account/application/command/RemitHandler';
 
-import { AccountRepository } from 'src/account/domain/AccountRepository';
+import { AccountRepository } from 'src/account/domain/account-repository';
 import { AccountDomainService } from 'src/account/domain/AccountDomainService';
 import { ErrorMessage } from 'src/account/domain/ErrorMessage';
 

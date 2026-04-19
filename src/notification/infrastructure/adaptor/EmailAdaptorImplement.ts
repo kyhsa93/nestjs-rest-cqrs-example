@@ -2,7 +2,7 @@ import { SendEmailCommand, SESClient } from '@aws-sdk/client-ses';
 
 import { Config } from 'src/Config';
 
-import { EmailAdaptor } from 'src/notification/application/adaptor/EmailAdaptor';
+import { EmailAdaptor } from 'src/notification/application/adaptor/email-adaptor';
 
 export class EmailAdaptorImplement extends EmailAdaptor {
   private readonly sesClient = new SESClient({

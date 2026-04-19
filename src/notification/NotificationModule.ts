@@ -8,13 +8,13 @@ import { NotificationQueryImplement } from 'src/notification/infrastructure/quer
 import { AccountIntegrationEventController } from 'src/notification/interface/integration-event/account-integration-event-controller';
 import { NotificationController } from 'src/notification/interface/NotificationController';
 
-import { EmailAdaptor } from 'src/notification/application/adaptor/EmailAdaptor';
+import { EmailAdaptor } from 'src/notification/application/adaptor/email-adaptor';
 import { SendEmailHandler } from 'src/notification/application/command/SendEmailHandler';
 import { FindNotificationHandler } from 'src/notification/application/query/FindNotificationHandler';
-import { NotificationQuery } from 'src/notification/application/query/NotificationQuery';
+import { NotificationQuery } from 'src/notification/application/query/notification-query';
 
 import { NotificationFactory } from 'src/notification/domain/NotificationFactory';
-import { NotificationRepository } from 'src/notification/domain/NotificationRepository';
+import { NotificationRepository } from 'src/notification/domain/notification-repository';
 
 const infrastructure = [
   {

@@ -8,7 +8,7 @@ import {
 
 import { AccountEntity } from 'src/account/infrastructure/entity/AccountEntity';
 
-import { AccountQuery } from 'src/account/application/query/AccountQuery';
+import { AccountQuery } from 'src/account/application/query/account-query';
 import { FindAccountByIdResult } from 'src/account/application/query/FindAccountByIdResult';
 import { FindAccountsResult } from 'src/account/application/query/FindAccountsResult';
 import { FindAccountsQuery } from 'src/account/application/query/FindAccountsQuery';

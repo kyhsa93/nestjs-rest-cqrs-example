@@ -2,7 +2,7 @@ import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 
 import { FindNotificationQuery } from 'src/notification/application/query/FindNotificationQuery';
 import { FindNotificationResult } from 'src/notification/application/query/FindNotificationResult';
-import { NotificationQuery } from 'src/notification/application/query/NotificationQuery';
+import { NotificationQuery } from 'src/notification/application/query/notification-query';
 
 @QueryHandler(FindNotificationQuery)
 export class FindNotificationHandler implements IQueryHandler<

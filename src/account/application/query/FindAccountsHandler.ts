@@ -1,6 +1,6 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 
-import { AccountQuery } from 'src/account/application/query/AccountQuery';
+import { AccountQuery } from 'src/account/application/query/account-query';
 import { FindAccountsQuery } from 'src/account/application/query/FindAccountsQuery';
 import { FindAccountsResult } from 'src/account/application/query/FindAccountsResult';
 

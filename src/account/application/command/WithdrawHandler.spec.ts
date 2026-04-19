@@ -4,7 +4,7 @@ import { Test } from '@nestjs/testing';
 import { WithdrawCommand } from 'src/account/application/command/WithdrawCommand';
 import { WithdrawHandler } from 'src/account/application/command/WithdrawHandler';
 
-import { AccountRepository } from 'src/account/domain/AccountRepository';
+import { AccountRepository } from 'src/account/domain/account-repository';
 import { ErrorMessage } from 'src/account/domain/ErrorMessage';
 
 jest.mock('libs/Transactional', () => ({

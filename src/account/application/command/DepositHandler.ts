@@ -6,7 +6,7 @@ import { Transactional } from 'libs/Transactional';
 import { DepositCommand } from 'src/account/application/command/DepositCommand';
 
 import { ErrorMessage } from 'src/account/domain/ErrorMessage';
-import { AccountRepository } from 'src/account/domain/AccountRepository';
+import { AccountRepository } from 'src/account/domain/account-repository';
 
 @CommandHandler(DepositCommand)
 export class DepositHandler implements ICommandHandler<DepositCommand, void> {

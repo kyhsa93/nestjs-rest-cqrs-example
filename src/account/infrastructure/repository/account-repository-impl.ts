@@ -10,7 +10,7 @@ import {
 import { AccountEntity } from 'src/account/infrastructure/entity/AccountEntity';
 import { OutboxWriter } from 'src/outbox/OutboxWriter';
 
-import { AccountRepository } from 'src/account/domain/AccountRepository';
+import { AccountRepository } from 'src/account/domain/account-repository';
 import { Account, AccountProperties } from 'src/account/domain/Account';
 import { AccountFactory } from 'src/account/domain/AccountFactory';
 

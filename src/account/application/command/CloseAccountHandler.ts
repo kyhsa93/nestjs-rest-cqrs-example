@@ -6,7 +6,7 @@ import { Transactional } from 'libs/Transactional';
 import { CloseAccountCommand } from 'src/account/application/command/CloseAccountCommand';
 
 import { ErrorMessage } from 'src/account/domain/ErrorMessage';
-import { AccountRepository } from 'src/account/domain/AccountRepository';
+import { AccountRepository } from 'src/account/domain/account-repository';
 
 @CommandHandler(CloseAccountCommand)
 export class CloseAccountHandler implements ICommandHandler<

@@ -4,7 +4,7 @@ import { Test } from '@nestjs/testing';
 import { CloseAccountCommand } from 'src/account/application/command/CloseAccountCommand';
 import { CloseAccountHandler } from 'src/account/application/command/CloseAccountHandler';
 
-import { AccountRepository } from 'src/account/domain/AccountRepository';
+import { AccountRepository } from 'src/account/domain/account-repository';
 import { ErrorMessage } from 'src/account/domain/ErrorMessage';
 
 jest.mock('libs/Transactional', () => ({

@@ -6,7 +6,7 @@ import { Transactional } from 'libs/Transactional';
 import { LockAccountCommand } from 'src/account/application/command/LockAccountCommand';
 
 import { ErrorMessage } from 'src/account/domain/ErrorMessage';
-import { AccountRepository } from 'src/account/domain/AccountRepository';
+import { AccountRepository } from 'src/account/domain/account-repository';
 
 @CommandHandler(LockAccountCommand)
 export class LockAccountHandler implements ICommandHandler<

@@ -6,7 +6,7 @@ import { Transactional } from 'libs/Transactional';
 import { RemitCommand } from 'src/account/application/command/RemitCommand';
 
 import { ErrorMessage } from 'src/account/domain/ErrorMessage';
-import { AccountRepository } from 'src/account/domain/AccountRepository';
+import { AccountRepository } from 'src/account/domain/account-repository';
 import { AccountDomainService } from 'src/account/domain/AccountDomainService';
 
 @CommandHandler(RemitCommand)

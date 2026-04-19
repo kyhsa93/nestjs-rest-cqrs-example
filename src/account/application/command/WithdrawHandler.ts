@@ -6,7 +6,7 @@ import { Transactional } from 'libs/Transactional';
 import { WithdrawCommand } from 'src/account/application/command/WithdrawCommand';
 
 import { ErrorMessage } from 'src/account/domain/ErrorMessage';
-import { AccountRepository } from 'src/account/domain/AccountRepository';
+import { AccountRepository } from 'src/account/domain/account-repository';
 
 @CommandHandler(WithdrawCommand)
 export class WithdrawHandler implements ICommandHandler<WithdrawCommand, void> {

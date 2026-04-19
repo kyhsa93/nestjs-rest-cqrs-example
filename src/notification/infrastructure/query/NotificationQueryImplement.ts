@@ -10,7 +10,7 @@ import { NotificationEntity } from 'src/notification/infrastructure/entities/Not
 
 import { FindNotificationQuery } from 'src/notification/application/query/FindNotificationQuery';
 import { FindNotificationResult } from 'src/notification/application/query/FindNotificationResult';
-import { NotificationQuery } from 'src/notification/application/query/NotificationQuery';
+import { NotificationQuery } from 'src/notification/application/query/notification-query';
 
 export class NotificationQueryImplement extends NotificationQuery {
   @Inject(ENTITY_ID_TRANSFORMER)

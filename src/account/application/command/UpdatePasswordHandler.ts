@@ -8,7 +8,7 @@ import { Transactional } from 'libs/Transactional';
 import { UpdatePasswordCommand } from 'src/account/application/command/UpdatePasswordCommand';
 
 import { ErrorMessage } from 'src/account/domain/ErrorMessage';
-import { AccountRepository } from 'src/account/domain/AccountRepository';
+import { AccountRepository } from 'src/account/domain/account-repository';
 
 @CommandHandler(UpdatePasswordCommand)
 export class UpdatePasswordHandler implements ICommandHandler<

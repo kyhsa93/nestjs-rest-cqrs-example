@@ -4,7 +4,7 @@ import { Test } from '@nestjs/testing';
 import { DepositCommand } from 'src/account/application/command/DepositCommand';
 import { DepositHandler } from 'src/account/application/command/DepositHandler';
 
-import { AccountRepository } from 'src/account/domain/AccountRepository';
+import { AccountRepository } from 'src/account/domain/account-repository';
 import { ErrorMessage } from 'src/account/domain/ErrorMessage';
 
 jest.mock('libs/Transactional', () => ({

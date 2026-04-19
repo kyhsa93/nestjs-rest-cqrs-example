@@ -14,7 +14,7 @@ import {
   Notification,
   NotificationProperties,
 } from 'src/notification/domain/Notification';
-import { NotificationRepository } from 'src/notification/domain/NotificationRepository';
+import { NotificationRepository } from 'src/notification/domain/notification-repository';
 
 export class NotificationRepositoryImplement extends NotificationRepository {
   @Inject(ENTITY_ID_TRANSFORMER)

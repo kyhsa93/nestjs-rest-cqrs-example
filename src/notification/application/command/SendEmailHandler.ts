@@ -2,11 +2,11 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
 import { Transactional } from 'libs/Transactional';
 
-import { EmailAdaptor } from 'src/notification/application/adaptor/EmailAdaptor';
+import { EmailAdaptor } from 'src/notification/application/adaptor/email-adaptor';
 import { SendEmailCommand } from 'src/notification/application/command/SendEmailCommand';
 
 import { NotificationFactory } from 'src/notification/domain/NotificationFactory';
-import { NotificationRepository } from 'src/notification/domain/NotificationRepository';
+import { NotificationRepository } from 'src/notification/domain/notification-repository';
 
 @CommandHandler(SendEmailCommand)
 export class SendEmailHandler implements ICommandHandler<
