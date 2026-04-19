@@ -1,9 +1,4 @@
-import {
-  ModuleMetadata,
-  NotFoundException,
-  Provider,
-  UnprocessableEntityException,
-} from '@nestjs/common';
+import { ModuleMetadata, Provider } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 
 import { RemitCommand } from 'src/account/application/command/RemitCommand';
@@ -12,6 +7,7 @@ import { InjectionToken } from 'src/account/application/InjectionToken';
 
 import { AccountRepository } from 'src/account/domain/AccountRepository';
 import { AccountDomainService } from 'src/account/domain/AccountDomainService';
+import { ErrorMessage } from 'src/account/domain/ErrorMessage';
 
 jest.mock('libs/Transactional', () => ({
   Transactional: () => () => undefined,
@@ -45,25 +41,27 @@ describe('RemitHandler', () => {
   });
 
   describe('execute', () => {
-    it('should throw UnprocessableEntityException when id and receiverId is same', async () => {
+    it('should throw error when id and receiverId is same', async () => {
       const command = new RemitCommand('accountId', 'accountId', 1);
 
       await expect(handler.execute(command)).rejects.toThrow(
-        UnprocessableEntityException,
+        ErrorMessage.WITHDRAWAL_AND_DEPOSIT_ACCOUNTS_CANNOT_BE_THE_SAME,
       );
     });
 
-    it('should throw NotFoundException when account is not found', async () => {
+    it('should throw error when account is not found', async () => {
       repository.findById = jest.fn();
 
       const command = new RemitCommand('accountId', 'receiverId', 1);
 
-      await expect(handler.execute(command)).rejects.toThrow(NotFoundException);
+      await expect(handler.execute(command)).rejects.toThrow(
+        ErrorMessage.ACCOUNT_IS_NOT_FOUND,
+      );
       expect(repository.findById).toHaveBeenCalledTimes(1);
       expect(repository.findById).toHaveBeenCalledWith(command.accountId);
     });
 
-    it('should throw UnprocessableEntityException receiver is not found', async () => {
+    it('should throw error when receiver is not found', async () => {
       repository.findById = jest
         .fn()
         .mockImplementation((id: string) => (id === 'accountId' ? {} : null));
@@ -71,7 +69,7 @@ describe('RemitHandler', () => {
       const command = new RemitCommand('accountId', 'receiverId', 1);
 
       await expect(handler.execute(command)).rejects.toThrow(
-        UnprocessableEntityException,
+        ErrorMessage.ACCOUNT_IS_NOT_FOUND,
       );
       expect(repository.findById).toHaveBeenCalledTimes(2);
       expect(repository.findById).toHaveBeenCalledWith(command.accountId);

@@ -1,6 +1,7 @@
-import { Inject, NotFoundException } from '@nestjs/common';
+import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
+import { throwError } from 'libs/ThrowError';
 import { Transactional } from 'libs/Transactional';
 
 import { WithdrawCommand } from 'src/account/application/command/WithdrawCommand';
@@ -17,8 +18,7 @@ export class WithdrawHandler implements ICommandHandler<WithdrawCommand, void> {
   @Transactional()
   async execute(command: WithdrawCommand): Promise<void> {
     const account = await this.accountRepository.findById(command.accountId);
-    if (!account)
-      throw new NotFoundException(ErrorMessage.ACCOUNT_IS_NOT_FOUND);
+    if (!account) throwError(ErrorMessage.ACCOUNT_IS_NOT_FOUND);
 
     account.withdraw(command.amount);
 

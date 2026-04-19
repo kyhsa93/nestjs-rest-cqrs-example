@@ -9,11 +9,18 @@ import {
   Query,
   UseInterceptors,
   HttpStatus,
+  InternalServerErrorException,
   NotFoundException,
+  UnprocessableEntityException,
   Headers,
 } from '@nestjs/common';
 import { CacheInterceptor } from '@nestjs/cache-manager';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
+
+import {
+  ErrorExceptionMapping,
+  generateErrorResponse,
+} from 'libs/GenerateErrorResponse';
 import {
   ApiBadRequestResponse,
   ApiInternalServerErrorResponse,
@@ -53,6 +60,27 @@ import { RemitCommand } from 'src/account/application/command/RemitCommand';
 
 import { ErrorMessage } from 'src/account/domain/ErrorMessage';
 
+const errorMappings: ErrorExceptionMapping[] = [
+  [ErrorMessage.ACCOUNT_IS_NOT_FOUND, NotFoundException],
+  [
+    ErrorMessage.WITHDRAWAL_AND_DEPOSIT_ACCOUNTS_CANNOT_BE_THE_SAME,
+    UnprocessableEntityException,
+  ],
+  [ErrorMessage.CAN_NOT_WITHDRAW_UNDER_1, InternalServerErrorException],
+  [
+    ErrorMessage.REQUESTED_AMOUNT_EXCEEDS_YOUR_WITHDRAWAL_LIMIT,
+    UnprocessableEntityException,
+  ],
+  [ErrorMessage.CAN_NOT_DEPOSIT_UNDER_1, InternalServerErrorException],
+  [ErrorMessage.ACCOUNT_BALANCE_IS_REMAINED, UnprocessableEntityException],
+  [ErrorMessage.ACCOUNT_IS_ALREADY_LOCKED, UnprocessableEntityException],
+  [ErrorMessage.INTERNAL_SERVER_ERROR, InternalServerErrorException],
+];
+
+const mapError = (error: Error): never => {
+  throw generateErrorResponse(error.message, errorMappings);
+};
+
 @ApiTags('Accounts')
 @Controller()
 export class AccountsController {
@@ -76,7 +104,7 @@ export class AccountsController {
       body.email,
       body.password,
     );
-    await this.commandBus.execute(command);
+    await this.commandBus.execute(command).catch(mapError);
   }
 
   @Auth()
@@ -101,9 +129,9 @@ export class AccountsController {
   ): Promise<void> {
     if (header.accountId !== param.accountId)
       throw new NotFoundException(ErrorMessage.ACCOUNT_IS_NOT_FOUND);
-    await this.commandBus.execute(
-      new WithdrawCommand(param.accountId, body.amount),
-    );
+    await this.commandBus
+      .execute(new WithdrawCommand(param.accountId, body.amount))
+      .catch(mapError);
   }
 
   @Auth()
@@ -124,9 +152,9 @@ export class AccountsController {
   ): Promise<void> {
     if (header.accountId !== param.accountId)
       throw new NotFoundException(ErrorMessage.ACCOUNT_IS_NOT_FOUND);
-    await this.commandBus.execute(
-      new DepositCommand(param.accountId, body.amount),
-    );
+    await this.commandBus
+      .execute(new DepositCommand(param.accountId, body.amount))
+      .catch(mapError);
   }
 
   @Auth()
@@ -151,9 +179,9 @@ export class AccountsController {
   ): Promise<void> {
     if (header.accountId !== param.accountId)
       throw new NotFoundException(ErrorMessage.ACCOUNT_IS_NOT_FOUND);
-    await this.commandBus.execute(
-      new RemitCommand(param.accountId, body.receiverId, body.amount),
-    );
+    await this.commandBus
+      .execute(new RemitCommand(param.accountId, body.receiverId, body.amount))
+      .catch(mapError);
   }
 
   @Auth()
@@ -172,9 +200,9 @@ export class AccountsController {
   ): Promise<void> {
     if (header.accountId !== param.accountId)
       throw new NotFoundException(ErrorMessage.ACCOUNT_IS_NOT_FOUND);
-    await this.commandBus.execute(
-      new UpdatePasswordCommand(param.accountId, body.password),
-    );
+    await this.commandBus
+      .execute(new UpdatePasswordCommand(param.accountId, body.password))
+      .catch(mapError);
   }
 
   @Auth()
@@ -195,7 +223,9 @@ export class AccountsController {
   ): Promise<void> {
     if (header.accountId !== param.accountId)
       throw new NotFoundException(ErrorMessage.ACCOUNT_IS_NOT_FOUND);
-    await this.commandBus.execute(new CloseAccountCommand(param.accountId));
+    await this.commandBus
+      .execute(new CloseAccountCommand(param.accountId))
+      .catch(mapError);
   }
 
   @Get('accounts')
@@ -213,7 +243,9 @@ export class AccountsController {
     @Query() querystring: FindAccountsRequestQueryString,
   ): Promise<FindAccountsResponseDto> {
     const query = new FindAccountsQuery(querystring);
-    return { accounts: await this.queryBus.execute(query) };
+    return {
+      accounts: await this.queryBus.execute(query).catch(mapError),
+    };
   }
 
   @Auth()
@@ -235,6 +267,8 @@ export class AccountsController {
   ): Promise<FindAccountByIdResponseDTO> {
     if (header.accountId !== param.accountId)
       throw new NotFoundException(ErrorMessage.ACCOUNT_IS_NOT_FOUND);
-    return this.queryBus.execute(new FindAccountByIdQuery(param.accountId));
+    return this.queryBus
+      .execute(new FindAccountByIdQuery(param.accountId))
+      .catch(mapError);
   }
 }

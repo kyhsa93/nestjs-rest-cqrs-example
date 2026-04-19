@@ -1,9 +1,7 @@
-import {
-  Inject,
-  InternalServerErrorException,
-  NotFoundException,
-} from '@nestjs/common';
+import { Inject } from '@nestjs/common';
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
+
+import { throwError } from 'libs/ThrowError';
 
 import { InjectionToken } from 'src/account/application/InjectionToken';
 import { AccountQuery } from 'src/account/application/query/AccountQuery';
@@ -21,16 +19,16 @@ export class FindAccountByIdHandler implements IQueryHandler<
 
   async execute(query: FindAccountByIdQuery): Promise<FindAccountByIdResult> {
     const data = await this.accountQuery.findById(query.id);
-    if (!data) throw new NotFoundException(ErrorMessage.ACCOUNT_IS_NOT_FOUND);
+    if (!data) throwError(ErrorMessage.ACCOUNT_IS_NOT_FOUND);
 
     const dataKeys = Object.keys(data);
     const resultKeys = Object.keys(new FindAccountByIdResult());
 
     if (dataKeys.length < resultKeys.length)
-      throw new InternalServerErrorException();
+      throwError(ErrorMessage.INTERNAL_SERVER_ERROR);
 
     if (resultKeys.find((resultKey) => !dataKeys.includes(resultKey)))
-      throw new InternalServerErrorException();
+      throwError(ErrorMessage.INTERNAL_SERVER_ERROR);
 
     dataKeys
       .filter((dataKey) => !resultKeys.includes(dataKey))

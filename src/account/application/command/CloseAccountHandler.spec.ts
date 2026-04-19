@@ -1,4 +1,4 @@
-import { ModuleMetadata, NotFoundException, Provider } from '@nestjs/common';
+import { ModuleMetadata, Provider } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 
 import { CloseAccountCommand } from 'src/account/application/command/CloseAccountCommand';
@@ -6,6 +6,7 @@ import { CloseAccountHandler } from 'src/account/application/command/CloseAccoun
 import { InjectionToken } from 'src/account/application/InjectionToken';
 
 import { AccountRepository } from 'src/account/domain/AccountRepository';
+import { ErrorMessage } from 'src/account/domain/ErrorMessage';
 
 jest.mock('libs/Transactional', () => ({
   Transactional: () => () => undefined,
@@ -29,12 +30,14 @@ describe('CloseAccountHandler', () => {
   });
 
   describe('execute', () => {
-    it('should throw NotFoundException when account not found', async () => {
+    it('should throw error when account not found', async () => {
       repository.findById = jest.fn().mockResolvedValue(null);
 
       const command = new CloseAccountCommand('accountId');
 
-      await expect(handler.execute(command)).rejects.toThrow(NotFoundException);
+      await expect(handler.execute(command)).rejects.toThrow(
+        ErrorMessage.ACCOUNT_IS_NOT_FOUND,
+      );
       expect(repository.findById).toHaveBeenCalledTimes(1);
       expect(repository.findById).toHaveBeenCalledWith(command.accountId);
     });

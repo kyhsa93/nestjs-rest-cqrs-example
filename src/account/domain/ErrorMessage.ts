@@ -6,4 +6,6 @@ export enum ErrorMessage {
   CAN_NOT_DEPOSIT_UNDER_1 = 'Can not deposit under 1',
   ACCOUNT_BALANCE_IS_REMAINED = 'Account balance is remained',
   WITHDRAWAL_AND_DEPOSIT_ACCOUNTS_CANNOT_BE_THE_SAME = 'Withdrawal and deposit accounts cannot be the same',
+  ACCOUNT_IS_ALREADY_LOCKED = 'Account is already locked',
+  INTERNAL_SERVER_ERROR = 'Internal server error',
 }

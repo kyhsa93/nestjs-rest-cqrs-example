@@ -1,11 +1,13 @@
-import { Inject, NotFoundException } from '@nestjs/common';
+import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
+import { throwError } from 'libs/ThrowError';
 import { Transactional } from 'libs/Transactional';
 
 import { LockAccountCommand } from 'src/account/application/command/LockAccountCommand';
 import { InjectionToken } from 'src/account/application/InjectionToken';
 
+import { ErrorMessage } from 'src/account/domain/ErrorMessage';
 import { AccountRepository } from 'src/account/domain/AccountRepository';
 
 @CommandHandler(LockAccountCommand)
@@ -19,7 +21,7 @@ export class LockAccountHandler implements ICommandHandler<
   @Transactional()
   async execute(command: LockAccountCommand): Promise<void> {
     const account = await this.accountRepository.findById(command.accountId);
-    if (!account) throw new NotFoundException('Account is not found');
+    if (!account) throwError(ErrorMessage.ACCOUNT_IS_NOT_FOUND);
 
     account.lock();
 

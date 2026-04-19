@@ -1,7 +1,8 @@
-import { Inject, NotFoundException } from '@nestjs/common';
+import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
 import { PasswordGenerator, PASSWORD_GENERATOR } from 'libs/PasswordModule';
+import { throwError } from 'libs/ThrowError';
 import { Transactional } from 'libs/Transactional';
 
 import { UpdatePasswordCommand } from 'src/account/application/command/UpdatePasswordCommand';
@@ -23,8 +24,7 @@ export class UpdatePasswordHandler implements ICommandHandler<
   @Transactional()
   async execute(command: UpdatePasswordCommand): Promise<void> {
     const account = await this.accountRepository.findById(command.accountId);
-    if (!account)
-      throw new NotFoundException(ErrorMessage.ACCOUNT_IS_NOT_FOUND);
+    if (!account) throwError(ErrorMessage.ACCOUNT_IS_NOT_FOUND);
 
     account.updatePassword(
       this.passwordGenerator.generateKey(command.password),
