@@ -8,6 +8,7 @@ import {
 } from 'libs/DatabaseModule';
 
 import { AccountEntity } from 'src/account/infrastructure/entity/AccountEntity';
+import { OutboxWriter } from 'src/outbox/OutboxWriter';
 
 import { AccountRepository } from 'src/account/domain/AccountRepository';
 import { Account, AccountProperties } from 'src/account/domain/Account';
@@ -15,6 +16,7 @@ import { AccountFactory } from 'src/account/domain/AccountFactory';
 
 export class AccountRepositoryImplement implements AccountRepository {
   @Inject() private readonly accountFactory: AccountFactory;
+  @Inject() private readonly outboxWriter: OutboxWriter;
   @Inject(ENTITY_ID_TRANSFORMER)
   private readonly entityIdTransformer: EntityIdTransformer;
 
@@ -26,6 +28,12 @@ export class AccountRepositoryImplement implements AccountRepository {
     const models = Array.isArray(data) ? data : [data];
     const entities = models.map((model) => this.modelToEntity(model));
     await writeConnection.manager.getRepository(AccountEntity).save(entities);
+
+    const events = models.flatMap((model) => [...model.domainEvents]);
+    if (events.length > 0) {
+      await this.outboxWriter.saveAll(events);
+      models.forEach((model) => model.clearEvents());
+    }
   }
 
   async findById(id: string): Promise<Account | null> {
