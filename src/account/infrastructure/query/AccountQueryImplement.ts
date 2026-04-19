@@ -40,8 +40,8 @@ export class AccountQueryImplement extends AccountQuery {
     return readConnection
       .getRepository(AccountEntity)
       .find({
-        skip: query.skip,
-        take: query.skip,
+        skip: query.page * query.take,
+        take: query.take,
       })
       .then((entities) => ({
         accounts: entities.map((entity) => ({

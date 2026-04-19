@@ -8,13 +8,13 @@ export class FindAccountsRequestQueryString {
   @IsInt()
   @Min(0)
   @ApiProperty({ required: false, default: 0, minimum: 0 })
-  readonly skip: number = 0;
+  readonly page: number = 0;
 
   @IsOptional()
   @Type(() => Number)
   @IsInt()
   @Min(1)
   @Max(20)
-  @ApiProperty({ required: false, default: 10, minimum: 1, maximum: 20 })
-  readonly take: number = 10;
+  @ApiProperty({ required: false, default: 20, minimum: 1, maximum: 20 })
+  readonly take: number = 20;
 }
