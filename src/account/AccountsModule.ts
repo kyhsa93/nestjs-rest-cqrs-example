@@ -16,9 +16,9 @@ import { OpenAccountHandler } from 'src/account/application/command/OpenAccountH
 import { RemitHandler } from 'src/account/application/command/RemitHandler';
 import { UpdatePasswordHandler } from 'src/account/application/command/UpdatePasswordHandler';
 import { WithdrawHandler } from 'src/account/application/command/WithdrawHandler';
+import { AccountQuery } from 'src/account/application/query/AccountQuery';
 import { FindAccountByIdHandler } from 'src/account/application/query/FindAccountByIdHandler';
 import { FindAccountsHandler } from 'src/account/application/query/FindAccountsHandler';
-import { InjectionToken } from 'src/account/application/InjectionToken';
 import { AccountOpenedHandler } from 'src/account/application/event/account-opened-handler';
 import { LockAccountHandler } from 'src/account/application/command/LockAccountHandler';
 import { PasswordUpdatedHandler } from 'src/account/application/event/password-updated-handler';
@@ -28,14 +28,15 @@ import { WithdrawnHandler } from 'src/account/application/event/withdrawn-handle
 
 import { AccountDomainService } from 'src/account/domain/AccountDomainService';
 import { AccountFactory } from 'src/account/domain/AccountFactory';
+import { AccountRepository } from 'src/account/domain/AccountRepository';
 
 const infrastructure: Provider[] = [
   {
-    provide: InjectionToken.ACCOUNT_REPOSITORY,
+    provide: AccountRepository,
     useClass: AccountRepositoryImplement,
   },
   {
-    provide: InjectionToken.ACCOUNT_QUERY,
+    provide: AccountQuery,
     useClass: AccountQueryImplement,
   },
   AccountScheduler,

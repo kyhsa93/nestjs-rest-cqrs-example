@@ -1,11 +1,9 @@
-import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
 import { throwError } from 'libs/ThrowError';
 import { Transactional } from 'libs/Transactional';
 
 import { RemitCommand } from 'src/account/application/command/RemitCommand';
-import { InjectionToken } from 'src/account/application/InjectionToken';
 
 import { ErrorMessage } from 'src/account/domain/ErrorMessage';
 import { AccountRepository } from 'src/account/domain/AccountRepository';
@@ -13,9 +11,10 @@ import { AccountDomainService } from 'src/account/domain/AccountDomainService';
 
 @CommandHandler(RemitCommand)
 export class RemitHandler implements ICommandHandler<RemitCommand, void> {
-  @Inject(InjectionToken.ACCOUNT_REPOSITORY)
-  private readonly accountRepository: AccountRepository;
-  @Inject() private readonly accountDomainService: AccountDomainService;
+  constructor(
+    private readonly accountRepository: AccountRepository,
+    private readonly accountDomainService: AccountDomainService,
+  ) {}
 
   @Transactional()
   async execute(command: RemitCommand): Promise<void> {

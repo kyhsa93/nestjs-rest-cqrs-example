@@ -16,7 +16,7 @@ import {
 } from 'src/notification/domain/Notification';
 import { NotificationRepository } from 'src/notification/domain/NotificationRepository';
 
-export class NotificationRepositoryImplement implements NotificationRepository {
+export class NotificationRepositoryImplement extends NotificationRepository {
   @Inject(ENTITY_ID_TRANSFORMER)
   private readonly entityIdTransformer: EntityIdTransformer;
   @Inject() private readonly outboxWriter: OutboxWriter;

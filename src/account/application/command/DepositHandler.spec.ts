@@ -3,7 +3,6 @@ import { Test } from '@nestjs/testing';
 
 import { DepositCommand } from 'src/account/application/command/DepositCommand';
 import { DepositHandler } from 'src/account/application/command/DepositHandler';
-import { InjectionToken } from 'src/account/application/InjectionToken';
 
 import { AccountRepository } from 'src/account/domain/AccountRepository';
 import { ErrorMessage } from 'src/account/domain/ErrorMessage';
@@ -18,7 +17,7 @@ describe('DepositHandler', () => {
 
   beforeEach(async () => {
     const repoProvider: Provider = {
-      provide: InjectionToken.ACCOUNT_REPOSITORY,
+      provide: AccountRepository,
       useValue: {},
     };
     const providers: Provider[] = [DepositHandler, repoProvider];
@@ -26,7 +25,7 @@ describe('DepositHandler', () => {
     const testModule = await Test.createTestingModule(moduleMetadata).compile();
 
     handler = testModule.get(DepositHandler);
-    repository = testModule.get(InjectionToken.ACCOUNT_REPOSITORY);
+    repository = testModule.get(AccountRepository);
   });
 
   describe('execute', () => {

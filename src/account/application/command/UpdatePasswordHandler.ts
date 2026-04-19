@@ -6,7 +6,6 @@ import { throwError } from 'libs/ThrowError';
 import { Transactional } from 'libs/Transactional';
 
 import { UpdatePasswordCommand } from 'src/account/application/command/UpdatePasswordCommand';
-import { InjectionToken } from 'src/account/application/InjectionToken';
 
 import { ErrorMessage } from 'src/account/domain/ErrorMessage';
 import { AccountRepository } from 'src/account/domain/AccountRepository';
@@ -16,10 +15,11 @@ export class UpdatePasswordHandler implements ICommandHandler<
   UpdatePasswordCommand,
   void
 > {
-  @Inject(InjectionToken.ACCOUNT_REPOSITORY)
-  private readonly accountRepository: AccountRepository;
-  @Inject(PASSWORD_GENERATOR)
-  private readonly passwordGenerator: PasswordGenerator;
+  constructor(
+    private readonly accountRepository: AccountRepository,
+    @Inject(PASSWORD_GENERATOR)
+    private readonly passwordGenerator: PasswordGenerator,
+  ) {}
 
   @Transactional()
   async execute(command: UpdatePasswordCommand): Promise<void> {

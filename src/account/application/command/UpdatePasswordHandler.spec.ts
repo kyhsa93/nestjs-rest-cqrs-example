@@ -5,7 +5,6 @@ import { PasswordGenerator, PASSWORD_GENERATOR } from 'libs/PasswordModule';
 
 import { UpdatePasswordCommand } from 'src/account/application/command/UpdatePasswordCommand';
 import { UpdatePasswordHandler } from 'src/account/application/command/UpdatePasswordHandler';
-import { InjectionToken } from 'src/account/application/InjectionToken';
 
 import { AccountRepository } from 'src/account/domain/AccountRepository';
 import { ErrorMessage } from 'src/account/domain/ErrorMessage';
@@ -21,7 +20,7 @@ describe('UpdatePasswordHandler', () => {
 
   beforeEach(async () => {
     const repoProvider: Provider = {
-      provide: InjectionToken.ACCOUNT_REPOSITORY,
+      provide: AccountRepository,
       useValue: {},
     };
     const passwordGeneratorProvider: Provider = {
@@ -37,7 +36,7 @@ describe('UpdatePasswordHandler', () => {
     const testModule = await Test.createTestingModule(moduleMetadata).compile();
 
     handler = testModule.get(UpdatePasswordHandler);
-    repository = testModule.get(InjectionToken.ACCOUNT_REPOSITORY);
+    repository = testModule.get(AccountRepository);
     passwordGenerator = testModule.get(PASSWORD_GENERATOR);
   });
 

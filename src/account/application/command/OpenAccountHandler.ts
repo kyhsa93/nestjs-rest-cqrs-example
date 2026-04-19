@@ -5,7 +5,6 @@ import { PasswordGenerator, PASSWORD_GENERATOR } from 'libs/PasswordModule';
 import { Transactional } from 'libs/Transactional';
 
 import { OpenAccountCommand } from 'src/account/application/command/OpenAccountCommand';
-import { InjectionToken } from 'src/account/application/InjectionToken';
 
 import { AccountFactory } from 'src/account/domain/AccountFactory';
 import { AccountRepository } from 'src/account/domain/AccountRepository';
@@ -15,11 +14,12 @@ export class OpenAccountHandler implements ICommandHandler<
   OpenAccountCommand,
   void
 > {
-  @Inject(InjectionToken.ACCOUNT_REPOSITORY)
-  private readonly accountRepository: AccountRepository;
-  @Inject() private readonly accountFactory: AccountFactory;
-  @Inject(PASSWORD_GENERATOR)
-  private readonly passwordGenerator: PasswordGenerator;
+  constructor(
+    private readonly accountRepository: AccountRepository,
+    private readonly accountFactory: AccountFactory,
+    @Inject(PASSWORD_GENERATOR)
+    private readonly passwordGenerator: PasswordGenerator,
+  ) {}
 
   @Transactional()
   async execute(command: OpenAccountCommand): Promise<void> {

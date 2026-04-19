@@ -14,7 +14,7 @@ import { AccountRepository } from 'src/account/domain/AccountRepository';
 import { Account, AccountProperties } from 'src/account/domain/Account';
 import { AccountFactory } from 'src/account/domain/AccountFactory';
 
-export class AccountRepositoryImplement implements AccountRepository {
+export class AccountRepositoryImplement extends AccountRepository {
   @Inject() private readonly accountFactory: AccountFactory;
   @Inject() private readonly outboxWriter: OutboxWriter;
   @Inject(ENTITY_ID_TRANSFORMER)

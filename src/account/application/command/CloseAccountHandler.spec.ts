@@ -3,7 +3,6 @@ import { Test } from '@nestjs/testing';
 
 import { CloseAccountCommand } from 'src/account/application/command/CloseAccountCommand';
 import { CloseAccountHandler } from 'src/account/application/command/CloseAccountHandler';
-import { InjectionToken } from 'src/account/application/InjectionToken';
 
 import { AccountRepository } from 'src/account/domain/AccountRepository';
 import { ErrorMessage } from 'src/account/domain/ErrorMessage';
@@ -18,7 +17,7 @@ describe('CloseAccountHandler', () => {
 
   beforeEach(async () => {
     const repoProvider: Provider = {
-      provide: InjectionToken.ACCOUNT_REPOSITORY,
+      provide: AccountRepository,
       useValue: {},
     };
     const providers: Provider[] = [CloseAccountHandler, repoProvider];
@@ -26,7 +25,7 @@ describe('CloseAccountHandler', () => {
     const testModule = await Test.createTestingModule(moduleMetadata).compile();
 
     handler = testModule.get(CloseAccountHandler);
-    repository = testModule.get(InjectionToken.ACCOUNT_REPOSITORY);
+    repository = testModule.get(AccountRepository);
   });
 
   describe('execute', () => {

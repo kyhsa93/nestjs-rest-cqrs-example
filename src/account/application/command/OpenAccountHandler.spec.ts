@@ -5,7 +5,7 @@ import { PasswordGenerator, PASSWORD_GENERATOR } from 'libs/PasswordModule';
 
 import { OpenAccountCommand } from 'src/account/application/command/OpenAccountCommand';
 import { OpenAccountHandler } from 'src/account/application/command/OpenAccountHandler';
-import { InjectionToken } from 'src/account/application/InjectionToken';
+
 import { AccountFactory } from 'src/account/domain/AccountFactory';
 
 import { AccountRepository } from 'src/account/domain/AccountRepository';
@@ -22,7 +22,7 @@ describe('OpenAccountHandler', () => {
 
   beforeEach(async () => {
     const repoProvider: Provider = {
-      provide: InjectionToken.ACCOUNT_REPOSITORY,
+      provide: AccountRepository,
       useValue: {},
     };
     const factoryProvider: Provider = {
@@ -43,7 +43,7 @@ describe('OpenAccountHandler', () => {
     const testModule = await Test.createTestingModule(moduleMetadata).compile();
 
     handler = testModule.get(OpenAccountHandler);
-    repository = testModule.get(InjectionToken.ACCOUNT_REPOSITORY);
+    repository = testModule.get(AccountRepository);
     factory = testModule.get(AccountFactory);
     passwordGenerator = testModule.get(PASSWORD_GENERATOR);
   });

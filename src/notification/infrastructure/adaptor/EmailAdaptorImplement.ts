@@ -4,7 +4,7 @@ import { Config } from 'src/Config';
 
 import { EmailAdaptor } from 'src/notification/application/adaptor/EmailAdaptor';
 
-export class EmailAdaptorImplement implements EmailAdaptor {
+export class EmailAdaptorImplement extends EmailAdaptor {
   private readonly sesClient = new SESClient({
     region: Config.AWS_REGION,
     endpoint: Config.AWS_ENDPOINT,

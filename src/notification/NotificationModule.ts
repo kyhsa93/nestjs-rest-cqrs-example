@@ -8,23 +8,25 @@ import { NotificationQueryImplement } from 'src/notification/infrastructure/quer
 import { AccountIntegrationEventController } from 'src/notification/interface/integration-event/account-integration-event-controller';
 import { NotificationController } from 'src/notification/interface/NotificationController';
 
+import { EmailAdaptor } from 'src/notification/application/adaptor/EmailAdaptor';
 import { SendEmailHandler } from 'src/notification/application/command/SendEmailHandler';
-import { InjectionToken } from 'src/notification/application/InjectionToken';
 import { FindNotificationHandler } from 'src/notification/application/query/FindNotificationHandler';
+import { NotificationQuery } from 'src/notification/application/query/NotificationQuery';
 
 import { NotificationFactory } from 'src/notification/domain/NotificationFactory';
+import { NotificationRepository } from 'src/notification/domain/NotificationRepository';
 
 const infrastructure = [
   {
-    provide: InjectionToken.EMAIL_ADAPTOR,
+    provide: EmailAdaptor,
     useClass: EmailAdaptorImplement,
   },
   {
-    provide: InjectionToken.NOTIFICATION_REPOSITORY,
+    provide: NotificationRepository,
     useClass: NotificationRepositoryImplement,
   },
   {
-    provide: InjectionToken.NOTIFICATION_QUERY,
+    provide: NotificationQuery,
     useClass: NotificationQueryImplement,
   },
 ];

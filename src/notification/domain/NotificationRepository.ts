@@ -1,6 +1,6 @@
 import { Notification } from 'src/notification/domain/Notification';
 
-export interface NotificationRepository {
-  newId: () => string;
-  save: (notification: Notification) => Promise<void>;
+export abstract class NotificationRepository {
+  abstract newId(): string;
+  abstract save(notification: Notification): Promise<void>;
 }

@@ -2,7 +2,7 @@ import { FindAccountByIdResult } from 'src/account/application/query/FindAccount
 import { FindAccountsQuery } from 'src/account/application/query/FindAccountsQuery';
 import { FindAccountsResult } from 'src/account/application/query/FindAccountsResult';
 
-export interface AccountQuery {
-  findById: (id: string) => Promise<FindAccountByIdResult | null>;
-  find: (query: FindAccountsQuery) => Promise<FindAccountsResult>;
+export abstract class AccountQuery {
+  abstract findById(id: string): Promise<FindAccountByIdResult | null>;
+  abstract find(query: FindAccountsQuery): Promise<FindAccountsResult>;
 }

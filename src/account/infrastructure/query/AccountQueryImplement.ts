@@ -14,7 +14,7 @@ import { FindAccountsResult } from 'src/account/application/query/FindAccountsRe
 import { FindAccountsQuery } from 'src/account/application/query/FindAccountsQuery';
 
 @Injectable()
-export class AccountQueryImplement implements AccountQuery {
+export class AccountQueryImplement extends AccountQuery {
   @Inject(ENTITY_ID_TRANSFORMER)
   private readonly entityIdTransformer: EntityIdTransformer;
 

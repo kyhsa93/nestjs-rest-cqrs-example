@@ -1,19 +1,16 @@
-import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
 import { throwError } from 'libs/ThrowError';
 import { Transactional } from 'libs/Transactional';
 
 import { WithdrawCommand } from 'src/account/application/command/WithdrawCommand';
-import { InjectionToken } from 'src/account/application/InjectionToken';
 
 import { ErrorMessage } from 'src/account/domain/ErrorMessage';
 import { AccountRepository } from 'src/account/domain/AccountRepository';
 
 @CommandHandler(WithdrawCommand)
 export class WithdrawHandler implements ICommandHandler<WithdrawCommand, void> {
-  @Inject(InjectionToken.ACCOUNT_REPOSITORY)
-  private readonly accountRepository: AccountRepository;
+  constructor(private readonly accountRepository: AccountRepository) {}
 
   @Transactional()
   async execute(command: WithdrawCommand): Promise<void> {

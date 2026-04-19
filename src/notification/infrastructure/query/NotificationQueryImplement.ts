@@ -12,7 +12,7 @@ import { FindNotificationQuery } from 'src/notification/application/query/FindNo
 import { FindNotificationResult } from 'src/notification/application/query/FindNotificationResult';
 import { NotificationQuery } from 'src/notification/application/query/NotificationQuery';
 
-export class NotificationQueryImplement implements NotificationQuery {
+export class NotificationQueryImplement extends NotificationQuery {
   @Inject(ENTITY_ID_TRANSFORMER)
   private readonly entityIdTransformer: EntityIdTransformer;
 
