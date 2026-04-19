@@ -1,5 +1,13 @@
-FROM node:hydrogen-alpine
-COPY . /app
+FROM node:20-alpine
+
 WORKDIR /app
+
+COPY package.json package-lock.json ./
 RUN npm ci
-ENTRYPOINT [ "npm", "run", "start:debug" ]
+
+COPY . .
+
+EXPOSE 5000
+EXPOSE 9229
+
+CMD ["npm", "run", "start:debug"]
