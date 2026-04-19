@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 
 import { EmailAdaptorImplement } from 'src/notification/infrastructure/adaptor/EmailAdaptorImplement';
-import { NotificationRepositoryImplement } from 'src/notification/infrastructure/repository/NotificationRepositoryImplement';
+import { NotificationRepositoryImplement } from 'src/notification/infrastructure/repository/notification-repository-impl';
 import { NotificationQueryImplement } from 'src/notification/infrastructure/query/NotificationQueryImplement';
 
 import { AccountIntegrationEventController } from 'src/notification/interface/integration-event/account-integration-event-controller';

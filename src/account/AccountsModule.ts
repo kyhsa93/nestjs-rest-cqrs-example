@@ -4,7 +4,7 @@ import { CqrsModule } from '@nestjs/cqrs';
 import { PasswordModule } from 'libs/PasswordModule';
 
 import { AccountQueryImplement } from 'src/account/infrastructure/query/AccountQueryImplement';
-import { AccountRepositoryImplement } from 'src/account/infrastructure/repository/AccountRepositoryImplement';
+import { AccountRepositoryImplement } from 'src/account/infrastructure/repository/account-repository-impl';
 import { AccountScheduler } from 'src/account/infrastructure/scheduler/account-scheduler';
 
 import { AccountsController } from 'src/account/interface/AccountsController';
