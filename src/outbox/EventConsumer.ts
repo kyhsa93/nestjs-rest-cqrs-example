@@ -6,6 +6,8 @@ import {
 } from '@aws-sdk/client-sqs';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { ModulesContainer } from '@nestjs/core';
+import { InstanceWrapper } from '@nestjs/core/injector/instance-wrapper';
+import { Module as NestModule } from '@nestjs/core/injector/module';
 import { Interval } from '@nestjs/schedule';
 
 import { RequestStorage } from 'libs/RequestStorage';
@@ -81,39 +83,67 @@ export class EventConsumer {
 
   private async dispatch(message: OutboxMessage): Promise<void> {
     const domainHandler = (
-      await this.discover.controllerMethodsWithMetaAtKey<HandleEventMetadata>(
+      await this.discover.providerMethodsWithMetaAtKey<HandleEventMetadata>(
         HANDLE_EVENT_METADATA,
       )
     ).find((entry) => entry.meta.eventType === message.eventType);
+    if (domainHandler) {
+      const instance = this.findInstance(
+        domainHandler.discoveredMethod.parentClass.name,
+        'provider',
+      );
+      if (!instance) {
+        this.logger.warn(
+          `Provider not found for ${domainHandler.discoveredMethod.parentClass.name}`,
+        );
+        return;
+      }
+      await domainHandler.discoveredMethod.handler.bind(instance)(
+        JSON.parse(message.payload),
+      );
+      return;
+    }
+
     const integrationHandler = (
       await this.discover.controllerMethodsWithMetaAtKey<HandleIntegrationEventMetadata>(
         HANDLE_INTEGRATION_EVENT_METADATA,
       )
     ).find((entry) => entry.meta.eventName === message.eventType);
-
-    const handler = domainHandler ?? integrationHandler;
-    if (!handler) {
-      this.logger.warn(
-        `No handler registered for eventType: ${message.eventType}`,
+    if (integrationHandler) {
+      const instance = this.findInstance(
+        integrationHandler.discoveredMethod.parentClass.name,
+        'controller',
+      );
+      if (!instance) {
+        this.logger.warn(
+          `Controller not found for ${integrationHandler.discoveredMethod.parentClass.name}`,
+        );
+        return;
+      }
+      await integrationHandler.discoveredMethod.handler.bind(instance)(
+        JSON.parse(message.payload),
       );
       return;
     }
 
-    const instance = Array.from(this.modulesContainer.values())
-      .filter((module) => 0 < module.controllers.size)
-      .flatMap((module) => Array.from(module.controllers.values()))
-      .find(
-        (wrapper) => wrapper.name === handler.discoveredMethod.parentClass.name,
-      )?.instance;
-    if (!instance) {
-      this.logger.warn(
-        `Handler instance not found for ${handler.discoveredMethod.parentClass.name}`,
-      );
-      return;
-    }
-
-    await handler.discoveredMethod.handler.bind(instance)(
-      JSON.parse(message.payload),
+    this.logger.warn(
+      `No handler registered for eventType: ${message.eventType}`,
     );
+  }
+
+  private findInstance(
+    className: string,
+    kind: 'provider' | 'controller',
+  ): unknown {
+    const wrappers = Array.from(this.modulesContainer.values()).flatMap(
+      (module: NestModule) =>
+        Array.from(
+          (kind === 'provider'
+            ? module.providers
+            : module.controllers
+          ).values(),
+        ) as InstanceWrapper[],
+    );
+    return wrappers.find((wrapper) => wrapper.name === className)?.instance;
   }
 }

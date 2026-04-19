@@ -19,12 +19,12 @@ import { WithdrawHandler } from 'src/account/application/command/WithdrawHandler
 import { FindAccountByIdHandler } from 'src/account/application/query/FindAccountByIdHandler';
 import { FindAccountsHandler } from 'src/account/application/query/FindAccountsHandler';
 import { InjectionToken } from 'src/account/application/InjectionToken';
-import { AccountOpenedHandler } from 'src/account/application/event/AccountOpenedHandler';
+import { AccountOpenedHandler } from 'src/account/application/event/account-opened-handler';
 import { LockAccountHandler } from 'src/account/application/command/LockAccountHandler';
-import { PasswordUpdatedHandler } from 'src/account/application/event/PasswordUpdatedHandler';
-import { AccountClosedHandler } from 'src/account/application/event/AccountClosedHandler';
-import { DepositedHandler } from 'src/account/application/event/DepositedHandler';
-import { WithdrawnHandler } from 'src/account/application/event/WithdrawnHandler';
+import { PasswordUpdatedHandler } from 'src/account/application/event/password-updated-handler';
+import { AccountClosedHandler } from 'src/account/application/event/account-closed-handler';
+import { DepositedHandler } from 'src/account/application/event/deposited-handler';
+import { WithdrawnHandler } from 'src/account/application/event/withdrawn-handler';
 
 import { AccountDomainService } from 'src/account/domain/AccountDomainService';
 import { AccountFactory } from 'src/account/domain/AccountFactory';
