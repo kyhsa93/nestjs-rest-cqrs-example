@@ -1,6 +1,4 @@
-import { IEvent } from '@nestjs/cqrs';
-
-export class WithdrawnEvent implements IEvent {
+export class WithdrawnEvent {
   constructor(
     readonly accountId: string,
     readonly email: string,

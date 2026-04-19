@@ -1,6 +1,4 @@
-import { IEvent } from '@nestjs/cqrs';
-
-export class AccountClosedEvent implements IEvent {
+export class AccountClosedEvent {
   constructor(
     readonly accountId: string,
     readonly email: string,
