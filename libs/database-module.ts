@@ -1,4 +1,11 @@
-import { Global, Module, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
+import {
+  Global,
+  Logger,
+  Module,
+  OnModuleDestroy,
+  OnModuleInit,
+} from '@nestjs/common';
+import { Cron, CronExpression } from '@nestjs/schedule';
 import {
   DataSource,
   EntityManager,
@@ -50,6 +57,7 @@ export let readConnection = {} as ReadConnection;
 type DatabaseCredentials = Readonly<{ username: string; password: string }>;
 
 class DatabaseService implements OnModuleInit, OnModuleDestroy {
+  private readonly logger = new Logger(DatabaseService.name);
   private dataSource!: DataSource;
 
   async onModuleInit(): Promise<void> {
@@ -76,6 +84,19 @@ class DatabaseService implements OnModuleInit, OnModuleDestroy {
 
   async onModuleDestroy(): Promise<void> {
     await this.dataSource?.destroy();
+  }
+
+  @Cron(CronExpression.EVERY_5_SECONDS)
+  async healthCheck(): Promise<void> {
+    try {
+      await Promise.all([
+        writeConnection.manager.query('SELECT 1'),
+        readConnection.query('SELECT 1'),
+      ]);
+    } catch (error) {
+      this.logger.error(error);
+      process.exit(1);
+    }
   }
 
   private async loadCredentials(): Promise<DatabaseCredentials> {

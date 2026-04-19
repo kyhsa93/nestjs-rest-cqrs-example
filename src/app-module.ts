@@ -9,7 +9,6 @@ import { MessageModule } from 'libs/message-module';
 import { RequestStorageMiddleware } from 'libs/request-storage-middleware';
 
 import { AppController } from 'src/app-controller';
-import { DatabaseScheduler } from 'src/infrastructure/scheduler/database-scheduler';
 import { OutboxModule } from 'src/outbox/outbox-module';
 import { AccountsModule } from 'src/account/accounts-module';
 import { NotificationModule } from 'src/notification/notification-module';
@@ -27,7 +26,6 @@ import { NotificationModule } from 'src/notification/notification-module';
   ],
   controllers: [AppController],
   providers: [
-    DatabaseScheduler,
     {
       provide: APP_GUARD,
       useClass: ThrottlerGuard,
