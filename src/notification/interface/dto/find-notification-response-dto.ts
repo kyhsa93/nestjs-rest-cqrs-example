@@ -23,5 +23,5 @@ class Notification {
 
 export class FindNotificationResponseDto extends FindNotificationResult {
   @ApiProperty({ type: [Notification] })
-  readonly notifications: Notification[];
+  override readonly notifications: Notification[];
 }

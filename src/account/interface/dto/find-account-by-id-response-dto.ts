@@ -6,20 +6,20 @@ import { FindAccountByIdResult } from 'src/account/application/query/find-accoun
 
 export class FindAccountByIdResponseDTO extends FindAccountByIdResult {
   @ApiProperty({ example: new EntityId() })
-  readonly id: string;
+  override readonly id: string;
 
   @ApiProperty({ example: 'young' })
-  readonly name: string;
+  override readonly name: string;
 
   @ApiProperty({ example: 100 })
-  readonly balance: number;
+  override readonly balance: number;
 
   @ApiProperty()
-  readonly createdAt: Date;
+  override readonly createdAt: Date;
 
   @ApiProperty()
-  readonly updatedAt: Date;
+  override readonly updatedAt: Date;
 
   @ApiProperty({ nullable: true, example: null })
-  readonly deletedAt: Date | null;
+  override readonly deletedAt: Date | null;
 }

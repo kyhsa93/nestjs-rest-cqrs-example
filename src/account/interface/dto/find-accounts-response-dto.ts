@@ -17,5 +17,5 @@ class Account {
 
 export class FindAccountsResponseDto extends FindAccountsResult {
   @ApiProperty({ type: [Account] })
-  readonly accounts: Account[];
+  override readonly accounts: Account[];
 }
