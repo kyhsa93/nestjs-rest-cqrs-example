@@ -37,7 +37,13 @@ jobs:
         with:
           node-version-file: project/.nvmrc
           cache: npm
-          cache-dependency-path: playbook/harness/package-lock.json
+          cache-dependency-path: |
+            project/package-lock.json
+            playbook/harness/package-lock.json
+
+      - name: Install project deps
+        working-directory: project
+        run: npm ci
 
       - name: Install harness
         working-directory: playbook/harness
