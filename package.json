@@ -26,7 +26,6 @@
     "@aws-sdk/client-sqs": "^3.1032.0",
     "@aws-sdk/s3-request-presigner": "^3.1032.0",
     "@aws-sdk/util-endpoints": "^3.996.7",
-    "@nestjs-plus/discovery": "^2.0.2",
     "@nestjs/axios": "^4.0.1",
     "@nestjs/cache-manager": "^3.1.0",
     "@nestjs/common": "^11.1.19",

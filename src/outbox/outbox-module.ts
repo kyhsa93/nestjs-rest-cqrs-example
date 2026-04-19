@@ -1,5 +1,5 @@
-import { DiscoveryModule } from '@nestjs-plus/discovery';
 import { Global, Module } from '@nestjs/common';
+import { DiscoveryModule } from '@nestjs/core';
 
 import { EventConsumer } from 'src/outbox/event-consumer';
 import { OutboxRelay } from 'src/outbox/outbox-relay';

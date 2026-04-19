@@ -1,15 +1,13 @@
-import { DiscoveryService } from '@nestjs-plus/discovery';
 import {
   DeleteMessageCommand,
   ReceiveMessageCommand,
   SQSClient,
 } from '@aws-sdk/client-sqs';
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { ModulesContainer } from '@nestjs/core';
-import { InstanceWrapper } from '@nestjs/core/injector/instance-wrapper';
-import { Module as NestModule } from '@nestjs/core/injector/module';
+import { DiscoveryService } from '@nestjs/core';
 import { Interval } from '@nestjs/schedule';
 
+import { discoverMethods } from 'libs/metadata-discovery';
 import { RequestStorage } from 'libs/request-storage';
 
 import { Config } from 'src/config';
@@ -31,8 +29,7 @@ type OutboxMessage = Readonly<{
 @Injectable()
 export class EventConsumer {
   private readonly logger = new Logger(EventConsumer.name);
-  @Inject() private readonly discover: DiscoveryService;
-  @Inject() private readonly modulesContainer: ModulesContainer;
+  @Inject() private readonly discoveryService: DiscoveryService;
   private readonly sqsClient = new SQSClient({
     region: Config.AWS_REGION,
     endpoint: Config.AWS_ENDPOINT,
@@ -78,45 +75,27 @@ export class EventConsumer {
   }
 
   private async dispatch(message: OutboxMessage): Promise<void> {
-    const domainHandler = (
-      await this.discover.providerMethodsWithMetaAtKey<HandleEventMetadata>(
-        HANDLE_EVENT_METADATA,
-      )
+    const domainHandler = discoverMethods<HandleEventMetadata>(
+      this.discoveryService,
+      HANDLE_EVENT_METADATA,
+      'provider',
     ).find((entry) => entry.meta.eventType === message.eventType);
     if (domainHandler) {
-      const instance = this.findInstance(
-        domainHandler.discoveredMethod.parentClass.name,
-        'provider',
-      );
-      if (!instance) {
-        this.logger.warn(
-          `Provider not found for ${domainHandler.discoveredMethod.parentClass.name}`,
-        );
-        return;
-      }
-      await domainHandler.discoveredMethod.handler.bind(instance)(
+      await domainHandler.method.call(
+        domainHandler.instance,
         JSON.parse(message.payload),
       );
       return;
     }
 
-    const integrationHandler = (
-      await this.discover.controllerMethodsWithMetaAtKey<HandleIntegrationEventMetadata>(
-        HANDLE_INTEGRATION_EVENT_METADATA,
-      )
+    const integrationHandler = discoverMethods<HandleIntegrationEventMetadata>(
+      this.discoveryService,
+      HANDLE_INTEGRATION_EVENT_METADATA,
+      'controller',
     ).find((entry) => entry.meta.eventName === message.eventType);
     if (integrationHandler) {
-      const instance = this.findInstance(
-        integrationHandler.discoveredMethod.parentClass.name,
-        'controller',
-      );
-      if (!instance) {
-        this.logger.warn(
-          `Controller not found for ${integrationHandler.discoveredMethod.parentClass.name}`,
-        );
-        return;
-      }
-      await integrationHandler.discoveredMethod.handler.bind(instance)(
+      await integrationHandler.method.call(
+        integrationHandler.instance,
         JSON.parse(message.payload),
       );
       return;
@@ -125,21 +104,5 @@ export class EventConsumer {
     this.logger.warn(
       `No handler registered for eventType: ${message.eventType}`,
     );
-  }
-
-  private findInstance(
-    className: string,
-    kind: 'provider' | 'controller',
-  ): unknown {
-    const wrappers = Array.from(this.modulesContainer.values()).flatMap(
-      (module: NestModule) =>
-        Array.from(
-          (kind === 'provider'
-            ? module.providers
-            : module.controllers
-          ).values(),
-        ) as InstanceWrapper[],
-    );
-    return wrappers.find((wrapper) => wrapper.name === className)?.instance;
   }
 }

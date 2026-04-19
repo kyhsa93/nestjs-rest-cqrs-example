@@ -1,4 +1,3 @@
-import { DiscoveryService, DiscoveryModule } from '@nestjs-plus/discovery';
 import {
   Global,
   Inject,
@@ -7,7 +6,7 @@ import {
   OnModuleDestroy,
   SetMetadata,
 } from '@nestjs/common';
-import { ModulesContainer } from '@nestjs/core';
+import { DiscoveryModule, DiscoveryService } from '@nestjs/core';
 import { IEvent } from '@nestjs/cqrs';
 import {
   DeleteMessageCommand,
@@ -22,6 +21,7 @@ import {
 } from '@aws-sdk/client-sns';
 import { Interval } from '@nestjs/schedule';
 
+import { discoverMethods } from 'libs/metadata-discovery';
 import { RequestStorage } from 'libs/request-storage';
 
 import { Config } from 'src/config';
@@ -35,8 +35,7 @@ export const MessageHandler = (name: string) =>
 
 class SQSConsumerService implements OnModuleDestroy {
   private readonly logger = new Logger(SQSConsumerService.name);
-  @Inject() private readonly discover: DiscoveryService;
-  @Inject() private readonly modulesContainer: ModulesContainer;
+  @Inject() private readonly discoveryService: DiscoveryService;
   private readonly sqsClient = new SQSClient({
     region: Config.AWS_REGION,
     endpoint: Config.AWS_ENDPOINT,
@@ -66,33 +65,18 @@ class SQSConsumerService implements OnModuleDestroy {
     ) as Message;
     RequestStorage.setRequestId(message.requestId);
 
-    const handler = (
-      await this.discover.controllerMethodsWithMetaAtKey<MessageHandlerMetadata>(
-        SQS_CONSUMER_METHOD,
-      )
-    ).find((handler) => handler.meta.name === message.name);
+    const handler = discoverMethods<MessageHandlerMetadata>(
+      this.discoveryService,
+      SQS_CONSUMER_METHOD,
+      'controller',
+    ).find((entry) => entry.meta.name === message.name);
     if (!handler)
       throw new Error(
         `Message handler is not found. Message: ${JSON.stringify(message)}`,
       );
 
-    const controller = Array.from(this.modulesContainer.values())
-      .filter((module) => 0 < module.controllers.size)
-      .flatMap((module) => Array.from(module.controllers.values()))
-      .find(
-        (wrapper) => wrapper.name == handler.discoveredMethod.parentClass.name,
-      );
-    if (!controller)
-      throw new Error(
-        `Message handling controller is not found. Message: ${JSON.stringify(
-          message,
-        )}`,
-      );
-
     try {
-      await handler.discoveredMethod.handler.bind(controller.instance)(
-        message.body,
-      );
+      await handler.method.call(handler.instance, message.body);
       await this.sqsClient.send(
         new DeleteMessageCommand({
           QueueUrl: Config.AWS_SQS_QUEUE_URL,
