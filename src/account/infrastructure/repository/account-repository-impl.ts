@@ -1,4 +1,5 @@
 import { Inject } from '@nestjs/common';
+import { FindOptionsWhere } from 'typeorm';
 
 import {
   EntityId,
@@ -10,7 +11,11 @@ import {
 import { AccountEntity } from 'src/account/infrastructure/entity/account-entity';
 import { OutboxWriter } from 'src/outbox/outbox-writer';
 
-import { AccountRepository } from 'src/account/domain/account-repository';
+import {
+  AccountRepository,
+  FindAccountsOptions,
+  FindAccountsRepositoryResult,
+} from 'src/account/domain/account-repository';
 import { Account, AccountProperties } from 'src/account/domain/account';
 import { AccountFactory } from 'src/account/domain/account-factory';
 
@@ -36,18 +41,20 @@ export class AccountRepositoryImplement extends AccountRepository {
     }
   }
 
-  async findById(id: string): Promise<Account | null> {
-    const entity = await writeConnection.manager
-      .getRepository(AccountEntity)
-      .findOneBy({ id: this.entityIdTransformer.to(id) });
-    return entity ? this.entityToModel(entity) : null;
-  }
+  async findAccounts(
+    options: FindAccountsOptions,
+  ): Promise<FindAccountsRepositoryResult> {
+    const where: FindOptionsWhere<AccountEntity> = {};
+    if (options.id) where.id = this.entityIdTransformer.to(options.id);
 
-  async findByName(name: string): Promise<Account[]> {
     const entities = await writeConnection.manager
       .getRepository(AccountEntity)
-      .findBy({ name });
-    return entities.map((entity) => this.entityToModel(entity));
+      .find({
+        where,
+        skip: options.page * options.take,
+        take: options.take,
+      });
+    return { accounts: entities.map((entity) => this.entityToModel(entity)) };
   }
 
   private modelToEntity(model: Account): AccountEntity {

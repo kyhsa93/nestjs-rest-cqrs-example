@@ -17,7 +17,9 @@ export class LockAccountHandler implements ICommandHandler<
 
   @Transactional()
   async execute(command: LockAccountCommand): Promise<void> {
-    const account = await this.accountRepository.findById(command.accountId);
+    const account = await this.accountRepository
+      .findAccounts({ id: command.accountId, take: 1, page: 0 })
+      .then((result) => result.accounts.pop());
     if (!account) throwError(ErrorMessage.ACCOUNT_IS_NOT_FOUND);
 
     account.lock();

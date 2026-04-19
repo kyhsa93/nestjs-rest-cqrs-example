@@ -49,30 +49,34 @@ describe('RemitHandler', () => {
     });
 
     it('should throw error when account is not found', async () => {
-      repository.findById = jest.fn();
+      repository.findAccounts = jest.fn().mockResolvedValue({ accounts: [] });
 
       const command = new RemitCommand('accountId', 'receiverId', 1);
 
       await expect(handler.execute(command)).rejects.toThrow(
         ErrorMessage.ACCOUNT_IS_NOT_FOUND,
       );
-      expect(repository.findById).toHaveBeenCalledTimes(1);
-      expect(repository.findById).toHaveBeenCalledWith(command.accountId);
+      expect(repository.findAccounts).toHaveBeenCalledTimes(1);
+      expect(repository.findAccounts).toHaveBeenCalledWith({
+        id: command.accountId,
+        take: 1,
+        page: 0,
+      });
     });
 
     it('should throw error when receiver is not found', async () => {
-      repository.findById = jest
+      repository.findAccounts = jest
         .fn()
-        .mockImplementation((id: string) => (id === 'accountId' ? {} : null));
+        .mockImplementation(({ id }: { id: string }) =>
+          Promise.resolve({ accounts: id === 'accountId' ? [{}] : [] }),
+        );
 
       const command = new RemitCommand('accountId', 'receiverId', 1);
 
       await expect(handler.execute(command)).rejects.toThrow(
         ErrorMessage.ACCOUNT_IS_NOT_FOUND,
       );
-      expect(repository.findById).toHaveBeenCalledTimes(2);
-      expect(repository.findById).toHaveBeenCalledWith(command.accountId);
-      expect(repository.findById).toHaveBeenCalledWith(command.receiverId);
+      expect(repository.findAccounts).toHaveBeenCalledTimes(2);
     });
 
     it('should execute RemitCommand', async () => {
@@ -83,10 +87,17 @@ describe('RemitHandler', () => {
         compareId: (id: string) => id === 'receiverId',
       };
 
-      repository.findById = jest
+      repository.findAccounts = jest
         .fn()
-        .mockImplementation((id: string) =>
-          id === 'accountId' ? account : id === 'receiverId' ? receiver : null,
+        .mockImplementation(({ id }: { id: string }) =>
+          Promise.resolve({
+            accounts:
+              id === 'accountId'
+                ? [account]
+                : id === 'receiverId'
+                  ? [receiver]
+                  : [],
+          }),
         );
       repository.save = jest.fn().mockResolvedValue(undefined);
       domainService.remit = jest.fn().mockReturnValue(undefined);
@@ -94,9 +105,7 @@ describe('RemitHandler', () => {
       const command = new RemitCommand('accountId', 'receiverId', 1);
 
       await expect(handler.execute(command)).resolves.toEqual(undefined);
-      expect(repository.findById).toHaveBeenCalledTimes(2);
-      expect(repository.findById).toHaveBeenCalledWith(command.accountId);
-      expect(repository.findById).toHaveBeenCalledWith(command.receiverId);
+      expect(repository.findAccounts).toHaveBeenCalledTimes(2);
       expect(domainService.remit).toHaveBeenCalledTimes(1);
       expect(domainService.remit).toHaveBeenCalledWith({
         ...command,

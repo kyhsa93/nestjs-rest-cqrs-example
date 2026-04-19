@@ -30,28 +30,33 @@ describe('WithdrawHandler', () => {
 
   describe('execute', () => {
     it('should throw error when account not found', async () => {
-      repository.findById = jest.fn().mockResolvedValue(null);
+      repository.findAccounts = jest.fn().mockResolvedValue({ accounts: [] });
 
       const command = new WithdrawCommand('accountId', 1);
 
       await expect(handler.execute(command)).rejects.toThrow(
         ErrorMessage.ACCOUNT_IS_NOT_FOUND,
       );
-      expect(repository.findById).toHaveBeenCalledTimes(1);
-      expect(repository.findById).toHaveBeenCalledWith(command.accountId);
+      expect(repository.findAccounts).toHaveBeenCalledTimes(1);
+      expect(repository.findAccounts).toHaveBeenCalledWith({
+        id: command.accountId,
+        take: 1,
+        page: 0,
+      });
     });
 
     it('should execute WithdrawCommand', async () => {
       const account = { withdraw: jest.fn() };
 
-      repository.findById = jest.fn().mockResolvedValue(account);
+      repository.findAccounts = jest
+        .fn()
+        .mockResolvedValue({ accounts: [account] });
       repository.save = jest.fn().mockResolvedValue(undefined);
 
       const command = new WithdrawCommand('accountId', 1);
 
       await expect(handler.execute(command)).resolves.toEqual(undefined);
-      expect(repository.findById).toHaveBeenCalledTimes(1);
-      expect(repository.findById).toHaveBeenCalledWith(command.accountId);
+      expect(repository.findAccounts).toHaveBeenCalledTimes(1);
       expect(account.withdraw).toHaveBeenCalledTimes(1);
       expect(account.withdraw).toHaveBeenCalledWith(command.amount);
       expect(repository.save).toHaveBeenCalledTimes(1);

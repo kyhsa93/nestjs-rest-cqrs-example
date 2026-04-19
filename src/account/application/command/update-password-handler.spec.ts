@@ -42,29 +42,34 @@ describe('UpdatePasswordHandler', () => {
 
   describe('execute', () => {
     it('should throw error when account not found', async () => {
-      repository.findById = jest.fn().mockResolvedValue(null);
+      repository.findAccounts = jest.fn().mockResolvedValue({ accounts: [] });
 
       const command = new UpdatePasswordCommand('accountId', 'password');
 
       await expect(handler.execute(command)).rejects.toThrow(
         ErrorMessage.ACCOUNT_IS_NOT_FOUND,
       );
-      expect(repository.findById).toHaveBeenCalledTimes(1);
-      expect(repository.findById).toHaveBeenCalledWith(command.accountId);
+      expect(repository.findAccounts).toHaveBeenCalledTimes(1);
+      expect(repository.findAccounts).toHaveBeenCalledWith({
+        id: command.accountId,
+        take: 1,
+        page: 0,
+      });
     });
 
     it('should execute UpdatePasswordCommand', async () => {
       const account = { updatePassword: jest.fn() };
 
-      repository.findById = jest.fn().mockResolvedValue(account);
+      repository.findAccounts = jest
+        .fn()
+        .mockResolvedValue({ accounts: [account] });
       repository.save = jest.fn().mockResolvedValue(undefined);
       passwordGenerator.generateKey = jest.fn().mockReturnValue('password');
 
       const command = new UpdatePasswordCommand('accountId', 'password');
 
       await expect(handler.execute(command)).resolves.toEqual(undefined);
-      expect(repository.findById).toHaveBeenCalledTimes(1);
-      expect(repository.findById).toHaveBeenCalledWith(command.accountId);
+      expect(repository.findAccounts).toHaveBeenCalledTimes(1);
       expect(account.updatePassword).toHaveBeenCalledTimes(1);
       expect(account.updatePassword).toHaveBeenCalledWith(command.password);
       expect(repository.save).toHaveBeenCalledTimes(1);

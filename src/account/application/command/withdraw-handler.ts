@@ -14,7 +14,9 @@ export class WithdrawHandler implements ICommandHandler<WithdrawCommand, void> {
 
   @Transactional()
   async execute(command: WithdrawCommand): Promise<void> {
-    const account = await this.accountRepository.findById(command.accountId);
+    const account = await this.accountRepository
+      .findAccounts({ id: command.accountId, take: 1, page: 0 })
+      .then((result) => result.accounts.pop());
     if (!account) throwError(ErrorMessage.ACCOUNT_IS_NOT_FOUND);
 
     account.withdraw(command.amount);
