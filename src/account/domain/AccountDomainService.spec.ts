@@ -19,10 +19,10 @@ describe('AccountDomainService', () => {
       };
 
       expect(service.remit(options)).toEqual(undefined);
-      expect(account.withdraw).toBeCalledTimes(1);
-      expect(account.withdraw).toBeCalledWith(options.amount);
-      expect(receiver.deposit).toBeCalledTimes(1);
-      expect(receiver.deposit).toBeCalledWith(options.amount);
+      expect(account.withdraw).toHaveBeenCalledTimes(1);
+      expect(account.withdraw).toHaveBeenCalledWith(options.amount);
+      expect(receiver.deposit).toHaveBeenCalledTimes(1);
+      expect(receiver.deposit).toHaveBeenCalledWith(options.amount);
     });
   });
 });

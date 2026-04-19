@@ -34,11 +34,9 @@ describe('CloseAccountHandler', () => {
 
       const command = new CloseAccountCommand('accountId');
 
-      await expect(handler.execute(command)).rejects.toThrowError(
-        NotFoundException,
-      );
-      expect(repository.findById).toBeCalledTimes(1);
-      expect(repository.findById).toBeCalledWith(command.accountId);
+      await expect(handler.execute(command)).rejects.toThrow(NotFoundException);
+      expect(repository.findById).toHaveBeenCalledTimes(1);
+      expect(repository.findById).toHaveBeenCalledWith(command.accountId);
     });
 
     it('should execute CloseAccountCommand', async () => {
@@ -50,12 +48,12 @@ describe('CloseAccountHandler', () => {
       const command = new CloseAccountCommand('accountId');
 
       await expect(handler.execute(command)).resolves.toEqual(undefined);
-      expect(repository.findById).toBeCalledTimes(1);
-      expect(repository.findById).toBeCalledWith(command.accountId);
-      expect(account.close).toBeCalledTimes(1);
-      expect(repository.save).toBeCalledTimes(1);
-      expect(repository.save).toBeCalledWith(account);
-      expect(account.commit).toBeCalledTimes(1);
+      expect(repository.findById).toHaveBeenCalledTimes(1);
+      expect(repository.findById).toHaveBeenCalledWith(command.accountId);
+      expect(account.close).toHaveBeenCalledTimes(1);
+      expect(repository.save).toHaveBeenCalledTimes(1);
+      expect(repository.save).toHaveBeenCalledWith(account);
+      expect(account.commit).toHaveBeenCalledTimes(1);
     });
   });
 });

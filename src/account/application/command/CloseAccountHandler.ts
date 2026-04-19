@@ -10,9 +10,10 @@ import { ErrorMessage } from 'src/account/domain/ErrorMessage';
 import { AccountRepository } from 'src/account/domain/AccountRepository';
 
 @CommandHandler(CloseAccountCommand)
-export class CloseAccountHandler
-  implements ICommandHandler<CloseAccountCommand, void>
-{
+export class CloseAccountHandler implements ICommandHandler<
+  CloseAccountCommand,
+  void
+> {
   @Inject(InjectionToken.ACCOUNT_REPOSITORY)
   private readonly accountRepository: AccountRepository;
 

@@ -1,5 +1,4 @@
 import {
-  CacheInterceptor,
   Controller,
   Get,
   Inject,
@@ -7,6 +6,7 @@ import {
   Query,
   UseInterceptors,
 } from '@nestjs/common';
+import { CacheInterceptor } from '@nestjs/cache-manager';
 import { QueryBus } from '@nestjs/cqrs';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 

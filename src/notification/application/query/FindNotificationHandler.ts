@@ -7,9 +7,10 @@ import { FindNotificationResult } from 'src/notification/application/query/FindN
 import { NotificationQuery } from 'src/notification/application/query/NotificationQuery';
 
 @QueryHandler(FindNotificationQuery)
-export class FindNotificationHandler
-  implements IQueryHandler<FindNotificationQuery, FindNotificationResult>
-{
+export class FindNotificationHandler implements IQueryHandler<
+  FindNotificationQuery,
+  FindNotificationResult
+> {
   @Inject(InjectionToken.NOTIFICATION_QUERY)
   private readonly notificationQuery: NotificationQuery;
 

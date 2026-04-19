@@ -11,9 +11,10 @@ import { NotificationFactory } from 'src/notification/domain/NotificationFactory
 import { NotificationRepository } from 'src/notification/domain/NotificationRepository';
 
 @CommandHandler(SendEmailCommand)
-export class SendEmailHandler
-  implements ICommandHandler<SendEmailCommand, void>
-{
+export class SendEmailHandler implements ICommandHandler<
+  SendEmailCommand,
+  void
+> {
   @Inject() private readonly notificationFactory: NotificationFactory;
   @Inject(InjectionToken.NOTIFICATION_REPOSITORY)
   private readonly notificationRepository: NotificationRepository;

@@ -1,6 +1,5 @@
 import {
   Body,
-  CacheInterceptor,
   Controller,
   Delete,
   Get,
@@ -13,6 +12,7 @@ import {
   NotFoundException,
   Headers,
 } from '@nestjs/common';
+import { CacheInterceptor } from '@nestjs/cache-manager';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import {
   ApiBadRequestResponse,
@@ -56,7 +56,10 @@ import { ErrorMessage } from 'src/account/domain/ErrorMessage';
 @ApiTags('Accounts')
 @Controller()
 export class AccountsController {
-  constructor(readonly commandBus: CommandBus, readonly queryBus: QueryBus) {}
+  constructor(
+    readonly commandBus: CommandBus,
+    readonly queryBus: QueryBus,
+  ) {}
 
   @Post('accounts')
   @ApiResponse({

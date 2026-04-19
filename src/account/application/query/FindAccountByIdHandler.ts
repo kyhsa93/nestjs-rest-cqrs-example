@@ -13,9 +13,10 @@ import { FindAccountByIdResult } from 'src/account/application/query/FindAccount
 import { ErrorMessage } from 'src/account/domain/ErrorMessage';
 
 @QueryHandler(FindAccountByIdQuery)
-export class FindAccountByIdHandler
-  implements IQueryHandler<FindAccountByIdQuery, FindAccountByIdResult>
-{
+export class FindAccountByIdHandler implements IQueryHandler<
+  FindAccountByIdQuery,
+  FindAccountByIdResult
+> {
   @Inject(InjectionToken.ACCOUNT_QUERY) readonly accountQuery: AccountQuery;
 
   async execute(query: FindAccountByIdQuery): Promise<FindAccountByIdResult> {
@@ -33,7 +34,10 @@ export class FindAccountByIdHandler
 
     dataKeys
       .filter((dataKey) => !resultKeys.includes(dataKey))
-      .forEach((dataKey) => delete data[dataKey]);
+      .forEach(
+        (dataKey) =>
+          delete (data as unknown as Record<string, unknown>)[dataKey],
+      );
 
     return data;
   }

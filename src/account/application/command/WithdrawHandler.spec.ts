@@ -34,11 +34,9 @@ describe('WithdrawHandler', () => {
 
       const command = new WithdrawCommand('accountId', 1);
 
-      await expect(handler.execute(command)).rejects.toThrowError(
-        NotFoundException,
-      );
-      expect(repository.findById).toBeCalledTimes(1);
-      expect(repository.findById).toBeCalledWith(command.accountId);
+      await expect(handler.execute(command)).rejects.toThrow(NotFoundException);
+      expect(repository.findById).toHaveBeenCalledTimes(1);
+      expect(repository.findById).toHaveBeenCalledWith(command.accountId);
     });
 
     it('should execute WithdrawCommand', async () => {
@@ -50,13 +48,13 @@ describe('WithdrawHandler', () => {
       const command = new WithdrawCommand('accountId', 1);
 
       await expect(handler.execute(command)).resolves.toEqual(undefined);
-      expect(repository.findById).toBeCalledTimes(1);
-      expect(repository.findById).toBeCalledWith(command.accountId);
-      expect(account.withdraw).toBeCalledTimes(1);
-      expect(account.withdraw).toBeCalledWith(command.amount);
-      expect(repository.save).toBeCalledTimes(1);
-      expect(repository.save).toBeCalledWith(account);
-      expect(account.commit).toBeCalledTimes(1);
+      expect(repository.findById).toHaveBeenCalledTimes(1);
+      expect(repository.findById).toHaveBeenCalledWith(command.accountId);
+      expect(account.withdraw).toHaveBeenCalledTimes(1);
+      expect(account.withdraw).toHaveBeenCalledWith(command.amount);
+      expect(repository.save).toHaveBeenCalledTimes(1);
+      expect(repository.save).toHaveBeenCalledWith(account);
+      expect(account.commit).toHaveBeenCalledTimes(1);
     });
   });
 });

@@ -12,7 +12,10 @@
     "baseUrl": "./",
     "incremental": true,
     "strictNullChecks": true,
+    "strictPropertyInitialization": false,
     "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "ignoreDeprecations": "6.0",
+    "types": ["node", "jest"]
   }
 }

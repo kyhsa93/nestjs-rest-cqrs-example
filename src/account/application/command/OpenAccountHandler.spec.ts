@@ -60,13 +60,15 @@ describe('OpenAccountHandler', () => {
       const command = new OpenAccountCommand('name', 'email', 'password');
 
       await expect(handler.execute(command)).resolves.toEqual(undefined);
-      expect(repository.newId).toBeCalledTimes(1);
-      expect(account.open).toBeCalledTimes(1);
-      expect(repository.save).toBeCalledTimes(1);
-      expect(repository.save).toBeCalledWith(account);
-      expect(account.commit).toBeCalledTimes(1);
-      expect(passwordGenerator.generateKey).toBeCalledWith(command.password);
-      expect(passwordGenerator.generateKey).toBeCalledTimes(1);
+      expect(repository.newId).toHaveBeenCalledTimes(1);
+      expect(account.open).toHaveBeenCalledTimes(1);
+      expect(repository.save).toHaveBeenCalledTimes(1);
+      expect(repository.save).toHaveBeenCalledWith(account);
+      expect(account.commit).toHaveBeenCalledTimes(1);
+      expect(passwordGenerator.generateKey).toHaveBeenCalledWith(
+        command.password,
+      );
+      expect(passwordGenerator.generateKey).toHaveBeenCalledTimes(1);
     });
   });
 });

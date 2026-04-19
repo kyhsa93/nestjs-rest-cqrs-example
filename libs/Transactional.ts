@@ -9,7 +9,9 @@ export function Transactional() {
     key: string,
     descriptor: PropertyDescriptor,
   ): void => {
-    const originalMethod = descriptor.value as (...args) => Promise<unknown>;
+    const originalMethod = descriptor.value as (
+      ...args: unknown[]
+    ) => Promise<unknown>;
     descriptor.value = new Proxy(originalMethod, {
       apply: async (proxyTarget, thisArg, args) => {
         if (writeConnection.isTransactionActive)

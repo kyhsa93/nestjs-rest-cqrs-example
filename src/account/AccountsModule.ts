@@ -1,4 +1,4 @@
-import addYears from 'date-fns/addYears';
+import { addYears } from 'date-fns/addYears';
 import { LessThan } from 'typeorm';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { Inject, Logger, Module, Provider } from '@nestjs/common';

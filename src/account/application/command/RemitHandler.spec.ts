@@ -48,7 +48,7 @@ describe('RemitHandler', () => {
     it('should throw UnprocessableEntityException when id and receiverId is same', async () => {
       const command = new RemitCommand('accountId', 'accountId', 1);
 
-      await expect(handler.execute(command)).rejects.toThrowError(
+      await expect(handler.execute(command)).rejects.toThrow(
         UnprocessableEntityException,
       );
     });
@@ -58,11 +58,9 @@ describe('RemitHandler', () => {
 
       const command = new RemitCommand('accountId', 'receiverId', 1);
 
-      await expect(handler.execute(command)).rejects.toThrowError(
-        NotFoundException,
-      );
-      expect(repository.findById).toBeCalledTimes(1);
-      expect(repository.findById).toBeCalledWith(command.accountId);
+      await expect(handler.execute(command)).rejects.toThrow(NotFoundException);
+      expect(repository.findById).toHaveBeenCalledTimes(1);
+      expect(repository.findById).toHaveBeenCalledWith(command.accountId);
     });
 
     it('should throw UnprocessableEntityException receiver is not found', async () => {
@@ -72,12 +70,12 @@ describe('RemitHandler', () => {
 
       const command = new RemitCommand('accountId', 'receiverId', 1);
 
-      await expect(handler.execute(command)).rejects.toThrowError(
+      await expect(handler.execute(command)).rejects.toThrow(
         UnprocessableEntityException,
       );
-      expect(repository.findById).toBeCalledTimes(2);
-      expect(repository.findById).toBeCalledWith(command.accountId);
-      expect(repository.findById).toBeCalledWith(command.receiverId);
+      expect(repository.findById).toHaveBeenCalledTimes(2);
+      expect(repository.findById).toHaveBeenCalledWith(command.accountId);
+      expect(repository.findById).toHaveBeenCalledWith(command.receiverId);
     });
 
     it('should execute RemitCommand', async () => {
@@ -101,19 +99,19 @@ describe('RemitHandler', () => {
       const command = new RemitCommand('accountId', 'receiverId', 1);
 
       await expect(handler.execute(command)).resolves.toEqual(undefined);
-      expect(repository.findById).toBeCalledTimes(2);
-      expect(repository.findById).toBeCalledWith(command.accountId);
-      expect(repository.findById).toBeCalledWith(command.receiverId);
-      expect(domainService.remit).toBeCalledTimes(1);
-      expect(domainService.remit).toBeCalledWith({
+      expect(repository.findById).toHaveBeenCalledTimes(2);
+      expect(repository.findById).toHaveBeenCalledWith(command.accountId);
+      expect(repository.findById).toHaveBeenCalledWith(command.receiverId);
+      expect(domainService.remit).toHaveBeenCalledTimes(1);
+      expect(domainService.remit).toHaveBeenCalledWith({
         ...command,
         account,
         receiver,
       });
-      expect(repository.save).toBeCalledTimes(1);
-      expect(repository.save).toBeCalledWith([account, receiver]);
-      expect(account.commit).toBeCalledTimes(1);
-      expect(receiver.commit).toBeCalledTimes(1);
+      expect(repository.save).toHaveBeenCalledTimes(1);
+      expect(repository.save).toHaveBeenCalledWith([account, receiver]);
+      expect(account.commit).toHaveBeenCalledTimes(1);
+      expect(receiver.commit).toHaveBeenCalledTimes(1);
     });
   });
 });

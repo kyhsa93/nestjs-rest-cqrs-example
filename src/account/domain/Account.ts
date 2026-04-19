@@ -55,7 +55,7 @@ export class AccountImplement extends AggregateRoot implements Account {
   private readonly createdAt: Date;
   private updatedAt: Date;
   private deletedAt: Date | null;
-  private version;
+  private version: number;
 
   constructor(properties: AccountProperties) {
     super();

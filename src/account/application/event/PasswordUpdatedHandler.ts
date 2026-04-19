@@ -12,9 +12,7 @@ import { Transactional } from 'libs/Transactional';
 import { PasswordUpdatedEvent } from 'src/account/domain/event/PasswordUpdatedEvent';
 
 @EventsHandler(PasswordUpdatedEvent)
-export class PasswordUpdatedHandler
-  implements IEventHandler<PasswordUpdatedEvent>
-{
+export class PasswordUpdatedHandler implements IEventHandler<PasswordUpdatedEvent> {
   @Inject(INTEGRATION_EVENT_PUBLISHER)
   private readonly integrationEventPublisher: IntegrationEventPublisher;
 

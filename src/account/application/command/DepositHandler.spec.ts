@@ -34,11 +34,9 @@ describe('DepositHandler', () => {
 
       const command = new DepositCommand('accountId', 1);
 
-      await expect(handler.execute(command)).rejects.toThrowError(
-        NotFoundException,
-      );
-      expect(repository.findById).toBeCalledTimes(1);
-      expect(repository.findById).toBeCalledWith(command.accountId);
+      await expect(handler.execute(command)).rejects.toThrow(NotFoundException);
+      expect(repository.findById).toHaveBeenCalledTimes(1);
+      expect(repository.findById).toHaveBeenCalledWith(command.accountId);
     });
 
     it('should execute DepositCommand', async () => {
@@ -53,13 +51,13 @@ describe('DepositHandler', () => {
       const command = new DepositCommand('accountId', 1);
 
       await expect(handler.execute(command)).resolves.toEqual(undefined);
-      expect(repository.findById).toBeCalledTimes(1);
-      expect(repository.findById).toBeCalledWith(command.accountId);
-      expect(account.deposit).toBeCalledTimes(1);
-      expect(account.deposit).toBeCalledWith(command.amount);
-      expect(repository.save).toBeCalledTimes(1);
-      expect(repository.save).toBeCalledWith(account);
-      expect(account.commit).toBeCalledTimes(1);
+      expect(repository.findById).toHaveBeenCalledTimes(1);
+      expect(repository.findById).toHaveBeenCalledWith(command.accountId);
+      expect(account.deposit).toHaveBeenCalledTimes(1);
+      expect(account.deposit).toHaveBeenCalledWith(command.amount);
+      expect(repository.save).toHaveBeenCalledTimes(1);
+      expect(repository.save).toHaveBeenCalledWith(account);
+      expect(account.commit).toHaveBeenCalledTimes(1);
     });
   });
 });

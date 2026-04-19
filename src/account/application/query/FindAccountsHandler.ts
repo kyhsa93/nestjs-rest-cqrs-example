@@ -7,9 +7,10 @@ import { FindAccountsQuery } from 'src/account/application/query/FindAccountsQue
 import { FindAccountsResult } from 'src/account/application/query/FindAccountsResult';
 
 @QueryHandler(FindAccountsQuery)
-export class FindAccountsHandler
-  implements IQueryHandler<FindAccountsQuery, FindAccountsResult>
-{
+export class FindAccountsHandler implements IQueryHandler<
+  FindAccountsQuery,
+  FindAccountsResult
+> {
   @Inject(InjectionToken.ACCOUNT_QUERY) readonly accountQuery: AccountQuery;
 
   async execute(query: FindAccountsQuery): Promise<FindAccountsResult> {

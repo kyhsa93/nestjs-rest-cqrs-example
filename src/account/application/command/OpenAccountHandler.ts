@@ -11,9 +11,10 @@ import { AccountFactory } from 'src/account/domain/AccountFactory';
 import { AccountRepository } from 'src/account/domain/AccountRepository';
 
 @CommandHandler(OpenAccountCommand)
-export class OpenAccountHandler
-  implements ICommandHandler<OpenAccountCommand, void>
-{
+export class OpenAccountHandler implements ICommandHandler<
+  OpenAccountCommand,
+  void
+> {
   @Inject(InjectionToken.ACCOUNT_REPOSITORY)
   private readonly accountRepository: AccountRepository;
   @Inject() private readonly accountFactory: AccountFactory;

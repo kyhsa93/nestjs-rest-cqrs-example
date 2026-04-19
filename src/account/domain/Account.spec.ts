@@ -50,9 +50,7 @@ describe('Account', () => {
     it('should throw InternalServerErrorException when given amount is under 1', () => {
       const account = new AccountImplement({} as AccountProperties);
 
-      expect(() => account.withdraw(0)).toThrowError(
-        InternalServerErrorException,
-      );
+      expect(() => account.withdraw(0)).toThrow(InternalServerErrorException);
     });
 
     it('should throw UnprocessableEntityException when given amount is over account balance', () => {
@@ -62,9 +60,7 @@ describe('Account', () => {
         balance: 0,
       } as AccountProperties);
 
-      expect(() => account.withdraw(1)).toThrowError(
-        UnprocessableEntityException,
-      );
+      expect(() => account.withdraw(1)).toThrow(UnprocessableEntityException);
     });
 
     it('should withdraw from account', () => {
@@ -87,9 +83,7 @@ describe('Account', () => {
     it('should throw InternalServerErrorException when given amount is under 1', () => {
       const account = new AccountImplement({} as AccountProperties);
 
-      expect(() => account.deposit(0)).toThrowError(
-        InternalServerErrorException,
-      );
+      expect(() => account.deposit(0)).toThrow(InternalServerErrorException);
     });
 
     it('should deposit to account', () => {
@@ -119,7 +113,7 @@ describe('Account', () => {
         balance: 1,
       } as AccountProperties);
 
-      expect(() => account.close()).toThrowError(UnprocessableEntityException);
+      expect(() => account.close()).toThrow(UnprocessableEntityException);
     });
 
     it('should close account', () => {

@@ -9,9 +9,10 @@ import { InjectionToken } from 'src/account/application/InjectionToken';
 import { AccountRepository } from 'src/account/domain/AccountRepository';
 
 @CommandHandler(LockAccountCommand)
-export class LockAccountHandler
-  implements ICommandHandler<LockAccountCommand, void>
-{
+export class LockAccountHandler implements ICommandHandler<
+  LockAccountCommand,
+  void
+> {
   @Inject(InjectionToken.ACCOUNT_REPOSITORY)
   private readonly accountRepository: AccountRepository;
 

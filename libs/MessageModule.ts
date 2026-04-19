@@ -129,23 +129,38 @@ export enum Topic {
 }
 
 export class AccountOpened {
-  constructor(readonly accountId: string, readonly email: string) {}
+  constructor(
+    readonly accountId: string,
+    readonly email: string,
+  ) {}
 }
 
 export class AccountPasswordUpdated {
-  constructor(readonly accountId: string, readonly email: string) {}
+  constructor(
+    readonly accountId: string,
+    readonly email: string,
+  ) {}
 }
 
 export class AccountClosed {
-  constructor(readonly accountId: string, readonly email: string) {}
+  constructor(
+    readonly accountId: string,
+    readonly email: string,
+  ) {}
 }
 
 export class AccountDeposited {
-  constructor(readonly accountId: string, readonly email: string) {}
+  constructor(
+    readonly accountId: string,
+    readonly email: string,
+  ) {}
 }
 
 export class AccountWithdrawn {
-  constructor(readonly accountId: string, readonly email: string) {}
+  constructor(
+    readonly accountId: string,
+    readonly email: string,
+  ) {}
 }
 
 class SNSMessagePublisher {

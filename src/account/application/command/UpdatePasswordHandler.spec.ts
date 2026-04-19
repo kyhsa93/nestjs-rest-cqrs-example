@@ -46,11 +46,9 @@ describe('UpdatePasswordHandler', () => {
 
       const command = new UpdatePasswordCommand('accountId', 'password');
 
-      await expect(handler.execute(command)).rejects.toThrowError(
-        NotFoundException,
-      );
-      expect(repository.findById).toBeCalledTimes(1);
-      expect(repository.findById).toBeCalledWith(command.accountId);
+      await expect(handler.execute(command)).rejects.toThrow(NotFoundException);
+      expect(repository.findById).toHaveBeenCalledTimes(1);
+      expect(repository.findById).toHaveBeenCalledWith(command.accountId);
     });
 
     it('should execute UpdatePasswordCommand', async () => {
@@ -63,13 +61,13 @@ describe('UpdatePasswordHandler', () => {
       const command = new UpdatePasswordCommand('accountId', 'password');
 
       await expect(handler.execute(command)).resolves.toEqual(undefined);
-      expect(repository.findById).toBeCalledTimes(1);
-      expect(repository.findById).toBeCalledWith(command.accountId);
-      expect(account.updatePassword).toBeCalledTimes(1);
-      expect(account.updatePassword).toBeCalledWith(command.password);
-      expect(repository.save).toBeCalledTimes(1);
-      expect(repository.save).toBeCalledWith(account);
-      expect(account.commit).toBeCalledTimes(1);
+      expect(repository.findById).toHaveBeenCalledTimes(1);
+      expect(repository.findById).toHaveBeenCalledWith(command.accountId);
+      expect(account.updatePassword).toHaveBeenCalledTimes(1);
+      expect(account.updatePassword).toHaveBeenCalledWith(command.password);
+      expect(repository.save).toHaveBeenCalledTimes(1);
+      expect(repository.save).toHaveBeenCalledWith(account);
+      expect(account.commit).toHaveBeenCalledTimes(1);
     });
   });
 });
