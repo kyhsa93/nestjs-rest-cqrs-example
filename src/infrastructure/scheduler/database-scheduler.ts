@@ -1,10 +1,11 @@
-import { Logger } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 
 import { readConnection, writeConnection } from 'libs/DatabaseModule';
 
-export class AppService {
-  private readonly logger = new Logger(AppService.name);
+@Injectable()
+export class DatabaseScheduler {
+  private readonly logger = new Logger(DatabaseScheduler.name);
 
   @Cron(CronExpression.EVERY_5_SECONDS)
   async databaseHealthCheck(): Promise<void> {

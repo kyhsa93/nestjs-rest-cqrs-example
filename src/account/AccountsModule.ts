@@ -1,20 +1,11 @@
-import { addYears } from 'date-fns/addYears';
-import { LessThan } from 'typeorm';
-import { Cron, CronExpression } from '@nestjs/schedule';
-import { Inject, Logger, Module, Provider } from '@nestjs/common';
+import { Logger, Module, Provider } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 
 import { PasswordModule } from 'libs/PasswordModule';
-import {
-  EntityIdTransformer,
-  ENTITY_ID_TRANSFORMER,
-  writeConnection,
-} from 'libs/DatabaseModule';
-import { TaskPublisher, TASK_PUBLISHER } from 'libs/MessageModule';
 
 import { AccountQueryImplement } from 'src/account/infrastructure/query/AccountQueryImplement';
 import { AccountRepositoryImplement } from 'src/account/infrastructure/repository/AccountRepositoryImplement';
-import { AccountEntity } from 'src/account/infrastructure/entity/AccountEntity';
+import { AccountScheduler } from 'src/account/infrastructure/scheduler/account-scheduler';
 
 import { AccountsController } from 'src/account/interface/AccountsController';
 import { AccountTaskController } from 'src/account/interface/AccountTaskController';
@@ -29,7 +20,6 @@ import { FindAccountByIdHandler } from 'src/account/application/query/FindAccoun
 import { FindAccountsHandler } from 'src/account/application/query/FindAccountsHandler';
 import { InjectionToken } from 'src/account/application/InjectionToken';
 import { AccountOpenedHandler } from 'src/account/application/event/AccountOpenedHandler';
-import { LockAccountCommand } from 'src/account/application/command/LockAccountCommand';
 import { LockAccountHandler } from 'src/account/application/command/LockAccountHandler';
 import { PasswordUpdatedHandler } from 'src/account/application/event/PasswordUpdatedHandler';
 import { AccountClosedHandler } from 'src/account/application/event/AccountClosedHandler';
@@ -48,6 +38,7 @@ const infrastructure: Provider[] = [
     provide: InjectionToken.ACCOUNT_QUERY,
     useClass: AccountQueryImplement,
   },
+  AccountScheduler,
 ];
 
 const application = [
@@ -74,22 +65,4 @@ const domain = [AccountDomainService, AccountFactory];
   controllers: [AccountsController, AccountTaskController],
   providers: [Logger, ...infrastructure, ...application, ...domain],
 })
-export class AccountsModule {
-  @Inject(TASK_PUBLISHER) private readonly taskPublisher: TaskPublisher;
-  @Inject(ENTITY_ID_TRANSFORMER)
-  private readonly entityIdTransformer: EntityIdTransformer;
-
-  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
-  async lockUnusedAccount(): Promise<void> {
-    (
-      await writeConnection.manager
-        .getRepository(AccountEntity)
-        .findBy({ updatedAt: LessThan(addYears(new Date(), -1)) })
-    ).forEach((account) =>
-      this.taskPublisher.publish(
-        LockAccountCommand.name,
-        new LockAccountCommand(this.entityIdTransformer.from(account.id)),
-      ),
-    );
-  }
-}
+export class AccountsModule {}
