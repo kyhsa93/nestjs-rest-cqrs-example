@@ -10,6 +10,7 @@ import { RequestStorageMiddleware } from 'libs/RequestStorageMiddleware';
 
 import { AppController } from 'src/AppController';
 import { DatabaseScheduler } from 'src/infrastructure/scheduler/database-scheduler';
+import { OutboxModule } from 'src/outbox/OutboxModule';
 import { AccountsModule } from 'src/account/AccountsModule';
 import { NotificationModule } from 'src/notification/NotificationModule';
 
@@ -18,6 +19,7 @@ import { NotificationModule } from 'src/notification/NotificationModule';
     AccountsModule,
     DatabaseModule,
     MessageModule,
+    OutboxModule,
     CacheModule.register({ isGlobal: true }),
     ThrottlerModule.forRoot(),
     NotificationModule,

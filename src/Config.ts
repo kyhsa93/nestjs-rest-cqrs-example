@@ -27,6 +27,10 @@ class Configuration {
   @IsString()
   readonly AWS_SQS_QUEUE_URL = process.env.AWS_SQS_QUEUE_URL as string;
 
+  @IsOptional()
+  @IsString()
+  readonly SQS_DOMAIN_EVENT_QUEUE_URL = process.env.SQS_DOMAIN_EVENT_QUEUE_URL;
+
   @IsBoolean()
   readonly DATABASE_LOGGING = process.env.DATABASE_LOGGING === 'true';
 

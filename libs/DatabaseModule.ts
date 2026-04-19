@@ -13,6 +13,7 @@ import { Config } from 'src/Config';
 
 import { AccountEntity } from 'src/account/infrastructure/entity/AccountEntity';
 import { NotificationEntity } from 'src/notification/infrastructure/entities/NotificationEntity';
+import { OutboxEntity } from 'src/outbox/OutboxEntity';
 import { v4 } from 'uuid';
 
 interface WriteConnection {
@@ -47,7 +48,7 @@ export let readConnection = {} as ReadConnection;
 class DatabaseService implements OnModuleInit, OnModuleDestroy {
   private readonly dataSource = new DataSource({
     type: 'mysql',
-    entities: [AccountEntity, NotificationEntity],
+    entities: [AccountEntity, NotificationEntity, OutboxEntity],
     charset: 'utf8mb4_unicode_ci',
     logging: Config.DATABASE_LOGGING,
     host: Config.DATABASE_HOST,
