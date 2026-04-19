@@ -5,7 +5,7 @@ import { EmailAdaptorImplement } from 'src/notification/infrastructure/adaptor/E
 import { NotificationRepositoryImplement } from 'src/notification/infrastructure/repository/NotificationRepositoryImplement';
 import { NotificationQueryImplement } from 'src/notification/infrastructure/query/NotificationQueryImplement';
 
-import { NotificationIntegrationController } from 'src/notification/interface/NotificationIntegrationController';
+import { AccountIntegrationEventController } from 'src/notification/interface/integration-event/account-integration-event-controller';
 import { NotificationController } from 'src/notification/interface/NotificationController';
 
 import { SendEmailHandler } from 'src/notification/application/command/SendEmailHandler';
@@ -36,6 +36,6 @@ const domain = [NotificationFactory];
 @Module({
   imports: [CqrsModule],
   providers: [...infrastructure, ...application, ...domain],
-  controllers: [NotificationIntegrationController, NotificationController],
+  controllers: [AccountIntegrationEventController, NotificationController],
 })
 export class NotificationModule {}

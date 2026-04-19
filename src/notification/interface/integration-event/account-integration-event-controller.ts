@@ -7,17 +7,16 @@ import {
   AccountOpened,
   AccountPasswordUpdated,
   AccountWithdrawn,
-  MessageHandler,
-  Topic,
 } from 'libs/MessageModule';
 
 import { SendEmailCommand } from 'src/notification/application/command/SendEmailCommand';
+import { HandleIntegrationEvent } from 'src/outbox/HandleIntegrationEvent';
 
 @Controller()
-export class NotificationIntegrationController {
+export class AccountIntegrationEventController {
   @Inject() private readonly commandBus: CommandBus;
 
-  @MessageHandler(Topic.ACCOUNT_OPENED)
+  @HandleIntegrationEvent(AccountOpened.name)
   async sendNewAccountEmail(message: AccountOpened): Promise<void> {
     await this.commandBus.execute<SendEmailCommand, void>(
       new SendEmailCommand({
@@ -29,7 +28,7 @@ export class NotificationIntegrationController {
     );
   }
 
-  @MessageHandler(Topic.ACCOUNT_PASSWORD_UPDATED)
+  @HandleIntegrationEvent(AccountPasswordUpdated.name)
   async sendPasswordUpdatedEmail(
     message: AccountPasswordUpdated,
   ): Promise<void> {
@@ -43,7 +42,7 @@ export class NotificationIntegrationController {
     );
   }
 
-  @MessageHandler(Topic.ACCOUNT_CLOSED)
+  @HandleIntegrationEvent(AccountClosed.name)
   async sendAccountClosedEmail(message: AccountClosed): Promise<void> {
     await this.commandBus.execute<SendEmailCommand, void>(
       new SendEmailCommand({
@@ -55,7 +54,7 @@ export class NotificationIntegrationController {
     );
   }
 
-  @MessageHandler(Topic.ACCOUNT_DEPOSITED)
+  @HandleIntegrationEvent(AccountDeposited.name)
   async sendDepositEmail(message: AccountDeposited): Promise<void> {
     await this.commandBus.execute<SendEmailCommand, void>(
       new SendEmailCommand({
@@ -67,7 +66,7 @@ export class NotificationIntegrationController {
     );
   }
 
-  @MessageHandler(Topic.ACCOUNT_WITHDRAWN)
+  @HandleIntegrationEvent(AccountWithdrawn.name)
   async sendWithdrawnEmail(message: AccountWithdrawn): Promise<void> {
     await this.commandBus.execute<SendEmailCommand, void>(
       new SendEmailCommand({
