@@ -1,7 +1,7 @@
 import { Controller, Inject } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 
-import { MessageHandler } from 'libs/message-module';
+import { MessageHandler } from 'libs/message/message-module';
 
 import { LockAccountCommand } from 'src/account/application/command/lock-account-command';
 

@@ -5,7 +5,7 @@ import {
   EntityIdTransformer,
   ENTITY_ID_TRANSFORMER,
   writeConnection,
-} from 'libs/database-module';
+} from 'libs/database/database-module';
 
 import { NotificationEntity } from 'src/notification/infrastructure/entities/notification-entity';
 import { OutboxWriter } from 'src/outbox/outbox-writer';

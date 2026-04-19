@@ -7,7 +7,7 @@ import { CloseAccountHandler } from 'src/account/application/command/close-accou
 import { AccountRepository } from 'src/account/domain/account-repository';
 import { ErrorMessage } from 'src/account/domain/error-message';
 
-jest.mock('libs/transactional', () => ({
+jest.mock('libs/database/transactional', () => ({
   Transactional: () => () => undefined,
 }));
 

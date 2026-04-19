@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 
-import { AccountClosed } from 'libs/message-module';
+import { AccountClosed } from 'libs/message/message-module';
 
 import { AccountClosedEvent } from 'src/account/domain/event/account-closed-event';
 import { HandleEvent } from 'src/outbox/handle-event';

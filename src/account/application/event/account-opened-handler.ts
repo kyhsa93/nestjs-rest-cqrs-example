@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 
-import { AccountOpened } from 'libs/message-module';
+import { AccountOpened } from 'libs/message/message-module';
 
 import { AccountOpenedEvent } from 'src/account/domain/event/account-opened-event';
 import { HandleEvent } from 'src/outbox/handle-event';

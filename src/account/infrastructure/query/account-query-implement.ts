@@ -4,7 +4,7 @@ import {
   EntityIdTransformer,
   ENTITY_ID_TRANSFORMER,
   readConnection,
-} from 'libs/database-module';
+} from 'libs/database/database-module';
 
 import { AccountEntity } from 'src/account/infrastructure/entity/account-entity';
 

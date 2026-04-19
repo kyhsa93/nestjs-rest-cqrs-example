@@ -1,7 +1,10 @@
 import { ModuleMetadata, Provider } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 
-import { PasswordGenerator, PASSWORD_GENERATOR } from 'libs/password-module';
+import {
+  PasswordGenerator,
+  PASSWORD_GENERATOR,
+} from 'libs/auth/password-module';
 
 import { UpdatePasswordCommand } from 'src/account/application/command/update-password-command';
 import { UpdatePasswordHandler } from 'src/account/application/command/update-password-handler';
@@ -9,7 +12,7 @@ import { UpdatePasswordHandler } from 'src/account/application/command/update-pa
 import { AccountRepository } from 'src/account/domain/account-repository';
 import { ErrorMessage } from 'src/account/domain/error-message';
 
-jest.mock('libs/transactional', () => ({
+jest.mock('libs/database/transactional', () => ({
   Transactional: () => () => undefined,
 }));
 

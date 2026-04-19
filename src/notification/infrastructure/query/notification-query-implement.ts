@@ -4,7 +4,7 @@ import {
   EntityIdTransformer,
   ENTITY_ID_TRANSFORMER,
   readConnection,
-} from 'libs/database-module';
+} from 'libs/database/database-module';
 
 import { NotificationEntity } from 'src/notification/infrastructure/entities/notification-entity';
 

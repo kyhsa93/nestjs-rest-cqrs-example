@@ -1,8 +1,11 @@
 import { Inject } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
-import { PasswordGenerator, PASSWORD_GENERATOR } from 'libs/password-module';
-import { Transactional } from 'libs/transactional';
+import {
+  PasswordGenerator,
+  PASSWORD_GENERATOR,
+} from 'libs/auth/password-module';
+import { Transactional } from 'libs/database/transactional';
 
 import { OpenAccountCommand } from 'src/account/application/command/open-account-command';
 

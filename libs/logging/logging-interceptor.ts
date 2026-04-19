@@ -7,7 +7,7 @@ import {
 import { Request, Response } from 'express';
 import { map, Observable } from 'rxjs';
 
-import { RequestStorage } from 'libs/request-storage';
+import { RequestStorage } from 'libs/database/request-storage';
 
 export class LoggingInterceptor implements NestInterceptor {
   private readonly logger = new Logger(LoggingInterceptor.name);

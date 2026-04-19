@@ -6,7 +6,7 @@ import {
   EntityIdTransformer,
   ENTITY_ID_TRANSFORMER,
   writeConnection,
-} from 'libs/database-module';
+} from 'libs/database/database-module';
 
 import { AccountEntity } from 'src/account/infrastructure/entity/account-entity';
 import { OutboxWriter } from 'src/outbox/outbox-writer';

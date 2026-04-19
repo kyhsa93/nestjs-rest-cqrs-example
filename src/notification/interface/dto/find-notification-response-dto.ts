@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-import { EntityId } from 'libs/database-module';
+import { EntityId } from 'libs/database/database-module';
 
 import { FindNotificationResult } from 'src/notification/application/query/find-notification-result';
 

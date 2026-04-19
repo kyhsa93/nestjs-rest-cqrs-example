@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 
-import { AccountWithdrawn } from 'libs/message-module';
+import { AccountWithdrawn } from 'libs/message/message-module';
 
 import { WithdrawnEvent } from 'src/account/domain/event/withdrawn-event';
 import { HandleEvent } from 'src/outbox/handle-event';

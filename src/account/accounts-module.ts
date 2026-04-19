@@ -1,7 +1,7 @@
 import { Logger, Module, Provider } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 
-import { PasswordModule } from 'libs/password-module';
+import { PasswordModule } from 'libs/auth/password-module';
 
 import { AccountQueryImplement } from 'src/account/infrastructure/query/account-query-implement';
 import { AccountRepositoryImplement } from 'src/account/infrastructure/repository/account-repository-impl';

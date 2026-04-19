@@ -4,9 +4,9 @@ import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 import { ScheduleModule } from '@nestjs/schedule';
 
-import { DatabaseModule } from 'libs/database-module';
-import { MessageModule } from 'libs/message-module';
-import { RequestStorageMiddleware } from 'libs/request-storage-middleware';
+import { DatabaseModule } from 'libs/database/database-module';
+import { MessageModule } from 'libs/message/message-module';
+import { RequestStorageMiddleware } from 'libs/database/request-storage-middleware';
 
 import { AppController } from 'src/app-controller';
 import { OutboxModule } from 'src/outbox/outbox-module';

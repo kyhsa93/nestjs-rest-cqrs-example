@@ -7,8 +7,8 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import { DiscoveryService } from '@nestjs/core';
 import { Interval } from '@nestjs/schedule';
 
-import { discoverMethods } from 'libs/metadata-discovery';
-import { RequestStorage } from 'libs/request-storage';
+import { discoverMethods } from 'libs/discovery/metadata-discovery';
+import { RequestStorage } from 'libs/database/request-storage';
 
 import { Config } from 'src/config';
 import {

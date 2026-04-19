@@ -3,7 +3,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { LessThan } from 'typeorm';
 
-import { writeConnection } from 'libs/database-module';
+import { writeConnection } from 'libs/database/database-module';
 
 import { Config } from 'src/config';
 import { OutboxEntity } from 'src/outbox/outbox-entity';

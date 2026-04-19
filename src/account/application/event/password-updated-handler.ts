@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 
-import { AccountPasswordUpdated } from 'libs/message-module';
+import { AccountPasswordUpdated } from 'libs/message/message-module';
 
 import { PasswordUpdatedEvent } from 'src/account/domain/event/password-updated-event';
 import { HandleEvent } from 'src/outbox/handle-event';

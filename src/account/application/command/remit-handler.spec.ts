@@ -8,7 +8,7 @@ import { AccountRepository } from 'src/account/domain/account-repository';
 import { AccountDomainService } from 'src/account/domain/account-domain-service';
 import { ErrorMessage } from 'src/account/domain/error-message';
 
-jest.mock('libs/transactional', () => ({
+jest.mock('libs/database/transactional', () => ({
   Transactional: () => () => undefined,
 }));
 

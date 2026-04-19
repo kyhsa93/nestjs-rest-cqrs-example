@@ -1,4 +1,4 @@
-import { throwError } from 'libs/throw-error';
+import { throwError } from 'libs/error/throw-error';
 
 import { ErrorMessage } from 'src/account/domain/error-message';
 import { AccountClosedEvent } from 'src/account/domain/event/account-closed-event';

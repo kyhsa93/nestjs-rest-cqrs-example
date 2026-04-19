@@ -12,8 +12,11 @@ import {
   EntityIdTransformer,
   ENTITY_ID_TRANSFORMER,
   readConnection,
-} from 'libs/database-module';
-import { PasswordGenerator, PASSWORD_GENERATOR } from 'libs/password-module';
+} from 'libs/database/database-module';
+import {
+  PasswordGenerator,
+  PASSWORD_GENERATOR,
+} from 'libs/auth/password-module';
 
 import { AccountEntity } from 'src/account/infrastructure/entity/account-entity';
 

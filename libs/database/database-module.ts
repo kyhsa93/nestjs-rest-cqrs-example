@@ -16,7 +16,7 @@ import {
   SelectQueryBuilder,
 } from 'typeorm';
 
-import { getSecret } from 'libs/secret-manager';
+import { getSecret } from 'libs/secret/secret-manager';
 
 import { Config } from 'src/config';
 

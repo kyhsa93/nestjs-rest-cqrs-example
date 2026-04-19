@@ -6,8 +6,8 @@ import {
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
-import { LoggingInterceptor } from 'libs/logging-interceptor';
-import { HttpExceptionFilter } from 'libs/http-exception-filter';
+import { LoggingInterceptor } from 'libs/logging/logging-interceptor';
+import { HttpExceptionFilter } from 'libs/error/http-exception-filter';
 
 import { Config } from 'src/config';
 import { AppModule } from 'src/app-module';

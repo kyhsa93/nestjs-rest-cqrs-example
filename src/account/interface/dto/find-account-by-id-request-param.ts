@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsAlphanumeric, Length } from 'class-validator';
 
-import { EntityId } from 'libs/database-module';
+import { EntityId } from 'libs/database/database-module';
 
 export class FindAccountByIdRequestParam {
   @IsAlphanumeric()

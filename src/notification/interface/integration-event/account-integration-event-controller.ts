@@ -7,7 +7,7 @@ import {
   AccountOpened,
   AccountPasswordUpdated,
   AccountWithdrawn,
-} from 'libs/message-module';
+} from 'libs/message/message-module';
 
 import { SendEmailCommand } from 'src/notification/application/command/send-email-command';
 import { HandleIntegrationEvent } from 'src/outbox/handle-integration-event';

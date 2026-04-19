@@ -7,7 +7,7 @@ import { DepositHandler } from 'src/account/application/command/deposit-handler'
 import { AccountRepository } from 'src/account/domain/account-repository';
 import { ErrorMessage } from 'src/account/domain/error-message';
 
-jest.mock('libs/transactional', () => ({
+jest.mock('libs/database/transactional', () => ({
   Transactional: () => () => undefined,
 }));
 

@@ -1,6 +1,6 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
-import { Transactional } from 'libs/transactional';
+import { Transactional } from 'libs/database/transactional';
 
 import { EmailAdaptor } from 'src/notification/application/adaptor/email-adaptor';
 import { SendEmailCommand } from 'src/notification/application/command/send-email-command';

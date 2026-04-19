@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import { EntityId, writeConnection } from 'libs/database-module';
+import { EntityId, writeConnection } from 'libs/database/database-module';
 
 import { OutboxEntity } from 'src/outbox/outbox-entity';
 

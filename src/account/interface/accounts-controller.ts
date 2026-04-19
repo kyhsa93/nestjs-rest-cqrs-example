@@ -20,7 +20,7 @@ import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import {
   ErrorExceptionMapping,
   generateErrorResponse,
-} from 'libs/generate-error-response';
+} from 'libs/error/generate-error-response';
 import {
   ApiBadRequestResponse,
   ApiInternalServerErrorResponse,
@@ -31,7 +31,7 @@ import {
   ApiUnprocessableEntityResponse,
 } from '@nestjs/swagger';
 
-import { Auth, AuthorizedHeader } from 'libs/auth';
+import { Auth, AuthorizedHeader } from 'libs/auth/auth';
 
 import { DepositRequestDto } from 'src/account/interface/dto/deposit-request-dto';
 import { FindAccountsRequestQueryString } from 'src/account/interface/dto/find-accounts-request-query-string';

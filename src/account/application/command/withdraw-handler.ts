@@ -1,7 +1,7 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
-import { throwError } from 'libs/throw-error';
-import { Transactional } from 'libs/transactional';
+import { throwError } from 'libs/error/throw-error';
+import { Transactional } from 'libs/database/transactional';
 
 import { WithdrawCommand } from 'src/account/application/command/withdraw-command';
 

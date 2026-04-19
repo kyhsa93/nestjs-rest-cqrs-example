@@ -1,6 +1,6 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 
-import { throwError } from 'libs/throw-error';
+import { throwError } from 'libs/error/throw-error';
 
 import { AccountQuery } from 'src/account/application/query/account-query';
 import { FindAccountByIdQuery } from 'src/account/application/query/find-account-by-id-query';

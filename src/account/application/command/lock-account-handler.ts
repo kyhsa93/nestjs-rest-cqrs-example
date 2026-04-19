@@ -1,7 +1,7 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
-import { throwError } from 'libs/throw-error';
-import { Transactional } from 'libs/transactional';
+import { throwError } from 'libs/error/throw-error';
+import { Transactional } from 'libs/database/transactional';
 
 import { LockAccountCommand } from 'src/account/application/command/lock-account-command';
 

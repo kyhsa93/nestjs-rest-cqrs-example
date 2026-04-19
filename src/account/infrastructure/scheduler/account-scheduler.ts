@@ -7,8 +7,8 @@ import {
   EntityIdTransformer,
   ENTITY_ID_TRANSFORMER,
   writeConnection,
-} from 'libs/database-module';
-import { TaskPublisher, TASK_PUBLISHER } from 'libs/message-module';
+} from 'libs/database/database-module';
+import { TaskPublisher, TASK_PUBLISHER } from 'libs/message/message-module';
 
 import { LockAccountCommand } from 'src/account/application/command/lock-account-command';
 import { AccountEntity } from 'src/account/infrastructure/entity/account-entity';

@@ -1,7 +1,7 @@
 import { InternalServerErrorException } from '@nestjs/common';
 import { AsyncLocalStorage } from 'async_hooks';
 
-import { EntityId } from 'libs/database-module';
+import { EntityId } from 'libs/database/database-module';
 
 class Storage {
   constructor(
