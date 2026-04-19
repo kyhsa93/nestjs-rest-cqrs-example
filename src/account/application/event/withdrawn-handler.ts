@@ -1,10 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
 
-import { AccountWithdrawn } from 'libs/MessageModule';
+import { AccountWithdrawn } from 'libs/message-module';
 
-import { WithdrawnEvent } from 'src/account/domain/event/WithdrawnEvent';
-import { HandleEvent } from 'src/outbox/HandleEvent';
-import { OutboxWriter } from 'src/outbox/OutboxWriter';
+import { WithdrawnEvent } from 'src/account/domain/event/withdrawn-event';
+import { HandleEvent } from 'src/outbox/handle-event';
+import { OutboxWriter } from 'src/outbox/outbox-writer';
 
 @Injectable()
 export class WithdrawnHandler {

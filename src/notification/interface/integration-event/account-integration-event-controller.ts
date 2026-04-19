@@ -7,10 +7,10 @@ import {
   AccountOpened,
   AccountPasswordUpdated,
   AccountWithdrawn,
-} from 'libs/MessageModule';
+} from 'libs/message-module';
 
-import { SendEmailCommand } from 'src/notification/application/command/SendEmailCommand';
-import { HandleIntegrationEvent } from 'src/outbox/HandleIntegrationEvent';
+import { SendEmailCommand } from 'src/notification/application/command/send-email-command';
+import { HandleIntegrationEvent } from 'src/outbox/handle-integration-event';
 
 @Controller()
 export class AccountIntegrationEventController {

@@ -5,15 +5,15 @@ import {
   EntityIdTransformer,
   ENTITY_ID_TRANSFORMER,
   writeConnection,
-} from 'libs/DatabaseModule';
+} from 'libs/database-module';
 
-import { NotificationEntity } from 'src/notification/infrastructure/entities/NotificationEntity';
-import { OutboxWriter } from 'src/outbox/OutboxWriter';
+import { NotificationEntity } from 'src/notification/infrastructure/entities/notification-entity';
+import { OutboxWriter } from 'src/outbox/outbox-writer';
 
 import {
   Notification,
   NotificationProperties,
-} from 'src/notification/domain/Notification';
+} from 'src/notification/domain/notification';
 import { NotificationRepository } from 'src/notification/domain/notification-repository';
 
 export class NotificationRepositoryImplement extends NotificationRepository {

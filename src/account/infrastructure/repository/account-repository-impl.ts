@@ -5,14 +5,14 @@ import {
   EntityIdTransformer,
   ENTITY_ID_TRANSFORMER,
   writeConnection,
-} from 'libs/DatabaseModule';
+} from 'libs/database-module';
 
-import { AccountEntity } from 'src/account/infrastructure/entity/AccountEntity';
-import { OutboxWriter } from 'src/outbox/OutboxWriter';
+import { AccountEntity } from 'src/account/infrastructure/entity/account-entity';
+import { OutboxWriter } from 'src/outbox/outbox-writer';
 
 import { AccountRepository } from 'src/account/domain/account-repository';
-import { Account, AccountProperties } from 'src/account/domain/Account';
-import { AccountFactory } from 'src/account/domain/AccountFactory';
+import { Account, AccountProperties } from 'src/account/domain/account';
+import { AccountFactory } from 'src/account/domain/account-factory';
 
 export class AccountRepositoryImplement extends AccountRepository {
   @Inject() private readonly accountFactory: AccountFactory;

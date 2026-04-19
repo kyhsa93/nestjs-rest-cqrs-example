@@ -1,4 +1,4 @@
-import { Notification } from 'src/notification/domain/Notification';
+import { Notification } from 'src/notification/domain/notification';
 
 export abstract class NotificationRepository {
   abstract newId(): string;

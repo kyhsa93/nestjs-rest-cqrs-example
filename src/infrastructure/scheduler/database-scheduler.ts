@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 
-import { readConnection, writeConnection } from 'libs/DatabaseModule';
+import { readConnection, writeConnection } from 'libs/database-module';
 
 @Injectable()
 export class DatabaseScheduler {

@@ -1,4 +1,4 @@
-import { Account } from 'src/account/domain/Account';
+import { Account } from 'src/account/domain/account';
 
 export abstract class AccountRepository {
   abstract newId(): Promise<string>;

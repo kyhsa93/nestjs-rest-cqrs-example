@@ -1,10 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
 
-import { AccountClosed } from 'libs/MessageModule';
+import { AccountClosed } from 'libs/message-module';
 
-import { AccountClosedEvent } from 'src/account/domain/event/AccountClosedEvent';
-import { HandleEvent } from 'src/outbox/HandleEvent';
-import { OutboxWriter } from 'src/outbox/OutboxWriter';
+import { AccountClosedEvent } from 'src/account/domain/event/account-closed-event';
+import { HandleEvent } from 'src/outbox/handle-event';
+import { OutboxWriter } from 'src/outbox/outbox-writer';
 
 @Injectable()
 export class AccountClosedHandler {

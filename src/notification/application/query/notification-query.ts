@@ -1,5 +1,5 @@
-import { FindNotificationQuery } from 'src/notification/application/query/FindNotificationQuery';
-import { FindNotificationResult } from 'src/notification/application/query/FindNotificationResult';
+import { FindNotificationQuery } from 'src/notification/application/query/find-notification-query';
+import { FindNotificationResult } from 'src/notification/application/query/find-notification-result';
 
 export abstract class NotificationQuery {
   abstract find(

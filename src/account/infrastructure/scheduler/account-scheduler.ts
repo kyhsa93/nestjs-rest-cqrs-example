@@ -7,11 +7,11 @@ import {
   EntityIdTransformer,
   ENTITY_ID_TRANSFORMER,
   writeConnection,
-} from 'libs/DatabaseModule';
-import { TaskPublisher, TASK_PUBLISHER } from 'libs/MessageModule';
+} from 'libs/database-module';
+import { TaskPublisher, TASK_PUBLISHER } from 'libs/message-module';
 
-import { LockAccountCommand } from 'src/account/application/command/LockAccountCommand';
-import { AccountEntity } from 'src/account/infrastructure/entity/AccountEntity';
+import { LockAccountCommand } from 'src/account/application/command/lock-account-command';
+import { AccountEntity } from 'src/account/infrastructure/entity/account-entity';
 
 @Injectable()
 export class AccountScheduler {

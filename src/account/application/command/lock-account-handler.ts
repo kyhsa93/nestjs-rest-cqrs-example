@@ -1,0 +1,27 @@
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+
+import { throwError } from 'libs/throw-error';
+import { Transactional } from 'libs/transactional';
+
+import { LockAccountCommand } from 'src/account/application/command/lock-account-command';
+
+import { ErrorMessage } from 'src/account/domain/error-message';
+import { AccountRepository } from 'src/account/domain/account-repository';
+
+@CommandHandler(LockAccountCommand)
+export class LockAccountHandler implements ICommandHandler<
+  LockAccountCommand,
+  void
+> {
+  constructor(private readonly accountRepository: AccountRepository) {}
+
+  @Transactional()
+  async execute(command: LockAccountCommand): Promise<void> {
+    const account = await this.accountRepository.findById(command.accountId);
+    if (!account) throwError(ErrorMessage.ACCOUNT_IS_NOT_FOUND);
+
+    account.lock();
+
+    await this.accountRepository.save(account);
+  }
+}
