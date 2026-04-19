@@ -19,12 +19,6 @@ class Configuration {
   readonly AWS_ENDPOINT = process.env.AWS_ENDPOINT;
 
   @IsString()
-  readonly AWS_ACCESS_KEY_ID = process.env.AWS_ACCESS_KEY_ID as string;
-
-  @IsString()
-  readonly AWS_SECRET_ACCESS_KEY = process.env.AWS_SECRET_ACCESS_KEY as string;
-
-  @IsString()
   readonly AWS_SQS_QUEUE_URL = process.env.AWS_SQS_QUEUE_URL as string;
 
   @IsOptional()

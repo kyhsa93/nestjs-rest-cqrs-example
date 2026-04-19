@@ -40,10 +40,6 @@ class SQSConsumerService implements OnModuleDestroy {
   private readonly sqsClient = new SQSClient({
     region: Config.AWS_REGION,
     endpoint: Config.AWS_ENDPOINT,
-    credentials: {
-      accessKeyId: Config.AWS_ACCESS_KEY_ID,
-      secretAccessKey: Config.AWS_SECRET_ACCESS_KEY,
-    },
   });
 
   @Interval(5000)
@@ -167,10 +163,6 @@ class SNSMessagePublisher {
   private readonly snsClient = new SNSClient({
     region: Config.AWS_REGION,
     endpoint: Config.AWS_ENDPOINT,
-    credentials: {
-      accessKeyId: Config.AWS_ACCESS_KEY_ID,
-      secretAccessKey: Config.AWS_SECRET_ACCESS_KEY,
-    },
   });
   private readonly logger = new Logger(SNSMessagePublisher.name);
 

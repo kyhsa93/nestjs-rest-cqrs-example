@@ -8,10 +8,6 @@ export class EmailAdaptorImplement extends EmailAdaptor {
   private readonly sesClient = new SESClient({
     region: Config.AWS_REGION,
     endpoint: Config.AWS_ENDPOINT,
-    credentials: {
-      accessKeyId: Config.AWS_ACCESS_KEY_ID,
-      secretAccessKey: Config.AWS_SECRET_ACCESS_KEY,
-    },
   });
 
   async sendEmail(to: string, subject: string, text: string): Promise<void> {

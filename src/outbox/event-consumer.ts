@@ -36,10 +36,6 @@ export class EventConsumer {
   private readonly sqsClient = new SQSClient({
     region: Config.AWS_REGION,
     endpoint: Config.AWS_ENDPOINT,
-    credentials: {
-      accessKeyId: Config.AWS_ACCESS_KEY_ID,
-      secretAccessKey: Config.AWS_SECRET_ACCESS_KEY,
-    },
   });
 
   @Interval(5000)
