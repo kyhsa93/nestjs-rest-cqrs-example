@@ -15,8 +15,63 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
+  harness:
+    name: playbook harness
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      MIN_SCORE: '90'
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v5
+        with:
+          path: project
+
+      - name: Checkout nestjs-playbook
+        uses: actions/checkout@v5
+        with:
+          repository: kyhsa93/nestjs-playbook
+          path: playbook
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: project/.nvmrc
+          cache: npm
+          cache-dependency-path: playbook/harness/package-lock.json
+
+      - name: Install harness
+        working-directory: playbook/harness
+        run: npm ci
+
+      - name: Evaluate
+        working-directory: playbook/harness
+        run: npm run evaluate -- "$GITHUB_WORKSPACE/project" --out="$GITHUB_WORKSPACE/eval.json"
+
+      - name: Summary
+        run: |
+          jq '{totalScore, grade, failureCount: (.failures | length)}' "$GITHUB_WORKSPACE/eval.json"
+          jq '.failures | group_by(.ruleId) | map({ruleId: .[0].ruleId, severity: .[0].severity, count: length})' "$GITHUB_WORKSPACE/eval.json"
+
+      - name: Enforce score threshold
+        run: |
+          score=$(jq -r .totalScore "$GITHUB_WORKSPACE/eval.json")
+          if [ "$score" -lt "$MIN_SCORE" ]; then
+            echo "::error::Harness score $score is below required $MIN_SCORE"
+            jq '.failures' "$GITHUB_WORKSPACE/eval.json"
+            exit 1
+          fi
+          echo "Harness score $score (>= $MIN_SCORE)"
+
+      - name: Upload report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: harness-report
+          path: eval.json
+
   ci:
     name: lint · test · build
+    needs: harness
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
