@@ -43,7 +43,7 @@
     "date-fns": "^4.1.0",
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.3",
-    "mysql": "^2.18.1",
+    "mysql2": "^3.22.1",
     "reflect-metadata": "^0.2.2",
     "rimraf": "^6.1.3",
     "rxjs": "^7.8.2",
