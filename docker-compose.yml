@@ -1,59 +1,83 @@
-version: "3.7"
-
 services:
   proxy:
     image: nginx:alpine
-    restart: always
+    restart: unless-stopped
     ports:
-      - 80:80
+      - "80:80"
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
-    command: [nginx-debug, '-g', 'daemon off;']
+    depends_on:
+      - nest
 
   nest:
     build:
       context: .
       dockerfile: Dockerfile.dev
-    restart: always
+    restart: unless-stopped
     environment:
-      - AWS_REGION=ap-northeast-2
-      - AWS_ENDPOINT=http://localstack:4566
-      - AWS_ACCESS_KEY_ID=AWS_ACCESS_KEY_ID
-      - AWS_SECRET_ACCESS_KEY=AWS_SECRET_ACCESS_KEY
-      - AWS_SQS_QUEUE_URL=http://localhost:4566/000000000000/example
-      - DATABASE_LOGGING=true
-      - DATABASE_HOST=database
-      - DATABASE_PORT=3306
-      - DATABASE_NAME=nest
-      - DATABASE_USER=root
-      - DATABASE_PASSWORD=test
-      - DATABASE_SYNC=true
-      - EMAIL=no-reply@example.com
-      - PORT=5000
+      NODE_ENV: development
+      AWS_REGION: ap-northeast-2
+      AWS_ENDPOINT: http://localstack:4566
+      AWS_ACCESS_KEY_ID: test
+      AWS_SECRET_ACCESS_KEY: test
+      AWS_SQS_QUEUE_URL: http://localstack:4566/000000000000/example
+      DATABASE_LOGGING: "true"
+      DATABASE_HOST: database
+      DATABASE_PORT: "3306"
+      DATABASE_NAME: nest
+      DATABASE_USER: root
+      DATABASE_PASSWORD: test
+      DATABASE_SYNC: "true"
+      EMAIL: no-reply@example.com
+      PORT: "5000"
+    ports:
+      - "5000:5000"
+      - "9229:9229"
     volumes:
       - ./src:/app/src:ro
       - ./libs:/app/libs:ro
+    depends_on:
+      database:
+        condition: service_healthy
+      localstack:
+        condition: service_healthy
 
   database:
-    image: mysql
-    restart: always
+    image: mysql:8.4
+    restart: unless-stopped
     ports:
-      - 3306:3306
+      - "3306:3306"
     environment:
-      - MYSQL_DATABASE=nest
-      - MYSQL_ROOT_PASSWORD=test
-    command: mysqld --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+      MYSQL_DATABASE: nest
+      MYSQL_ROOT_PASSWORD: test
+    command: >
+      mysqld
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_unicode_ci
     cap_add:
       - SYS_NICE
     volumes:
-      - ./database/nest:/var/lib/mysql
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-ptest"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
 
   localstack:
-    image: localstack/localstack
+    image: localstack/localstack:3
     ports:
-      - 4566:4566
+      - "4566:4566"
     environment:
-      - SERVICES=ses,sqs,sns
-      - AWS_DEFAULT_REGION=ap-northeast-2
+      SERVICES: ses,sqs,sns
+      AWS_DEFAULT_REGION: ap-northeast-2
     volumes:
-      - ./.aws:/docker-entrypoint-initaws.d:ro
+      - ./.aws:/etc/localstack/init/ready.d:ro
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:4566/_localstack/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+volumes:
+  mysql-data:
