@@ -58,23 +58,50 @@ import { FindAccountByIdQuery } from 'src/account/application/query/FindAccountB
 import { FindAccountsQuery } from 'src/account/application/query/FindAccountsQuery';
 import { RemitCommand } from 'src/account/application/command/RemitCommand';
 
+import { ErrorCode } from 'src/account/domain/ErrorCode';
 import { ErrorMessage } from 'src/account/domain/ErrorMessage';
 
 const errorMappings: ErrorExceptionMapping[] = [
-  [ErrorMessage.ACCOUNT_IS_NOT_FOUND, NotFoundException],
+  [
+    ErrorMessage.ACCOUNT_IS_NOT_FOUND,
+    NotFoundException,
+    ErrorCode.ACCOUNT_IS_NOT_FOUND,
+  ],
   [
     ErrorMessage.WITHDRAWAL_AND_DEPOSIT_ACCOUNTS_CANNOT_BE_THE_SAME,
     UnprocessableEntityException,
+    ErrorCode.WITHDRAWAL_AND_DEPOSIT_ACCOUNTS_CANNOT_BE_THE_SAME,
   ],
-  [ErrorMessage.CAN_NOT_WITHDRAW_UNDER_1, InternalServerErrorException],
+  [
+    ErrorMessage.CAN_NOT_WITHDRAW_UNDER_1,
+    InternalServerErrorException,
+    ErrorCode.CAN_NOT_WITHDRAW_UNDER_1,
+  ],
   [
     ErrorMessage.REQUESTED_AMOUNT_EXCEEDS_YOUR_WITHDRAWAL_LIMIT,
     UnprocessableEntityException,
+    ErrorCode.REQUESTED_AMOUNT_EXCEEDS_YOUR_WITHDRAWAL_LIMIT,
   ],
-  [ErrorMessage.CAN_NOT_DEPOSIT_UNDER_1, InternalServerErrorException],
-  [ErrorMessage.ACCOUNT_BALANCE_IS_REMAINED, UnprocessableEntityException],
-  [ErrorMessage.ACCOUNT_IS_ALREADY_LOCKED, UnprocessableEntityException],
-  [ErrorMessage.INTERNAL_SERVER_ERROR, InternalServerErrorException],
+  [
+    ErrorMessage.CAN_NOT_DEPOSIT_UNDER_1,
+    InternalServerErrorException,
+    ErrorCode.CAN_NOT_DEPOSIT_UNDER_1,
+  ],
+  [
+    ErrorMessage.ACCOUNT_BALANCE_IS_REMAINED,
+    UnprocessableEntityException,
+    ErrorCode.ACCOUNT_BALANCE_IS_REMAINED,
+  ],
+  [
+    ErrorMessage.ACCOUNT_IS_ALREADY_LOCKED,
+    UnprocessableEntityException,
+    ErrorCode.ACCOUNT_IS_ALREADY_LOCKED,
+  ],
+  [
+    ErrorMessage.INTERNAL_SERVER_ERROR,
+    InternalServerErrorException,
+    ErrorCode.INTERNAL_SERVER_ERROR,
+  ],
 ];
 
 const mapError = (error: Error): never => {
