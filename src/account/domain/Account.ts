@@ -1,8 +1,6 @@
-import {
-  UnprocessableEntityException,
-  InternalServerErrorException,
-} from '@nestjs/common';
 import { AggregateRoot } from '@nestjs/cqrs';
+
+import { throwError } from 'libs/ThrowError';
 
 import { ErrorMessage } from 'src/account/domain/ErrorMessage';
 import { AccountClosedEvent } from 'src/account/domain/event/AccountClosedEvent';
@@ -77,42 +75,30 @@ export class AccountImplement extends AggregateRoot implements Account {
   }
 
   withdraw(amount: number): void {
-    if (amount < 1)
-      throw new InternalServerErrorException(
-        ErrorMessage.CAN_NOT_WITHDRAW_UNDER_1,
-      );
+    if (amount < 1) throwError(ErrorMessage.CAN_NOT_WITHDRAW_UNDER_1);
     if (this.balance < amount)
-      throw new UnprocessableEntityException(
-        ErrorMessage.REQUESTED_AMOUNT_EXCEEDS_YOUR_WITHDRAWAL_LIMIT,
-      );
+      throwError(ErrorMessage.REQUESTED_AMOUNT_EXCEEDS_YOUR_WITHDRAWAL_LIMIT);
     this.balance -= amount;
     this.updatedAt = new Date();
     this.apply(new WithdrawnEvent(this.id, this.email));
   }
 
   deposit(amount: number): void {
-    if (amount < 1)
-      throw new InternalServerErrorException(
-        ErrorMessage.CAN_NOT_DEPOSIT_UNDER_1,
-      );
+    if (amount < 1) throwError(ErrorMessage.CAN_NOT_DEPOSIT_UNDER_1);
     this.balance += amount;
     this.updatedAt = new Date();
     this.apply(new DepositedEvent(this.id, this.email));
   }
 
   close(): void {
-    if (this.balance > 0)
-      throw new UnprocessableEntityException(
-        ErrorMessage.ACCOUNT_BALANCE_IS_REMAINED,
-      );
+    if (this.balance > 0) throwError(ErrorMessage.ACCOUNT_BALANCE_IS_REMAINED);
     this.deletedAt = new Date();
     this.updatedAt = new Date();
     this.apply(new AccountClosedEvent(this.id, this.email));
   }
 
   lock(): void {
-    if (this.lockedAt)
-      throw new UnprocessableEntityException('Account is already locked');
+    if (this.lockedAt) throwError(ErrorMessage.ACCOUNT_IS_ALREADY_LOCKED);
     this.lockedAt = new Date();
     this.updatedAt = new Date();
     this.version += 1;

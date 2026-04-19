@@ -1,12 +1,8 @@
 import {
-  InternalServerErrorException,
-  UnprocessableEntityException,
-} from '@nestjs/common';
-
-import {
   AccountImplement,
   AccountProperties,
 } from 'src/account/domain/Account';
+import { ErrorMessage } from 'src/account/domain/ErrorMessage';
 import { AccountClosedEvent } from 'src/account/domain/event/AccountClosedEvent';
 import { AccountOpenedEvent } from 'src/account/domain/event/AccountOpenedEvent';
 import { DepositedEvent } from 'src/account/domain/event/DepositedEvent';
@@ -47,20 +43,24 @@ describe('Account', () => {
   });
 
   describe('withdraw', () => {
-    it('should throw InternalServerErrorException when given amount is under 1', () => {
+    it('should throw error when given amount is under 1', () => {
       const account = new AccountImplement({} as AccountProperties);
 
-      expect(() => account.withdraw(0)).toThrow(InternalServerErrorException);
+      expect(() => account.withdraw(0)).toThrow(
+        ErrorMessage.CAN_NOT_WITHDRAW_UNDER_1,
+      );
     });
 
-    it('should throw UnprocessableEntityException when given amount is over account balance', () => {
+    it('should throw error when given amount is over account balance', () => {
       const account = new AccountImplement({
         id: 'id',
         name: 'name',
         balance: 0,
       } as AccountProperties);
 
-      expect(() => account.withdraw(1)).toThrow(UnprocessableEntityException);
+      expect(() => account.withdraw(1)).toThrow(
+        ErrorMessage.REQUESTED_AMOUNT_EXCEEDS_YOUR_WITHDRAWAL_LIMIT,
+      );
     });
 
     it('should withdraw from account', () => {
@@ -80,10 +80,12 @@ describe('Account', () => {
   });
 
   describe('deposit', () => {
-    it('should throw InternalServerErrorException when given amount is under 1', () => {
+    it('should throw error when given amount is under 1', () => {
       const account = new AccountImplement({} as AccountProperties);
 
-      expect(() => account.deposit(0)).toThrow(InternalServerErrorException);
+      expect(() => account.deposit(0)).toThrow(
+        ErrorMessage.CAN_NOT_DEPOSIT_UNDER_1,
+      );
     });
 
     it('should deposit to account', () => {
@@ -106,14 +108,16 @@ describe('Account', () => {
   });
 
   describe('close', () => {
-    it('should throw UnprocessableEntityException when account balance is over 0', () => {
+    it('should throw error when account balance is over 0', () => {
       const account = new AccountImplement({
         id: 'id',
         name: 'name',
         balance: 1,
       } as AccountProperties);
 
-      expect(() => account.close()).toThrow(UnprocessableEntityException);
+      expect(() => account.close()).toThrow(
+        ErrorMessage.ACCOUNT_BALANCE_IS_REMAINED,
+      );
     });
 
     it('should close account', () => {
