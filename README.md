@@ -1,11 +1,16 @@
 # Nest CQRS Rest api example
 
 [![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fkyhsa93%2Fnestjs-rest-cqrs-example&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false)](https://hits.seeyoufarm.com)
+![GitHub stars](https://img.shields.io/github/stars/kyhsa93/nestjs-rest-cqrs-example?style=social)
 
-This is sample nestjs project.
-- link: https://nestjs.com
+A worked example of layered DDD + CQRS in [NestJS](https://nestjs.com) — domain/application/interface/infrastructure
+layers, aggregates and domain events, and CQRS command/query separation, all in one runnable REST API. This is the
+repo's most-starred project (870+ stars) and is kept as a stable reference rather than under active feature
+development — the layering and event patterns below are the lasting part.
 
-**Related:** To check your own NestJS project against the layered DDD/CQRS rules this example follows, add the agent skill from [backend-service-playbook](https://github.com/kyhsa93/backend-service-playbook): `npx skills add kyhsa93/backend-service-playbook --skill nestjs-architecture-harness`
+**Related:** this repo's conventions were later generalized into [backend-service-playbook](https://github.com/kyhsa93/backend-service-playbook),
+the same architecture implemented identically across 5 languages with an automated compliance harness. To check your
+own NestJS project against those rules, add the agent skill: `npx skills add kyhsa93/backend-service-playbook --skill nestjs-architecture-harness`
 
 ## Introduction
 ### Purpose of this Repository
