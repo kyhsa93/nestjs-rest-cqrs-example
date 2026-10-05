@@ -1,4 +1,5 @@
 import { Inject } from '@nestjs/common';
+import { FindOptionsWhere } from 'typeorm';
 
 import {
   EntityIdTransformer,
@@ -17,17 +18,14 @@ export class NotificationQueryImplement extends NotificationQuery {
   private readonly entityIdTransformer: EntityIdTransformer;
 
   find(options: FindNotificationQuery): Promise<FindNotificationResult> {
+    const where: FindOptionsWhere<NotificationEntity> = {};
+    if (options.to) where.to = options.to;
+    if (options.accountId)
+      where.accountId = this.entityIdTransformer.to(options.accountId);
+
     return readConnection
       .getRepository(NotificationEntity)
-      .find({
-        ...options,
-        where: {
-          to: options.to,
-          accountId: options.accountId
-            ? this.entityIdTransformer.to(options.accountId)
-            : undefined,
-        },
-      })
+      .find({ skip: options.skip, take: options.take, where })
       .then((entities) => ({
         notifications: entities.map((entity) => ({
           id: this.entityIdTransformer.from(entity.id),
