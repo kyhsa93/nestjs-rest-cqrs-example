@@ -5,6 +5,8 @@
 This is sample nestjs project.
 - link: https://nestjs.com
 
+**Related:** To check your own NestJS project against the layered DDD/CQRS rules this example follows, add the agent skill from [backend-service-playbook](https://github.com/kyhsa93/backend-service-playbook): `npx skills add kyhsa93/backend-service-playbook --skill nestjs-architecture-harness`
+
 ## Introduction
 ### Purpose of this Repository
 This is a main goals of this repository:
