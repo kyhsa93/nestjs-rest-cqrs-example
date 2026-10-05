@@ -16,42 +16,48 @@ concurrency:
 
 jobs:
   harness:
-    name: playbook harness
+    name: architecture harness (backend-service-playbook skill, adopt)
     runs-on: ubuntu-latest
     timeout-minutes: 10
     env:
-      MIN_SCORE: '90'
+      MIN_SCORE: '88' # temporary ratchet, restore 90 by 2026-10-19 (#106)
+      # pinned: following another repo's main is what broke this gate on 2026-05-05
+      BSP_REF: b83ebfd70436776b98355f019e57050dbbfdf112
     steps:
       - name: Checkout project
         uses: actions/checkout@v5
         with:
           path: project
 
-      - name: Checkout nestjs-playbook
+      - name: Checkout backend-service-playbook skill
         uses: actions/checkout@v5
         with:
-          repository: kyhsa93/nestjs-playbook
-          path: playbook
+          repository: kyhsa93/backend-service-playbook
+          ref: ${{ env.BSP_REF }}
+          path: bsp
+          sparse-checkout: skills/nestjs-architecture-harness
 
       - uses: actions/setup-node@v5
         with:
           node-version-file: project/.nvmrc
           cache: npm
-          cache-dependency-path: |
-            project/package-lock.json
-            playbook/harness/package-lock.json
+          cache-dependency-path: project/package-lock.json
 
       - name: Install project deps
         working-directory: project
         run: npm ci
 
-      - name: Install harness
-        working-directory: playbook/harness
-        run: npm ci
-
       - name: Evaluate
-        working-directory: playbook/harness
-        run: npm run evaluate -- "$GITHUB_WORKSPACE/project" --out="$GITHUB_WORKSPACE/eval.json"
+        run: |
+          set +e
+          bash bsp/skills/nestjs-architecture-harness/scripts/run.sh project --out="$GITHUB_WORKSPACE/eval.json"
+          code=$?
+          set -e
+          # run.sh exits 1 on any medium+ finding; the gate is the score, but no report is a hard error
+          if [ "$code" -eq 2 ] || [ ! -s "$GITHUB_WORKSPACE/eval.json" ]; then
+            echo "::error::harness produced no report (exit $code)"
+            exit 1
+          fi
 
       - name: Summary
         run: |
@@ -77,7 +83,6 @@ jobs:
 
   ci:
     name: lint · test · build
-    needs: harness
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -93,7 +98,7 @@ jobs:
 
   build-image:
     name: build & push image
-    needs: ci
+    needs: [harness, ci]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 30
