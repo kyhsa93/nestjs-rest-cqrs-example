@@ -38,10 +38,13 @@ spec:
           env:
             - name: AWS_REGION
               value: "ap-northeast-2"
-            - name: AWS_ENDPOINT
-              value: "localstack"
+            # Targets real AWS, so there is no AWS_ENDPOINT override and
+            # credentials come from the pod's IAM role (e.g. IRSA).
+            # Replace the placeholders with your own SQS queue URLs.
             - name: AWS_SQS_QUEUE_URL
-              value: "=http://localhost:4566/000000000000/example"
+              value: "https://sqs.ap-northeast-2.amazonaws.com/<ACCOUNT_ID>/<QUEUE_NAME>"
+            - name: SQS_DOMAIN_EVENT_QUEUE_URL
+              value: "https://sqs.ap-northeast-2.amazonaws.com/<ACCOUNT_ID>/<DOMAIN_EVENT_QUEUE_NAME>"
             - name: DATABASE_LOGGING
               value: "false"
             - name: DATABASE_HOST

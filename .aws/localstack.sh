@@ -27,3 +27,9 @@ DLQ_URL=$(awslocal sqs --region ap-northeast-2 create-queue --queue-name example
 DLQ_ARN=$(awslocal sqs --region ap-northeast-2 get-queue-attributes --queue-url $DLQ_URL --attribute-names QueueArn --query 'Attributes.QueueArn' --output text)
 
 awslocal sqs --region ap-northeast-2 set-queue-attributes --queue-url $QUEUE_URL --attributes RedrivePolicy="'"{\"deadLetterTargetArn\":\"$DLQ_ARN\"\,\"maxReceiveCount\":3}"'"
+
+DOMAIN_EVENT_DLQ_URL=$(awslocal sqs --region ap-northeast-2 create-queue --queue-name domain-events-dlq --query 'QueueUrl' --output text)
+DOMAIN_EVENT_DLQ_ARN=$(awslocal sqs --region ap-northeast-2 get-queue-attributes --queue-url $DOMAIN_EVENT_DLQ_URL --attribute-names QueueArn --query 'Attributes.QueueArn' --output text)
+DOMAIN_EVENT_QUEUE_URL=$(awslocal sqs --region ap-northeast-2 create-queue --queue-name domain-events --query 'QueueUrl' --output text)
+
+awslocal sqs --region ap-northeast-2 set-queue-attributes --queue-url $DOMAIN_EVENT_QUEUE_URL --attributes RedrivePolicy="'"{\"deadLetterTargetArn\":\"$DOMAIN_EVENT_DLQ_ARN\"\,\"maxReceiveCount\":3}"'"

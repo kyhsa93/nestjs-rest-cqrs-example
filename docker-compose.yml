@@ -23,6 +23,9 @@ services:
       AWS_ACCESS_KEY_ID: test
       AWS_SECRET_ACCESS_KEY: test
       AWS_SQS_QUEUE_URL: http://localstack:4566/000000000000/example
+      # Outbox domain events get their own queue so OutboxConsumer does not
+      # compete with the integration-event consumer reading `example`.
+      SQS_DOMAIN_EVENT_QUEUE_URL: http://localstack:4566/000000000000/domain-events
       DATABASE_LOGGING: "true"
       DATABASE_HOST: database
       DATABASE_PORT: "3306"

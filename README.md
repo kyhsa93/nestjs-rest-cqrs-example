@@ -133,7 +133,7 @@ If your docker is successfully installed, you can use docker cli.
   docker compose down                      # remove created containers
 ```
 
-LocalStack runs `.aws/localstack.sh` on startup. It creates the database secret `nest/database`, the SQS queue `example` (with a dead letter queue), the SNS topics and the verified SES sender `no-reply@example.com`.
+LocalStack runs `.aws/localstack.sh` on startup. It creates the database secret `nest/database`, the SQS queue `example` for integration events and the SQS queue `domain-events` for outbox domain events (each with a dead letter queue), the SNS topics and the verified SES sender `no-reply@example.com`.
 
 And then, you can connect mysql in localhost:3306, user name 'root' and password is 'test'.
 
@@ -145,6 +145,7 @@ The api reads its configuration from environment variables (there is no `.env` f
   export AWS_ACCESS_KEY_ID=test
   export AWS_SECRET_ACCESS_KEY=test
   export AWS_SQS_QUEUE_URL=http://localhost:4566/000000000000/example
+  export SQS_DOMAIN_EVENT_QUEUE_URL=http://localhost:4566/000000000000/domain-events
   export DATABASE_LOGGING=true
   export DATABASE_HOST=localhost
   export DATABASE_PORT=3306
@@ -216,7 +217,7 @@ After use compose, you have to stop and remove containers.
 ## Start with kubernetes
 If you want to use kubernetes, you can use manifest.yaml for apply to your kubernetes cluster.
 
-manifest.yaml creates the api and mysql only. It does not include LocalStack, so set the AWS environment variables in manifest.yaml to your own AWS resources (or a LocalStack you run in the cluster) before applying.
+manifest.yaml creates the api and mysql only. It does not include LocalStack and targets real AWS, so replace the `<ACCOUNT_ID>` and queue name placeholders in `AWS_SQS_QUEUE_URL` and `SQS_DOMAIN_EVENT_QUEUE_URL` with your own SQS queues before applying. The `nest/database` secret and the SES sender in `EMAIL` must also exist in your AWS account. To use a LocalStack you run in the cluster instead, add `AWS_ENDPOINT` pointing at it.
 
 Use minikube for create kubernetes locally or use your own kubernetes. (docker for desktop can be enable local cluster)
 
@@ -250,7 +251,7 @@ All configuration is read from environment values and validated on startup. If a
 |---|---|---|
 | `AWS_REGION` | yes | AWS region |
 | `AWS_ENDPOINT` | no | AWS endpoint override, e.g. `http://localhost:4566` for LocalStack |
-| `AWS_SQS_QUEUE_URL` | yes | SQS queue `OutboxPoller` publishes to |
+| `AWS_SQS_QUEUE_URL` | yes | SQS queue for integration messages (`libs/message`). `OutboxPoller` falls back to it when `SQS_DOMAIN_EVENT_QUEUE_URL` is not set |
 | `SQS_DOMAIN_EVENT_QUEUE_URL` | no | SQS queue for domain events. `OutboxPoller` publishes here instead of `AWS_SQS_QUEUE_URL` when set, and `OutboxConsumer` only consumes when it is set |
 | `DATABASE_HOST`, `DATABASE_PORT`, `DATABASE_NAME` | yes | mysql connection |
 | `DATABASE_SECRET_ID` | yes | Secrets Manager secret holding `{"username","password"}` for mysql |
