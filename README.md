@@ -83,23 +83,25 @@ Please refer to the image below.[[image source]](http://seedstack.org/docs/busin
 <img width="502" alt="Screenshot 2020-12-15 at 11 32 25 PM" src="https://user-images.githubusercontent.com/20676870/102228546-2b27b480-3f2e-11eb-8312-453fa669612e.png">
 
 ## Getting started
-This is REST api made by node.js, nest, redis, mysql with typescript.
+This is REST api made by node.js, nest, mysql with typescript.
 
-So you have to get node.js environment, redis for cache, mysql for database, know typescript syntax.
+AWS services (SQS, SNS, SES, Secrets Manager) are used for messaging, email and the database credentials. In local development they are emulated by [LocalStack](https://www.localstack.cloud/).
+
+Domain events are stored in an outbox table in the same transaction as the aggregate. `OutboxPoller` publishes pending rows to SQS, and `OutboxConsumer` receives them from SQS and dispatches them through `EventHandlerRegistry` (see `src/outbox`).
+
+So you have to get node.js environment, mysql for database, LocalStack (or real AWS) for messaging, know typescript syntax.
 
 ### Prerequisites
 ---
-Please install node.js and I recommend to use docker for your database.
+Please install node.js and I recommend to use docker for your database and LocalStack.
 
-My recommand node.js version is dubnium and latest docker version.
+My recommand node.js version is 24 (see `.nvmrc`) and latest docker version.
 
 * Install node.js: [https://nodejs.org/en/download/](https://nodejs.org/en/download/)
 
-* Install Docker Desktop for MAC: [https://docs.docker.com/docker-for-mac/install/](https://docs.docker.com/docker-for-mac/install/)
+* Install Docker Desktop: [https://docs.docker.com/get-started/get-docker/](https://docs.docker.com/get-started/get-docker/)
 
-* Install Docker Desktop for Windows: [https://docs.docker.com/docker-for-windows/install/](https://docs.docker.com/docker-for-windows/install/)
-
-* Install compose: [https://docs.docker.com/compose/install/](https://docs.docker.com/compose/install/)
+* Docker Compose is included in Docker Desktop: [https://docs.docker.com/compose/install/](https://docs.docker.com/compose/install/)
 
 ## Create development environment
 First, clone this repository into your local environment. Run followed command in your terminal.
@@ -118,11 +120,7 @@ Run followed command in your terminal.
   npm install
 ```
 
-Next up, generate mysql and redis.
-
-If you already have mysql, redis in your development environment, you can use that.
-
-But if you don't have one or both, try this process.
+Next up, generate mysql and LocalStack.
 
 Install docker for your OS from link in top of this documentation.
 
@@ -131,23 +129,38 @@ And run followed command.
 If your docker is successfully installed, you can use docker cli.
 
 ```bash
-  docker run --name nest -d -p 3306:3306 -e MYSQL_DATABASE=nest -e MYSQL_ROOT_PASSWORD=test -v ~/database/nest:/var/lib/mysql mysql:5.7
-  docker run --name redis -d -p 6379:6379 redis:alpine
-
-  OR
-
-  docker-compose -f docker-compose.development.yml up -d # create mysql, redis container for development environment
-  docker-compose -f docker-compose.development.yml down  # remove created containers
+  docker compose up -d database localstack # create mysql 8.4 and LocalStack containers
+  docker compose down                      # remove created containers
 ```
 
-And then, you can connect mysql in http://localhost:3306, user name 'root' and password is 'test'.
+LocalStack runs `.aws/localstack.sh` on startup. It creates the database secret `nest/database`, the SQS queue `example` (with a dead letter queue), the SNS topics and the verified SES sender `no-reply@example.com`.
+
+And then, you can connect mysql in localhost:3306, user name 'root' and password is 'test'.
+
+The api reads its configuration from environment variables (there is no `.env` file). Export them in your terminal.
+
+```bash
+  export AWS_REGION=ap-northeast-2
+  export AWS_ENDPOINT=http://localhost:4566
+  export AWS_ACCESS_KEY_ID=test
+  export AWS_SECRET_ACCESS_KEY=test
+  export AWS_SQS_QUEUE_URL=http://localhost:4566/000000000000/example
+  export DATABASE_LOGGING=true
+  export DATABASE_HOST=localhost
+  export DATABASE_PORT=3306
+  export DATABASE_NAME=nest
+  export DATABASE_SECRET_ID=nest/database
+  export DATABASE_SYNC=true
+  export EMAIL=no-reply@example.com
+  export PORT=5000
+```
 
 Finaly, your develop environment is created.
 
 You can start api with followed command.
 
 ```bash
-  npm start
+  npm run start:dev
 ```
 
 And if you modify code and save, you can see the process detect code changes and restart it self.
@@ -156,52 +169,58 @@ And if you modify code and save, you can see the process detect code changes and
 If you can use docker cli, you can build docker image.
 
 ```bash
-  docker build -t nest-sample
+  docker build -t nest-sample .
   docker images # list up docker images
 ```
 
 And then you can create and run docker container using builded image.
 
+The container needs the same environment variables as above (see [Configuration](#configuration)), and a reachable mysql and AWS (or LocalStack).
+
 ```bash
-  docker run -d -p 5000:5000 nest-sample
+  docker run -d -p 5000:5000 -e AWS_REGION=ap-northeast-2 -e ... nest-sample
   docker ps # list up running container
 ```
 
 and now you can connect api through http://localhost:5000.
 
 ## Start with docker compose
-Docker compose in this project is include api redis and mysql 5.7 for database.
+Docker compose in this project is include api, nginx proxy, mysql 8.4 for database and LocalStack.
+
+The api container is built from `Dockerfile.dev` and runs `npm run start:debug` with `src` and `libs` mounted, so code changes are reloaded. Debugger port is 9229.
 
 Run followed command in project directory.
 
 ```bash
-  docker-compose up -d # build images, create and run containers in background
+  docker compose up -d # build images, create and run containers in background
 ```
 
-If container is created, you can access api on http://localhost:5000.
+If container is created, you can access api on http://localhost:5000, or through the nginx proxy on http://localhost.
 
-And you can access database through http://localhost:3306.
+And you can access database through localhost:3306.
 
 Default database user is root and password is test.
 
 If you want apply your modified code into the running container, you can add build option.
 
 ```bash
-  docker-compose up -d --build # if source code is changed, rebuild image, recreate and start container
+  docker compose up -d --build # if package.json or Dockerfile.dev is changed, rebuild image, recreate and start container
 ```
 
 After use compose, you have to stop and remove containers.
 
 ```bash
-  docker-compose down # stop and remove container in compose
+  docker compose down # stop and remove container in compose
 ```
 
 ## Start with kubernetes
 If you want to use kubernetes, you can use manifest.yaml for apply to your kubernetes cluster.
 
+manifest.yaml creates the api and mysql only. It does not include LocalStack, so set the AWS environment variables in manifest.yaml to your own AWS resources (or a LocalStack you run in the cluster) before applying.
+
 Use minikube for create kubernetes locally or use your own kubernetes. (docker for desktop can be enable local cluster)
 
-Minikube: [https://kubernetes.io/docs/setup/learning-environment/minikube/](https://kubernetes.io/docs/setup/learning-environment/minikube/)
+Minikube: [https://minikube.sigs.k8s.io/docs/start/](https://minikube.sigs.k8s.io/docs/start/)
 
 ```bash
   kubectl apply -f manifest.yaml  # create kubernetes resource in your kubernetes using manifest.yaml file
@@ -216,31 +235,28 @@ If you want see all container in deployment, you can use kubectl.
 
 ```bash
   kubectl get all # print all kubernetes default namespace
-  kubectl logs deployment.apps/nestjs-rest-cqrs-example --all-containers=true
-  kubectl logs deployment.apps/nestjs-rest-cqrs-example --all-containers=true -f
+  kubectl logs deployment.apps/nest --all-containers=true
+  kubectl logs deployment.apps/nest --all-containers=true -f
 ```
 
 About kubernetes: [https://kubernetes.io/](https://kubernetes.io/)
 
-### Start with helm
-
-Helm can help you to manage kubernetes applications.
-
-Helm Charts help you define, install, and upgrade even the most complex Kubernetes application.
-
-```bash
-  helm install --name <releasename> helm # create helm chart
-  helm delete --purge <releasename> # delete helm chart
-```
-
-About helm: [https://helm.sh/](https://helm.sh/)
-
 ## Configuration
-All configuration is in [src/app.config.ts](https://github.com/kyhsa93/nestJS-sample/blob/main/src/Config.ts)
+All configuration is in [src/config.ts](https://github.com/kyhsa93/nestjs-rest-cqrs-example/blob/main/src/config.ts)
 
-Most default configuration can use through you environment values.
+All configuration is read from environment values and validated on startup. If a required value is missing, the api exits.
 
-And also you can modify configurations.
+| Name | Required | Description |
+|---|---|---|
+| `AWS_REGION` | yes | AWS region |
+| `AWS_ENDPOINT` | no | AWS endpoint override, e.g. `http://localhost:4566` for LocalStack |
+| `AWS_SQS_QUEUE_URL` | yes | SQS queue `OutboxPoller` publishes to |
+| `SQS_DOMAIN_EVENT_QUEUE_URL` | no | SQS queue for domain events. `OutboxPoller` publishes here instead of `AWS_SQS_QUEUE_URL` when set, and `OutboxConsumer` only consumes when it is set |
+| `DATABASE_HOST`, `DATABASE_PORT`, `DATABASE_NAME` | yes | mysql connection |
+| `DATABASE_SECRET_ID` | yes | Secrets Manager secret holding `{"username","password"}` for mysql |
+| `DATABASE_LOGGING`, `DATABASE_SYNC` | yes | `true` or `false` |
+| `EMAIL` | yes | SES sender address |
+| `PORT` | yes | http port |
 
 ## Documentation
 Documentaion about this project is made swagger.
@@ -251,39 +267,36 @@ Start this api and connect http://localhost:5000/api in your browser.
 ```bash
   git clone https://github.com/kyhsa93/nestjs-rest-cqrs-example.git # clone this project
 
-  # run mysql database container
-  docker run --name nest -d -p 3306:3306 -e MYSQL_DATABASE=nest -e MYSQL_ROOT_PASSWORD=test -v ~/database/nest:/var/lib/mysql mysql:5.7
+  # run mysql and LocalStack containers
+  docker compose up -d database localstack
 
-  docker build -t nest-sample # build docker image named nest-sample
+  docker build -t nest-sample . # build docker image named nest-sample
 
   docker images # list up docker images
 
-  docker run -d -p 5000:5000 nest-sample # run docker container using image nameed nest-sample (host port 5000 is mapped container port 5000 and container run background process)
+  docker run -d -p 5000:5000 -e ... nest-sample # run docker container using image nameed nest-sample (host port 5000 is mapped container port 5000 and container run background process)
 
   docker ps # list up running container
 
-  docker-compose up -d # build images, create and start containers in background
+  docker compose up -d # build images, create and start containers in background
 
-  docker-compose up -d --build # if container image's change exists, rebuild image, recreate and restart container
+  docker compose up -d --build # if container image's change exists, rebuild image, recreate and restart container
 
-  docker-compose down # stop and remove container in compose
+  docker compose down # stop and remove container in compose
 
-  npm install   # install packges
-  npm test      # run test
-  npm run build # transpile typescript
-  npm start     # run sample code
+  npm install         # install packges
+  npm test            # run test
+  npm run lint        # run eslint
+  npm run build       # transpile typescript
+  npm run start:dev   # run sample code with watch mode
+  npm run start:prod  # run built code in dist
 
-  docker-compose up # use compose
-  
   kubectl apply -f manifest.yaml  # create kubernetes resource in your kubernetes using manifest.yaml file
   kubectl delete -f manifest.yaml # delete kubernetes resource using manifest.yaml file
 
   kubectl get all # print all kubernetes default namespace
-  kubectl logs deployment.apps/nestjs-rest-cqrs-example --all-containers=true
-  kubectl logs deployment.apps/nestjs-rest-cqrs-example --all-containers=true -f
-
-  helm install --name <releasename> helm # create helm chart
-  helm delete --purge <releasename> # delete helm chart
+  kubectl logs deployment.apps/nest --all-containers=true
+  kubectl logs deployment.apps/nest --all-containers=true -f
 ```
 
 ## Links
