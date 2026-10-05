@@ -303,3 +303,7 @@ Start this api and connect http://localhost:5000/api in your browser.
 Github: [https://github.com/kyhsa93/nestjs-rest-cqrs-example](https://github.com/kyhsa93/nestjs-rest-cqrs-example)
 
 Dockerhub: [https://cloud.docker.com/repository/docker/kyhsa93/nestjs-rest-cqrs-example/](https://cloud.docker.com/repository/docker/kyhsa93/nestjs-rest-cqrs-example/)
+
+## License
+
+[MIT](LICENSE)
