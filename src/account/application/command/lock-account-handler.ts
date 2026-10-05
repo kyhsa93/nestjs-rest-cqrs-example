@@ -24,6 +24,6 @@ export class LockAccountHandler implements ICommandHandler<
 
     account.lock();
 
-    await this.accountRepository.save(account);
+    await this.accountRepository.saveAccount(account);
   }
 }

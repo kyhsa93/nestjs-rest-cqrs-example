@@ -35,6 +35,6 @@ export class UpdatePasswordHandler implements ICommandHandler<
       this.passwordGenerator.generateKey(command.password),
     );
 
-    await this.accountRepository.save(account);
+    await this.accountRepository.saveAccount(account);
   }
 }

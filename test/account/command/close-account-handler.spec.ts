@@ -51,15 +51,15 @@ describe('CloseAccountHandler', () => {
       repository.findAccounts = jest
         .fn()
         .mockResolvedValue({ accounts: [account] });
-      repository.save = jest.fn().mockResolvedValue(undefined);
+      repository.saveAccount = jest.fn().mockResolvedValue(undefined);
 
       const command = new CloseAccountCommand('accountId');
 
       await expect(handler.execute(command)).resolves.toEqual(undefined);
       expect(repository.findAccounts).toHaveBeenCalledTimes(1);
       expect(account.close).toHaveBeenCalledTimes(1);
-      expect(repository.save).toHaveBeenCalledTimes(1);
-      expect(repository.save).toHaveBeenCalledWith(account);
+      expect(repository.saveAccount).toHaveBeenCalledTimes(1);
+      expect(repository.saveAccount).toHaveBeenCalledWith(account);
     });
   });
 });

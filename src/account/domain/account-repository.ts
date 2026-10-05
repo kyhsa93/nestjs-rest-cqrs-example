@@ -12,7 +12,7 @@ export type FindAccountsRepositoryResult = Readonly<{
 
 export abstract class AccountRepository {
   abstract newId(): Promise<string>;
-  abstract save(account: Account | Account[]): Promise<void>;
+  abstract saveAccount(account: Account | Account[]): Promise<void>;
   abstract findAccounts(
     options: FindAccountsOptions,
   ): Promise<FindAccountsRepositoryResult>;

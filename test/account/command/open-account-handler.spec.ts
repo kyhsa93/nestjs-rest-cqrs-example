@@ -57,7 +57,7 @@ describe('OpenAccountHandler', () => {
 
       factory.create = jest.fn().mockReturnValue(account);
       repository.newId = jest.fn().mockResolvedValue('accountId');
-      repository.save = jest.fn().mockResolvedValue(undefined);
+      repository.saveAccount = jest.fn().mockResolvedValue(undefined);
       passwordGenerator.generateKey = jest.fn().mockReturnValue('password');
 
       const command = new OpenAccountCommand('name', 'email', 'password');
@@ -65,8 +65,8 @@ describe('OpenAccountHandler', () => {
       await expect(handler.execute(command)).resolves.toEqual(undefined);
       expect(repository.newId).toHaveBeenCalledTimes(1);
       expect(account.open).toHaveBeenCalledTimes(1);
-      expect(repository.save).toHaveBeenCalledTimes(1);
-      expect(repository.save).toHaveBeenCalledWith(account);
+      expect(repository.saveAccount).toHaveBeenCalledTimes(1);
+      expect(repository.saveAccount).toHaveBeenCalledWith(account);
       expect(passwordGenerator.generateKey).toHaveBeenCalledWith(
         command.password,
       );

@@ -124,12 +124,9 @@ playbook `implementations/nestjs/docs/architecture/design-principles.md`에서 �
 ## 4. 프로젝트 현황 및 하네스 (2026-10-05 기준)
 
 - CI 게이트: backend-service-playbook 에이전트 스킬, `adopt` 프로필, 커밋 SHA 고정 (`.github/workflows/main.yml`)
-- 마지막 평가: **88점 / Grade B** (45 failures). `MIN_SCORE`는 88로 한시 하향, 2026-10-19까지 90 복원 (#106)
+- 마지막 평가: **90점 / Grade A** (41 failures). `MIN_SCORE` 90
 - 주요 high 규칙:
-  - `repository-naming.save-bare` — Repository 저장 메서드가 `save<Noun>`이 아님
   - `domain-event-outbox.*` — Outbox poller/consumer/registry 부재
-  - `bootstrap.shutdown-hooks` — `enableShutdownHooks()` 미호출
-  - `timezone-pin.missing` — 부트스트랩에서 프로세스 타임존 미고정
   - `local-dev.postgres-service-missing` — MySQL 저장소에 대한 오탐 (backend-service-playbook#461)
 
 작업 시 새로 추가/수정하는 코드는 위 규칙을 **반드시** 준수한다. 기존 deviation은 관련 작업 맥락에서 정리하거나 별도 리팩토링 PR로 처리.

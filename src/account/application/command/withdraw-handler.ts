@@ -21,6 +21,6 @@ export class WithdrawHandler implements ICommandHandler<WithdrawCommand, void> {
 
     account.withdraw(command.amount);
 
-    await this.accountRepository.save(account);
+    await this.accountRepository.saveAccount(account);
   }
 }

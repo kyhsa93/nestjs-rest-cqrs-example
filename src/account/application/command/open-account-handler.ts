@@ -34,6 +34,6 @@ export class OpenAccountHandler implements ICommandHandler<
 
     account.open();
 
-    await this.accountRepository.save(account);
+    await this.accountRepository.saveAccount(account);
   }
 }

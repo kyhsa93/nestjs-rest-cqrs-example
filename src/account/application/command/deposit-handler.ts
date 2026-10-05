@@ -21,6 +21,6 @@ export class DepositHandler implements ICommandHandler<DepositCommand, void> {
 
     account.deposit(command.amount);
 
-    await this.accountRepository.save(account);
+    await this.accountRepository.saveAccount(account);
   }
 }

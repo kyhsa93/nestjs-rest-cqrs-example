@@ -1,3 +1,5 @@
+import './timezone';
+
 import {
   ConsoleLogger,
   INestApplication,
@@ -32,6 +34,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     logger: new ConsoleLogger({ colors: false }),
   });
+  app.enableShutdownHooks();
   app.enableCors();
   app.use(helmet());
   app.use(compression());

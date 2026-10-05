@@ -66,7 +66,7 @@ describe('UpdatePasswordHandler', () => {
       repository.findAccounts = jest
         .fn()
         .mockResolvedValue({ accounts: [account] });
-      repository.save = jest.fn().mockResolvedValue(undefined);
+      repository.saveAccount = jest.fn().mockResolvedValue(undefined);
       passwordGenerator.generateKey = jest.fn().mockReturnValue('password');
 
       const command = new UpdatePasswordCommand('accountId', 'password');
@@ -75,8 +75,8 @@ describe('UpdatePasswordHandler', () => {
       expect(repository.findAccounts).toHaveBeenCalledTimes(1);
       expect(account.updatePassword).toHaveBeenCalledTimes(1);
       expect(account.updatePassword).toHaveBeenCalledWith(command.password);
-      expect(repository.save).toHaveBeenCalledTimes(1);
-      expect(repository.save).toHaveBeenCalledWith(account);
+      expect(repository.saveAccount).toHaveBeenCalledTimes(1);
+      expect(repository.saveAccount).toHaveBeenCalledWith(account);
     });
   });
 });

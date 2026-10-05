@@ -25,7 +25,7 @@ export class SendEmailHandler implements ICommandHandler<
       ...command,
       id: this.notificationRepository.newId(),
     });
-    await this.notificationRepository.save(notification);
+    await this.notificationRepository.saveNotification(notification);
     await this.emailAdaptor.sendEmail(
       command.to,
       command.subject,

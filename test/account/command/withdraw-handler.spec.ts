@@ -51,7 +51,7 @@ describe('WithdrawHandler', () => {
       repository.findAccounts = jest
         .fn()
         .mockResolvedValue({ accounts: [account] });
-      repository.save = jest.fn().mockResolvedValue(undefined);
+      repository.saveAccount = jest.fn().mockResolvedValue(undefined);
 
       const command = new WithdrawCommand('accountId', 1);
 
@@ -59,8 +59,8 @@ describe('WithdrawHandler', () => {
       expect(repository.findAccounts).toHaveBeenCalledTimes(1);
       expect(account.withdraw).toHaveBeenCalledTimes(1);
       expect(account.withdraw).toHaveBeenCalledWith(command.amount);
-      expect(repository.save).toHaveBeenCalledTimes(1);
-      expect(repository.save).toHaveBeenCalledWith(account);
+      expect(repository.saveAccount).toHaveBeenCalledTimes(1);
+      expect(repository.saveAccount).toHaveBeenCalledWith(account);
     });
   });
 });

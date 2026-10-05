@@ -99,7 +99,7 @@ describe('RemitHandler', () => {
                   : [],
           }),
         );
-      repository.save = jest.fn().mockResolvedValue(undefined);
+      repository.saveAccount = jest.fn().mockResolvedValue(undefined);
       domainService.remit = jest.fn().mockReturnValue(undefined);
 
       const command = new RemitCommand('accountId', 'receiverId', 1);
@@ -112,8 +112,8 @@ describe('RemitHandler', () => {
         account,
         receiver,
       });
-      expect(repository.save).toHaveBeenCalledTimes(1);
-      expect(repository.save).toHaveBeenCalledWith([account, receiver]);
+      expect(repository.saveAccount).toHaveBeenCalledTimes(1);
+      expect(repository.saveAccount).toHaveBeenCalledWith([account, receiver]);
     });
   });
 });

@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     env:
-      MIN_SCORE: '88' # temporary ratchet, restore 90 by 2026-10-19 (#106)
+      MIN_SCORE: '90'
       # pinned: following another repo's main is what broke this gate on 2026-05-05
       BSP_REF: b83ebfd70436776b98355f019e57050dbbfdf112
     steps:

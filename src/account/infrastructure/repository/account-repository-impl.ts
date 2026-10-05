@@ -29,7 +29,7 @@ export class AccountRepositoryImplement extends AccountRepository {
     return new EntityId().toString();
   }
 
-  async save(data: Account | Account[]): Promise<void> {
+  async saveAccount(data: Account | Account[]): Promise<void> {
     const models = Array.isArray(data) ? data : [data];
     const entities = models.map((model) => this.modelToEntity(model));
     await writeConnection.manager.getRepository(AccountEntity).save(entities);

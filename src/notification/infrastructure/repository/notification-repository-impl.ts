@@ -25,7 +25,7 @@ export class NotificationRepositoryImplement extends NotificationRepository {
     return new EntityId().toString();
   }
 
-  async save(notification: Notification): Promise<void> {
+  async saveNotification(notification: Notification): Promise<void> {
     await writeConnection.manager
       .getRepository(NotificationEntity)
       .save(this.modelToEntity(notification));

@@ -53,7 +53,7 @@ describe('DepositHandler', () => {
       repository.findAccounts = jest
         .fn()
         .mockResolvedValue({ accounts: [account] });
-      repository.save = jest.fn().mockResolvedValue(undefined);
+      repository.saveAccount = jest.fn().mockResolvedValue(undefined);
 
       const command = new DepositCommand('accountId', 1);
 
@@ -61,8 +61,8 @@ describe('DepositHandler', () => {
       expect(repository.findAccounts).toHaveBeenCalledTimes(1);
       expect(account.deposit).toHaveBeenCalledTimes(1);
       expect(account.deposit).toHaveBeenCalledWith(command.amount);
-      expect(repository.save).toHaveBeenCalledTimes(1);
-      expect(repository.save).toHaveBeenCalledWith(account);
+      expect(repository.saveAccount).toHaveBeenCalledTimes(1);
+      expect(repository.saveAccount).toHaveBeenCalledWith(account);
     });
   });
 });
