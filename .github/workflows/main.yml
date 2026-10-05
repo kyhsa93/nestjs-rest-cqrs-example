@@ -22,7 +22,7 @@ jobs:
     env:
       MIN_SCORE: '90'
       # pinned: following another repo's main is what broke this gate on 2026-05-05
-      BSP_REF: b83ebfd70436776b98355f019e57050dbbfdf112
+      BSP_REF: 39e825c56188fe5db15d950dba8d055987ee09a0
     steps:
       - name: Checkout project
         uses: actions/checkout@v7

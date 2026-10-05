@@ -127,7 +127,7 @@ playbook `implementations/nestjs/docs/architecture/design-principles.md`에서 �
 ## 4. 프로젝트 현황 및 하네스 (2026-10-05 기준)
 
 - CI 게이트: backend-service-playbook 에이전트 스킬, `adopt` 프로필, 커밋 SHA 고정 (`.github/workflows/main.yml`)
-- 마지막 평가: **92점 / Grade A** (38 failures). `MIN_SCORE` 90
+- 마지막 평가: **93점 / Grade A** (37 failures, high 0). `MIN_SCORE` 90
 - 남은 high 규칙:
   - `local-dev.postgres-service-missing` — MySQL 저장소에 대한 오탐 (backend-service-playbook#461)
 
