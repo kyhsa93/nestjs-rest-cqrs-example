@@ -4,21 +4,12 @@ import {
   SQSClient,
 } from '@aws-sdk/client-sqs';
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { DiscoveryService } from '@nestjs/core';
 import { Interval } from '@nestjs/schedule';
 
-import { discoverMethods } from 'libs/discovery/metadata-discovery';
 import { RequestStorage } from 'libs/database/request-storage';
 
 import { Config } from 'src/config';
-import {
-  HANDLE_EVENT_METADATA,
-  HandleEventMetadata,
-} from 'src/outbox/handle-event';
-import {
-  HANDLE_INTEGRATION_EVENT_METADATA,
-  HandleIntegrationEventMetadata,
-} from 'src/outbox/handle-integration-event';
+import { EventHandlerRegistry } from 'src/outbox/event-handler-registry';
 
 type OutboxMessage = Readonly<{
   eventId: string;
@@ -27,9 +18,9 @@ type OutboxMessage = Readonly<{
 }>;
 
 @Injectable()
-export class EventConsumer {
-  private readonly logger = new Logger(EventConsumer.name);
-  @Inject() private readonly discoveryService: DiscoveryService;
+export class OutboxConsumer {
+  private readonly logger = new Logger(OutboxConsumer.name);
+  @Inject() private readonly registry: EventHandlerRegistry;
   private readonly sqsClient = new SQSClient({
     region: Config.AWS_REGION,
     endpoint: Config.AWS_ENDPOINT,
@@ -75,34 +66,15 @@ export class EventConsumer {
   }
 
   private async dispatch(message: OutboxMessage): Promise<void> {
-    const domainHandler = discoverMethods<HandleEventMetadata>(
-      this.discoveryService,
-      HANDLE_EVENT_METADATA,
-      'provider',
-    ).find((entry) => entry.meta.eventType === message.eventType);
-    if (domainHandler) {
-      await domainHandler.method.call(
-        domainHandler.instance,
-        JSON.parse(message.payload),
+    if (!this.registry.has(message.eventType)) {
+      this.logger.warn(
+        `No handler registered for eventType: ${message.eventType}`,
       );
       return;
     }
-
-    const integrationHandler = discoverMethods<HandleIntegrationEventMetadata>(
-      this.discoveryService,
-      HANDLE_INTEGRATION_EVENT_METADATA,
-      'controller',
-    ).find((entry) => entry.meta.eventName === message.eventType);
-    if (integrationHandler) {
-      await integrationHandler.method.call(
-        integrationHandler.instance,
-        JSON.parse(message.payload),
-      );
-      return;
-    }
-
-    this.logger.warn(
-      `No handler registered for eventType: ${message.eventType}`,
+    await this.registry.handle(
+      message.eventType,
+      JSON.parse(message.payload) as object,
     );
   }
 }

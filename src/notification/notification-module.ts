@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Inject, Module, OnModuleInit } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 
 import { EmailAdaptorImplement } from 'src/notification/infrastructure/adaptor/email-adaptor-implement';
@@ -16,6 +16,8 @@ import { NotificationQuery } from 'src/notification/application/query/notificati
 import { NotificationFactory } from 'src/notification/domain/notification-factory';
 import { NotificationRepository } from 'src/notification/domain/notification-repository';
 
+import { EventHandlerRegistry } from 'src/outbox/event-handler-registry';
+
 const infrastructure = [
   {
     provide: EmailAdaptor,
@@ -31,13 +33,45 @@ const infrastructure = [
   },
 ];
 
+const interfaces = [AccountIntegrationEventController];
+
 const application = [SendEmailHandler, FindNotificationHandler];
 
 const domain = [NotificationFactory];
 
 @Module({
   imports: [CqrsModule],
-  providers: [...infrastructure, ...application, ...domain],
-  controllers: [AccountIntegrationEventController, NotificationController],
+  providers: [...infrastructure, ...interfaces, ...application, ...domain],
+  controllers: [NotificationController],
 })
-export class NotificationModule {}
+export class NotificationModule implements OnModuleInit {
+  @Inject() private readonly registry: EventHandlerRegistry;
+  @Inject()
+  private readonly accountIntegrationEventController: AccountIntegrationEventController;
+
+  onModuleInit(): void {
+    this.registry.register('AccountOpened', (payload) =>
+      this.accountIntegrationEventController.sendNewAccountEmail(
+        payload as never,
+      ),
+    );
+    this.registry.register('AccountPasswordUpdated', (payload) =>
+      this.accountIntegrationEventController.sendPasswordUpdatedEmail(
+        payload as never,
+      ),
+    );
+    this.registry.register('AccountClosed', (payload) =>
+      this.accountIntegrationEventController.sendAccountClosedEmail(
+        payload as never,
+      ),
+    );
+    this.registry.register('AccountDeposited', (payload) =>
+      this.accountIntegrationEventController.sendDepositEmail(payload as never),
+    );
+    this.registry.register('AccountWithdrawn', (payload) =>
+      this.accountIntegrationEventController.sendWithdrawnEmail(
+        payload as never,
+      ),
+    );
+  }
+}

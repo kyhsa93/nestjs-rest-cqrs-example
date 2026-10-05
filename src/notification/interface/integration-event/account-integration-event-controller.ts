@@ -1,4 +1,4 @@
-import { Controller, Inject } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 
 import {
@@ -12,7 +12,7 @@ import {
 import { SendEmailCommand } from 'src/notification/application/command/send-email-command';
 import { HandleIntegrationEvent } from 'src/outbox/handle-integration-event';
 
-@Controller()
+@Injectable()
 export class AccountIntegrationEventController {
   @Inject() private readonly commandBus: CommandBus;
 

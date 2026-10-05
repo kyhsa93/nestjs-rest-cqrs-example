@@ -1,14 +1,13 @@
 import { Global, Module } from '@nestjs/common';
-import { DiscoveryModule } from '@nestjs/core';
 
-import { EventConsumer } from 'src/outbox/event-consumer';
-import { OutboxRelay } from 'src/outbox/outbox-relay';
+import { EventHandlerRegistry } from 'src/outbox/event-handler-registry';
+import { OutboxConsumer } from 'src/outbox/outbox-consumer';
+import { OutboxPoller } from 'src/outbox/outbox-poller';
 import { OutboxWriter } from 'src/outbox/outbox-writer';
 
 @Global()
 @Module({
-  imports: [DiscoveryModule],
-  providers: [OutboxWriter, OutboxRelay, EventConsumer],
-  exports: [OutboxWriter],
+  providers: [OutboxWriter, EventHandlerRegistry, OutboxPoller, OutboxConsumer],
+  exports: [OutboxWriter, EventHandlerRegistry],
 })
 export class OutboxModule {}

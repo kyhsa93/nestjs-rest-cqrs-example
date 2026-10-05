@@ -9,15 +9,15 @@ import { Config } from 'src/config';
 import { OutboxEntity } from 'src/outbox/outbox-entity';
 
 @Injectable()
-export class OutboxRelay {
-  private readonly logger = new Logger(OutboxRelay.name);
+export class OutboxPoller {
+  private readonly logger = new Logger(OutboxPoller.name);
   private readonly sqsClient = new SQSClient({
     region: Config.AWS_REGION,
     endpoint: Config.AWS_ENDPOINT,
   });
 
   @Cron(CronExpression.EVERY_5_SECONDS)
-  async relay(): Promise<void> {
+  async poll(): Promise<void> {
     try {
       const queueUrl =
         Config.SQS_DOMAIN_EVENT_QUEUE_URL ?? Config.AWS_SQS_QUEUE_URL;

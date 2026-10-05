@@ -58,7 +58,7 @@ DDD + CQRS 기반 NestJS 예제. `account`, `notification` 두 도메인을 보�
 |---|---|
 | TypeORM 사용법, QueryBuilder, TransactionManager | `implementations/nestjs/docs/architecture/persistence.md` |
 | 마이그레이션, data-source | `implementations/nestjs/docs/architecture/persistence.md` |
-| Domain Event, Outbox, OutboxRelay, EventConsumer | `implementations/nestjs/docs/architecture/domain-events.md` |
+| Domain Event, Outbox, OutboxPoller, OutboxConsumer, EventHandlerRegistry | `implementations/nestjs/docs/architecture/domain-events.md` |
 | `@nestjs/cqrs` CommandBus/QueryBus/Handler | `implementations/nestjs/docs/architecture/cqrs-pattern.md` |
 
 ### API / Interface
@@ -127,9 +127,8 @@ playbook `implementations/nestjs/docs/architecture/design-principles.md`에서 �
 ## 4. 프로젝트 현황 및 하네스 (2026-10-05 기준)
 
 - CI 게이트: backend-service-playbook 에이전트 스킬, `adopt` 프로필, 커밋 SHA 고정 (`.github/workflows/main.yml`)
-- 마지막 평가: **90점 / Grade A** (41 failures). `MIN_SCORE` 90
-- 주요 high 규칙:
-  - `domain-event-outbox.*` — Outbox poller/consumer/registry 부재
+- 마지막 평가: **92점 / Grade A** (38 failures). `MIN_SCORE` 90
+- 남은 high 규칙:
   - `local-dev.postgres-service-missing` — MySQL 저장소에 대한 오탐 (backend-service-playbook#461)
 
 작업 시 새로 추가/수정하는 코드는 위 규칙을 **반드시** 준수한다. 기존 deviation은 관련 작업 맥락에서 정리하거나 별도 리팩토링 PR로 처리.
@@ -156,7 +155,7 @@ jq '.failures | group_by(.ruleId) | map({ruleId: .[0].ruleId, count: length})' /
 ## 6. 로컬 실행 / 개발 명령
 
 - 빌드: `npm run build`
-- 테스트: `npm test` (현재 23/23 통과)
+- 테스트: `npm test` (현재 46/46 통과)
 - 린트: `npm run lint` (ESLint flat config)
 - dev: `npm run start:dev`
 

@@ -1,4 +1,4 @@
-import { Logger, Module, Provider } from '@nestjs/common';
+import { Inject, Logger, Module, OnModuleInit, Provider } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 
 import { PasswordModule } from 'libs/auth/password-module';
@@ -29,6 +29,8 @@ import { WithdrawnHandler } from 'src/account/application/event/withdrawn-handle
 import { AccountDomainService } from 'src/account/domain/account-domain-service';
 import { AccountFactory } from 'src/account/domain/account-factory';
 import { AccountRepository } from 'src/account/domain/account-repository';
+
+import { EventHandlerRegistry } from 'src/outbox/event-handler-registry';
 
 const infrastructure: Provider[] = [
   {
@@ -66,4 +68,29 @@ const domain = [AccountDomainService, AccountFactory];
   controllers: [AccountsController, AccountTaskController],
   providers: [Logger, ...infrastructure, ...application, ...domain],
 })
-export class AccountsModule {}
+export class AccountsModule implements OnModuleInit {
+  @Inject() private readonly registry: EventHandlerRegistry;
+  @Inject() private readonly accountOpenedHandler: AccountOpenedHandler;
+  @Inject() private readonly passwordUpdatedHandler: PasswordUpdatedHandler;
+  @Inject() private readonly accountClosedHandler: AccountClosedHandler;
+  @Inject() private readonly depositedHandler: DepositedHandler;
+  @Inject() private readonly withdrawnHandler: WithdrawnHandler;
+
+  onModuleInit(): void {
+    this.registry.register('AccountOpenedEvent', (payload) =>
+      this.accountOpenedHandler.handle(payload as never),
+    );
+    this.registry.register('PasswordUpdatedEvent', (payload) =>
+      this.passwordUpdatedHandler.handle(payload as never),
+    );
+    this.registry.register('AccountClosedEvent', (payload) =>
+      this.accountClosedHandler.handle(payload as never),
+    );
+    this.registry.register('DepositedEvent', (payload) =>
+      this.depositedHandler.handle(payload as never),
+    );
+    this.registry.register('WithdrawnEvent', (payload) =>
+      this.withdrawnHandler.handle(payload as never),
+    );
+  }
+}
