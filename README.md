@@ -11,6 +11,7 @@ development — the layering and event patterns below are the lasting part.
 **Related:** this repo's conventions were later generalized into [backend-service-playbook](https://github.com/kyhsa93/backend-service-playbook),
 the same architecture implemented identically across 5 languages with an automated compliance harness. To check your
 own NestJS project against those rules, add the agent skill: `npx skills add kyhsa93/backend-service-playbook --skill nestjs-architecture-harness`
+For the deployment side, see the companion [k8s-playbook](https://github.com/kyhsa93/k8s-playbook), a Kubernetes deployment anti-pattern catalog with an automated detection harness.
 
 ## Introduction
 ### Purpose of this Repository
