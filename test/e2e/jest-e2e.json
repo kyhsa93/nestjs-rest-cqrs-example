@@ -1,0 +1,24 @@
+{
+  "rootDir": "../..",
+  "moduleFileExtensions": [
+    "js",
+    "json",
+    "ts"
+  ],
+  "testRegex": "test/e2e/.*\\.e2e-spec\\.ts$",
+  "transform": {
+    "^.+\\.(t|j)s$": "ts-jest"
+  },
+  "testEnvironment": "node",
+  "moduleNameMapper": {
+    "^uuid$": "<rootDir>/test/e2e/support/uuid.ts",
+    "^src/(.*)$": "<rootDir>/src/$1",
+    "^libs/(.*)$": "<rootDir>/libs/$1"
+  },
+  "setupFiles": [
+    "<rootDir>/test/e2e/support/env.ts"
+  ],
+  "globalSetup": "<rootDir>/test/e2e/support/global-setup.ts",
+  "maxWorkers": 1,
+  "testTimeout": 60000
+}
