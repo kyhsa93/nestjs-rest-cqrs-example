@@ -16,7 +16,8 @@
     "test": "jest --clearCache && jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
-    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand"
+    "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
+    "test:e2e": "jest --config ./test/e2e/jest-e2e.json --runInBand --forceExit"
   },
   "dependencies": {
     "@aws-sdk/client-secrets-manager": "^3.1032.0",

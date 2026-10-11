@@ -96,6 +96,30 @@ jobs:
       - run: npm test
       - run: npm run build
 
+  e2e:
+    name: e2e (MySQL + LocalStack)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - name: Start MySQL and LocalStack
+        run: docker compose up -d --wait database localstack
+      - run: npm run test:e2e
+      - name: Collect container logs
+        if: failure()
+        run: docker compose logs --no-color > compose.log
+      - name: Upload container logs
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: e2e-compose-logs
+          path: compose.log
+
   build-image:
     name: build & push image
     needs: [harness, ci]

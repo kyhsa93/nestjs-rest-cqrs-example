@@ -1,20 +1,12 @@
 import './timezone';
 
-import {
-  ConsoleLogger,
-  INestApplication,
-  ValidationPipe,
-} from '@nestjs/common';
+import { ConsoleLogger, INestApplication } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
-import { LoggingInterceptor } from 'libs/logging/logging-interceptor';
-import { HttpExceptionFilter } from 'libs/error/http-exception-filter';
-
 import { Config } from 'src/config';
 import { AppModule } from 'src/app-module';
-import helmet from 'helmet';
-import compression from 'compression';
+import { configureApp } from './app-setup';
 
 function setupSwagger(app: INestApplication): void {
   const documentBuilder = new DocumentBuilder()
@@ -35,12 +27,7 @@ async function bootstrap() {
     logger: new ConsoleLogger({ colors: false }),
   });
   app.enableShutdownHooks();
-  app.enableCors();
-  app.use(helmet());
-  app.use(compression());
-  app.useGlobalPipes(new ValidationPipe());
-  app.useGlobalInterceptors(new LoggingInterceptor());
-  app.useGlobalFilters(new HttpExceptionFilter());
+  configureApp(app);
   setupSwagger(app);
   await app.listen(Config.PORT);
 }
