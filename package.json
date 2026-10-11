@@ -27,7 +27,7 @@
     "@aws-sdk/s3-request-presigner": "^3.1032.0",
     "@aws-sdk/util-endpoints": "^3.996.7",
     "@nestjs/cache-manager": "^3.1.0",
-    "@nestjs/common": "^11.1.19",
+    "@nestjs/common": "^12.1.2",
     "@nestjs/core": "^11.1.19",
     "@nestjs/cqrs": "^11.0.3",
     "@nestjs/platform-express": "^11.1.19",
