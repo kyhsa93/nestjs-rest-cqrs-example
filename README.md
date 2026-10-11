@@ -275,17 +275,23 @@ if a required value is missing, the API exits.
 ## Tests
 
 - **Unit tests** (`npm test`) cover the command handlers, the aggregate and the outbox with mocked collaborators.
-- **End-to-end tests** (`npm run test:e2e`) boot the real `AppModule` against MySQL and LocalStack and follow an event the
+- **End-to-end tests** (`npm run test:e2e`) boot the real `AppModule` against MySQL and LocalStack and follow events the
   whole way: `POST /accounts` -> account and outbox row in one transaction -> SQS -> consumer -> notification -> email in
-  the LocalStack SES inbox. They need the containers from [Run it locally](#run-it-locally):
+  the LocalStack SES inbox. They cover:
+  - the account lifecycle and one email per event kind (opened, deposited, withdrawn, password changed, closed),
+  - money movement, access rules and failed commands that must leave no state or event behind,
+  - delivery behaviour: unknown event types are skipped, and a message delivered twice currently sends two emails
+    (there is no idempotency yet; that test documents the present behaviour).
+
+  They need the containers from [Run it locally](#run-it-locally):
 
   ```bash
   docker compose up -d --wait database localstack
   npm run test:e2e
   ```
 
-  Delivery is driven by 5-second timers, so the e2e tests poll with `eventually()` instead of sleeping. CI runs them
-  in the `e2e` job.
+  Delivery is driven by 5-second timers, and the consumer handles one message per tick, so the e2e tests poll with
+  `eventually()` instead of sleeping. CI runs them in the `e2e` job.
 
 ## Scripts
 

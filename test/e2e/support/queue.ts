@@ -1,6 +1,7 @@
 import {
   DeleteMessageBatchCommand,
   ReceiveMessageCommand,
+  SendMessageCommand,
   SQSClient,
 } from '@aws-sdk/client-sqs';
 
@@ -41,5 +42,31 @@ export async function emptyDomainEventQueue(): Promise<void> {
       }),
     );
   }
+  client.destroy();
+}
+
+/**
+ * Puts a message on the domain event queue in the shape OutboxPoller publishes
+ * ({ eventId, eventType, payload }), so tests can simulate redelivery or unknown events.
+ */
+export async function sendOutboxMessage(message: {
+  eventId: string;
+  eventType: string;
+  payload: object;
+}): Promise<void> {
+  const client = new SQSClient({
+    region: process.env.AWS_REGION,
+    endpoint: process.env.AWS_ENDPOINT,
+  });
+  await client.send(
+    new SendMessageCommand({
+      QueueUrl: process.env.SQS_DOMAIN_EVENT_QUEUE_URL as string,
+      MessageBody: JSON.stringify({
+        eventId: message.eventId,
+        eventType: message.eventType,
+        payload: JSON.stringify(message.payload),
+      }),
+    }),
+  );
   client.destroy();
 }
