@@ -7,6 +7,8 @@ import 'src/timezone';
 import { AppModule } from 'src/app-module';
 import { configureApp } from 'src/app-setup';
 
+import { emptyDomainEventQueue } from './queue';
+
 /**
  * Boots the real AppModule against MySQL and LocalStack with the same HTTP setup as main.ts.
  *
@@ -15,6 +17,7 @@ import { configureApp } from 'src/app-setup';
  * app in beforeAll and closes it in afterAll.
  */
 export async function createTestApp(): Promise<INestApplication> {
+  await emptyDomainEventQueue();
   const moduleRef = await Test.createTestingModule({
     imports: [AppModule],
   }).compile();
